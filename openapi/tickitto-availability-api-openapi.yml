@@ -1,0 +1,430 @@
+openapi: 3.0.1
+info:
+  title: Authentication Availability API
+  version: 1.0.0
+tags:
+- name: Availability
+paths:
+  /api/availability/:
+    get:
+      tags:
+      - Availability
+      summary: Fetch Availability For An Event
+      description: 'This endpoint returns a URL to Tickitto''s Ticket Selection Widget for the event being searched.
+
+
+        The Widgets are availability aware and load in real-time what seats, dates, and times are available to be selected for that event.
+
+
+        Any additional selection required for add ons, pickup points, or concessions will be displayed in the Widget.
+
+
+        You will need to pass the event_id and a basket_id with this endpoint. To generate a basket_id, you will need to first create a basket by making a POST request to the create
+
+        basket endpoint.
+
+
+        When the ticket buyer selects a ticket via the Widget, they will then need to invoke the ''add to basket'' action. This action will add the chosen ticket(s) to the basket_id
+
+        associated with that widget URL.'
+      operationId: get_availability
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: event_id
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Event Id
+      - name: basket_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: REQUIRED FOR A VALID BOOKING FLOW. The ID of the basket associated with the current session. Only optional if you do not intend to add tickets to a basket using this availability session.
+          title: Basket Id
+        description: REQUIRED FOR A VALID BOOKING FLOW. The ID of the basket associated with the current session. Only optional if you do not intend to add tickets to a basket using this availability session.
+      - name: allow_cache
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: If true, allows reusing results which are up to 300.0 seconds old.The session is returned much faster but may contain old availabilities.
+          default: false
+          title: Allow Cache
+        description: If true, allows reusing results which are up to 300.0 seconds old.The session is returned much faster but may contain old availabilities.
+      - name: t1
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          description: Inclusive start of the date range from which to fetch initial availabilities.
+          title: T1
+        description: Inclusive start of the date range from which to fetch initial availabilities.
+      - name: t2
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          description: Inclusive end of the date range from which to fetch initial availabilities.
+          title: T2
+        description: Inclusive end of the date range from which to fetch initial availabilities.
+      - name: profile_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Profile name
+          title: Profile Name
+        description: Profile name
+      - name: hostname
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Associated hostname
+          title: Hostname
+        description: Associated hostname
+      - name: origin
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Origin
+      - required: false
+        description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+        example: 123e4567-e89b-12d3-a456-426614174000
+        schema:
+          type: string
+        name: X-Correlation-ID
+        in: header
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionObject'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '401':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: authentication_error.insufficient_permissions
+                  msg: Invalid API key - this API key does not have the required permissions to access this resource
+                  loc: []
+                - type: authentication_error.invalid_key
+                  msg: Invalid API key - this API key either does not exist or is invalid
+                  loc: []
+                - type: authentication_error.key_missing
+                  msg: An API key is required to access this endpoint
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Unauthorized
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '404':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: availability_error.performance_not_found
+                  msg: The requested performance could not be found
+                  loc: []
+                - type: availability_error.basket_not_found
+                  msg: The requested basket could not be found
+                  loc: []
+                - type: availability_error.event_not_found
+                  msg: The requested event could not be found
+                  loc: []
+                - type: availability_error.flow_not_found
+                  msg: No active flow was found for the requested session
+                  loc: []
+                - type: availability_error.session_not_found
+                  msg: The requested availability session could not be found
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Not Found
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '409':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: availability_error.status_conflict
+                  msg: The basket's status prevented the request from being fulfilled
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Conflict
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '410':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: availability_error.event_gone
+                  msg: The requested event is no longer available
+                  loc: []
+                - type: availability_error.availability_gone
+                  msg: The requested event is no longer available for reservation
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Gone
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '500':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: availability_error.flow_error
+                  msg: The availability flow failed permanently
+                  loc: []
+                - type: availability_error.session_errored
+                  msg: The availability session could not be initialised
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Internal Server Error
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '400':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: availability_error.flow_not_supported
+                  msg: Flow is not supported for this availability
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Bad Request
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+components:
+  schemas:
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
+      type: object
+      required:
+      - request_id
+      - detail
+      title: ErrorBody
+    SessionObject:
+      properties:
+        session_id:
+          type: string
+          title: Session Id
+          description: Machine identifier of this session
+        view_url:
+          type: string
+          title: View Url
+          description: URL where the widget can be used to book this session
+      type: object
+      required:
+      - session_id
+      - view_url
+      title: SessionObject
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Error:
+      properties:
+        type:
+          type: string
+          title: Type
+        msg:
+          type: string
+          title: Msg
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Loc
+        payload:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Payload
+      type: object
+      required:
+      - type
+      - msg
+      - loc
+      title: Error
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: key
+    HTTPBearer:
+      type: http
+      scheme: bearer

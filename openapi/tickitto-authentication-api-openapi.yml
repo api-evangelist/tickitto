@@ -1,0 +1,284 @@
+openapi: 3.0.1
+info:
+  title: Authentication API
+  version: 1.0.0
+tags:
+- name: Authentication
+paths:
+  /api/authentication/account:
+    get:
+      tags:
+      - Authentication
+      summary: Get Signed In Account
+      description: Retrieves metadata and settings related to the account associated with the API key used.
+      operationId: get_account
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiUser'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: authentication_error.insufficient_permissions
+                  msg: Invalid API key - this API key does not have the required permissions to access this resource
+                  loc: []
+                - type: authentication_error.invalid_key
+                  msg: Invalid API key - this API key either does not exist or is invalid
+                  loc: []
+                - type: authentication_error.key_missing
+                  msg: An API key is required to access this endpoint
+                  loc: []
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - required: false
+        description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+        example: 123e4567-e89b-12d3-a456-426614174000
+        schema:
+          type: string
+        name: X-Correlation-ID
+        in: header
+components:
+  schemas:
+    PaymentAmendmentType:
+      type: string
+      enum:
+      - iterative
+      - checkout
+      - external
+      title: PaymentAmendmentType
+      description: 'ITERATIVE: Payment intents, invoices, etc, are made/amended when the basket is created, or items are added/removed from it
+
+        CHECKOUT: Payment intents, invoices, etc, are made at checkout only.
+
+        EXTERNAL: The distributor is MOR, handling the payment in its entirety.'
+    BookingFeeSettings:
+      properties:
+        item_min_charge:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Item Min Charge
+          description: Lower bound per item for the booking charge calculation
+          default: 0.0
+        item_max_charge:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Item Max Charge
+          description: Upper bound per item for the booking charge calculation
+          default: 999.999
+        item_variable_charge:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Item Variable Charge
+          description: Charge to apply as a multiplier of each item price
+          default: 1.0
+        item_fixed_charge:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Item Fixed Charge
+          description: Fixed charge per item
+          default: 0.0
+      type: object
+      title: BookingFeeSettings
+      description: Settings for booking charge calculation
+    StripePaymentMethod:
+      properties:
+        name:
+          $ref: '#/components/schemas/PaymentMethodType'
+          default: stripe
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether this payment method is currently enabled.
+          default: false
+        amendment_trigger:
+          $ref: '#/components/schemas/PaymentAmendmentType'
+          default: iterative
+        account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Account Id
+          description: Account ID.
+        platform_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Platform Key
+          description: Tickitto publishable platform key.
+      type: object
+      title: StripePaymentMethod
+      description: Payments method used for stripe.
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
+      type: object
+      required:
+      - request_id
+      - detail
+      title: ErrorBody
+    CreditPaymentMethod:
+      properties:
+        name:
+          $ref: '#/components/schemas/PaymentMethodType'
+          default: tickitto
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether this payment method is currently enabled.
+          default: false
+        amendment_trigger:
+          $ref: '#/components/schemas/PaymentAmendmentType'
+          default: external
+      type: object
+      title: CreditPaymentMethod
+      description: Payment method used where Tickitto is a creditor to the user.
+    PaymentMethodType:
+      type: string
+      enum:
+      - stripe
+      - careem_pay
+      - tickitto
+      title: PaymentMethodType
+      description: 'STRIPE: Tickitto is MOR, and retrieves payment for the items via Stripe.
+
+        CAREEM_PAY: Tickitto is MOR, and retrieves payment via Careem Pay.
+
+        TICKITTO: The distributor is MOR, and tickitto purchases the items directly.'
+    Error:
+      properties:
+        type:
+          type: string
+          title: Type
+        msg:
+          type: string
+          title: Msg
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Loc
+        payload:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Payload
+      type: object
+      required:
+      - type
+      - msg
+      - loc
+      title: Error
+    ApiUser:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Tickitto's unique identifier for a distribution partner.
+        name:
+          type: string
+          title: Name
+          description: The distribution partner's name.
+        booking_fee_settings:
+          $ref: '#/components/schemas/BookingFeeSettings'
+          description: Calculation parameters for the additional booking fee on tickets as specified by you and communicated to your Tickitto account manager.
+        payment_methods:
+          additionalProperties:
+            anyOf:
+            - $ref: '#/components/schemas/StripePaymentMethod'
+            - $ref: '#/components/schemas/CreditPaymentMethod'
+            - $ref: '#/components/schemas/CareemPayPaymentMethod'
+          propertyNames:
+            $ref: '#/components/schemas/PaymentMethodType'
+          type: object
+          title: Payment Methods
+          description: Collection of registered payment methods.
+          default:
+            tickitto:
+              amendment_trigger: external
+              enabled: false
+              name: tickitto
+            stripe:
+              amendment_trigger: iterative
+              enabled: false
+              name: stripe
+      type: object
+      required:
+      - id
+      - name
+      - booking_fee_settings
+      title: ApiUser
+    CareemPayPaymentMethod:
+      properties:
+        name:
+          $ref: '#/components/schemas/PaymentMethodType'
+          default: careem_pay
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether this payment method is currently enabled.
+          default: false
+        amendment_trigger:
+          $ref: '#/components/schemas/PaymentAmendmentType'
+          default: checkout
+      type: object
+      title: CareemPayPaymentMethod
+      description: Payment method used for Careem Pay.
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: key
+    HTTPBearer:
+      type: http
+      scheme: bearer

@@ -1,0 +1,1139 @@
+openapi: 3.0.1
+info:
+  title: Authentication Search API
+  version: 1.0.0
+tags:
+- name: Search
+paths:
+  /api/search/:
+    get:
+      tags:
+      - Search
+      summary: Search For Events
+      description: "Searches for events from the Tickitto inventory and provides additional metadata about the search result. \n\nThe search endpoint is meant for use with the Tickitto website. \n\nThe search endpoint supports text search as well as filters for different event categories, cities, or countries to create a powerful contextual search experience. \n\nThe endpoint supports pagination via the `skip` and `limit` parameters and the returned `X-Total-Count` header."
+      operationId: search
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: t1
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          description: Start of the date range in which returned events should have availability. Defaults to today.
+          examples:
+          - '2027-01-17'
+          title: T1
+        description: Start of the date range in which returned events should have availability. Defaults to today.
+      - name: t2
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          description: End of the date range in which returned events should have availability. Defaults to 14 days from now.
+          examples:
+          - '2027-07-21'
+          title: T2
+        description: End of the date range in which returned events should have availability. Defaults to 14 days from now.
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Category or categories to restrict query to.
+          examples:
+          - - Sports
+            - Bus Tours
+            - Attractions
+            - Family-Friendly
+          default: []
+          title: Category
+        description: Category or categories to restrict query to.
+      - name: city
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: City or cities to restrict query to.
+          examples:
+          - - Berlin
+            - Dubai
+            - London
+          default: []
+          title: City
+        description: City or cities to restrict query to.
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: State or states to restrict query to.
+          examples:
+          - - Virginia
+            - California
+            - Texas
+          default: []
+          title: State
+        description: State or states to restrict query to.
+      - name: region
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Region or regions to restrict the query to.
+          examples:
+          - - Derbyshire
+            - Umm Al-Quwain
+          default: []
+          title: Region
+        description: Region or regions to restrict the query to.
+      - name: country
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Countries to restrict query to.
+          examples:
+          - - United Arab Emirates
+            - United Kingdom
+            - Germany
+          default: []
+          title: Country
+        description: Countries to restrict query to.
+      - name: country_code
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            minLength: 2
+            maxLength: 2
+            pattern: '[A-Z][A-Z]'
+          description: Two-letter ISO country codes to restrict query to.
+          examples:
+          - - AE
+            - GB
+            - DE
+          default: []
+          title: Country Code
+        description: Two-letter ISO country codes to restrict query to.
+      - name: performer
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Performers to restrict query to.
+          default: []
+          title: Performer
+        description: Performers to restrict query to.
+      - name: venue
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          description: Venues to restrict query to.
+          default: []
+          title: Venue
+        description: Venues to restrict query to.
+      - name: event_type
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventType'
+          description: Event types to restrict the query to.
+          default: []
+          title: Event Type
+        description: Event types to restrict the query to.
+      - name: min_price
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: number
+            minimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          - type: 'null'
+          description: The minimum price to restrict the query to.
+          title: Min Price
+        description: The minimum price to restrict the query to.
+      - name: max_price
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: number
+            exclusiveMinimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          - type: 'null'
+          description: The maximum price to restrict the query to.
+          title: Max Price
+        description: The maximum price to restrict the query to.
+      - name: currency
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            minLength: 3
+            maxLength: 3
+            pattern: '[A-Z][A-Z][A-Z]'
+          - type: 'null'
+          description: The min/max price currency to use when using price-based query restrictions
+          title: Currency
+        description: The min/max price currency to use when using price-based query restrictions
+      - name: text
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Text to perform a search of events with.
+          examples:
+          - marina dinner cruise
+          default: ''
+          title: Text
+        description: Text to perform a search of events with.
+      - name: partial_match
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Perform partial/substring text matching, includes fuzzy search (max 1 character change). Algolia search always performs partial/substring text matching.
+          default: false
+          title: Partial Match
+        description: Perform partial/substring text matching, includes fuzzy search (max 1 character change). Algolia search always performs partial/substring text matching.
+      - name: skip
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            minimum: 0
+          - type: 'null'
+          description: Number of results to skip for pagination; see also `limit` and the `X-Total-Count` response header.
+          default: 0
+          title: Skip
+        description: Number of results to skip for pagination; see also `limit` and the `X-Total-Count` response header.
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          exclusiveMinimum: 0
+          description: Number of results to return for pagination; see also `skip` and the `X-Total-Count` response header.
+          default: 100
+          title: Limit
+        description: Number of results to return for pagination; see also `skip` and the `X-Total-Count` response header.
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ResultSort'
+          - type: 'null'
+          description: Sort order to use.If not specified, the default sort order is textual relevance if applicable, else geographical distance if applicable, else an arbitrary stable order.
+          title: Sort By
+        description: Sort order to use.If not specified, the default sort order is textual relevance if applicable, else geographical distance if applicable, else an arbitrary stable order.
+      - name: event_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: List of event IDs to retrieve.
+          examples:
+          - - T849
+            - T850
+          title: Event Ids
+        description: List of event IDs to retrieve.
+      - name: should_raise
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Should Raise
+      - name: profile_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Profile name
+          title: Profile Name
+        description: Profile name
+      - name: hostname
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Associated hostname
+          title: Hostname
+        description: Associated hostname
+      - name: accept-language
+        in: header
+        required: false
+        schema:
+          type: string
+          default: en
+          title: Accept-Language
+      - name: origin
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Origin
+      - required: false
+        description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+        example: 123e4567-e89b-12d3-a456-426614174000
+        schema:
+          type: string
+        name: X-Correlation-ID
+        in: header
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResults'
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+              description: The total number of events that exist for this query, ignoring pagination.
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '401':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: authentication_error.insufficient_permissions
+                  msg: Invalid API key - this API key does not have the required permissions to access this resource
+                  loc: []
+                - type: authentication_error.invalid_key
+                  msg: Invalid API key - this API key either does not exist or is invalid
+                  loc: []
+                - type: authentication_error.key_missing
+                  msg: An API key is required to access this endpoint
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Unauthorized
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '404':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: event_error.event_not_found
+                  msg: The requested event could not be found
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Not Found
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+  /api/search/autocomplete:
+    get:
+      tags:
+      - Search
+      summary: Get Search Autocomplete
+      operationId: search_autocomplete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: text
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Text to perform a search of events with. Searches event title, city, and performer names.
+          examples:
+          - Lond
+          title: Text
+        description: Text to perform a search of events with. Searches event title, city, and performer names.
+      - name: skip
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Number of results to skip for pagination; see also `limit` and the `X-Total-Count` response header.
+          default: 0
+          title: Skip
+        description: Number of results to skip for pagination; see also `limit` and the `X-Total-Count` response header.
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          exclusiveMinimum: 0
+          description: Number of results to return for pagination; see also `skip` and the `X-Total-Count` response header.
+          default: 100
+          title: Limit
+        description: Number of results to return for pagination; see also `skip` and the `X-Total-Count` response header.
+      - name: profile_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Profile name
+          title: Profile Name
+        description: Profile name
+      - name: hostname
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Associated hostname
+          title: Hostname
+        description: Associated hostname
+      - name: origin
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Origin
+      - required: false
+        description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+        example: 123e4567-e89b-12d3-a456-426614174000
+        schema:
+          type: string
+        name: X-Correlation-ID
+        in: header
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutocompleteResults'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '401':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: authentication_error.insufficient_permissions
+                  msg: Invalid API key - this API key does not have the required permissions to access this resource
+                  loc: []
+                - type: authentication_error.invalid_key
+                  msg: Invalid API key - this API key either does not exist or is invalid
+                  loc: []
+                - type: authentication_error.key_missing
+                  msg: An API key is required to access this endpoint
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Unauthorized
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '404':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: event_error.event_not_found
+                  msg: The requested event could not be found
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Not Found
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+components:
+  schemas:
+    ResultSort:
+      type: string
+      enum:
+      - price_asc
+      - price_desc
+      - popularity
+      title: ResultSort
+    Image:
+      properties:
+        desktop:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desktop
+          description: URL to use on desktop devices
+        mobile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mobile
+          description: URL to use on mobile devices
+        thumbnail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Thumbnail
+          description: URL of a square version of this image
+      type: object
+      title: Image
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
+      type: object
+      required:
+      - request_id
+      - detail
+      title: ErrorBody
+    SearchResults:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/LiteEvent'
+          type: array
+          title: Results
+          description: Event results (lightweight on event information for smaller response size).
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of events found.
+          examples:
+          - 10
+        category_count:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Category Count
+          description: Category count for this search result
+          examples:
+          - Attractions: 1
+            Tours: 2
+        city_count:
+          additionalProperties:
+            type: integer
+          type: object
+          title: City Count
+          description: City count for this search result set
+          examples:
+          - London: 1
+            Paris: 2
+        country_count:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Country Count
+          description: Country code count for this search result set
+          examples:
+          - FR: 2
+            GB: 1
+      type: object
+      required:
+      - results
+      - total_count
+      - category_count
+      - city_count
+      - country_count
+      title: SearchResults
+    LiteEvent:
+      properties:
+        title:
+          type: string
+          title: Title
+          description: Human-readable/marketing name for this event.
+          examples:
+          - The Event
+        slug:
+          type: string
+          title: Slug
+          description: SEO slug constructed from the event id
+          examples:
+          - matilda-the-musical-T500
+        short_description:
+          type: string
+          title: Short Description
+          description: Short summary of the event.
+          examples:
+          - Coming to an emergency broadcasting system near you!
+        event_type:
+          $ref: '#/components/schemas/EventType'
+          description: 'Type of event. (Note: standard currently refers to all non-cinema events.)'
+          default: Standard
+        categories:
+          items:
+            anyOf:
+            - type: string
+            - type: 'null'
+          type: array
+          title: Categories
+          description: Categories attributed to the event
+          default: []
+        city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: City
+          description: Name of the city in which the event takes place.
+          examples:
+          - Bristol
+        region:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Region
+          description: Name of the region in which the event takes place.
+          examples:
+          - Derbyshire
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: State
+          description: Name of the state in which the event takes place, if applicable.
+          examples:
+          - Virginia
+        country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country
+          description: Name of the country in which the event takes place.
+        country_code:
+          anyOf:
+          - type: string
+            pattern: '[A-Z][A-Z]'
+          - type: 'null'
+          title: Country Code
+          description: ISO 3166-1 alpha-2 code for the country in which the event takes place.
+          examples:
+          - GB
+        venue_location:
+          items:
+            $ref: '#/components/schemas/APIEventVenue'
+          type: array
+          title: Venue Location
+          description: List of locations where this event occurs.
+          default: []
+        images:
+          items:
+            $ref: '#/components/schemas/Image'
+          type: array
+          title: Images
+          description: URLs of images which represent this event.
+          default: []
+          examples:
+          - - desktop: https://placekitten.com/g/1000/1000
+              mobile: https://placekitten.com/g/1000/1000
+            - desktop: https://place-puppy.com/1000x1000
+              thumbnail: https://place-puppy.com/1000x1000
+        videos:
+          items:
+            type: string
+          type: array
+          title: Videos
+          description: Links to videos that represent this event, such as trailers.
+          default: []
+        from_price:
+          $ref: '#/components/schemas/Price'
+          description: Price of the cheapest ticket associated with this event.
+          examples:
+          - amount: 3.99
+            currency: GBP
+        popularity:
+          anyOf:
+          - type: number
+            maximum: 10.0
+            minimum: 1.0
+          - type: 'null'
+          title: Popularity
+          description: Event's popularity with end users, out of 10.
+          examples:
+          - 8.5
+        is_tbd:
+          $ref: '#/components/schemas/IsTbd'
+          description: Whether the event date and/or time are to be determined.
+          default:
+            time: false
+            date: false
+        soft_availability_t1:
+          type: string
+          format: date-time
+          title: Soft Availability T1
+          description: Beginning of the period for which this event is available to book
+        soft_availability_t2:
+          type: string
+          format: date-time
+          title: Soft Availability T2
+          description: End of the period for which this event is available to book
+        event_id:
+          type: string
+          title: Event Id
+          description: Unique identifier for this event.
+          examples:
+          - T123
+      type: object
+      required:
+      - title
+      - slug
+      - short_description
+      - from_price
+      - soft_availability_t1
+      - soft_availability_t2
+      - event_id
+      title: LiteEvent
+    AutocompleteResults:
+      properties:
+        event_count:
+          type: integer
+          title: Event Count
+          description: Total number of events found.
+          default: 0
+          examples:
+          - 10
+        events:
+          items:
+            $ref: '#/components/schemas/AutocompleteField'
+          type: array
+          title: Events
+          description: List of events
+          default: []
+        performers:
+          items:
+            $ref: '#/components/schemas/AutocompleteField'
+          type: array
+          title: Performers
+          description: List of performers
+          default: []
+        venues:
+          items:
+            $ref: '#/components/schemas/AutocompleteField'
+          type: array
+          title: Venues
+          description: List of venues
+          default: []
+        states:
+          items:
+            $ref: '#/components/schemas/AutocompleteField'
+          type: array
+          title: States
+          description: List of states
+          default: []
+        regions:
+          items:
+            $ref: '#/components/schemas/AutocompleteField'
+          type: array
+          title: Regions
+          description: List of regions
+          default: []
+        categories:
+          items:
+            $ref: '#/components/schemas/AutocompleteField'
+          type: array
+          title: Categories
+          description: List of categories
+          default: []
+        cities:
+          items:
+            $ref: '#/components/schemas/AutocompleteField'
+          type: array
+          title: Cities
+          description: List of city names
+          default: []
+        countries:
+          items:
+            $ref: '#/components/schemas/AutocompleteField'
+          type: array
+          title: Countries
+          description: List of country names
+          default: []
+      type: object
+      title: AutocompleteResults
+    EventType:
+      type: string
+      enum:
+      - Standard
+      - Cinema
+      title: EventType
+      description: 'Event type classification.
+
+
+        - STANDARD: (Currently) All non-cinema events
+
+        - CINEMA: All cinema experiences'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Price:
+      properties:
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: Monetary value of this price in the given currency, with decimal point i.e. not integer format
+          examples:
+          - '3.99'
+        currency:
+          type: string
+          maxLength: 3
+          minLength: 3
+          pattern: '[A-Z][A-Z][A-Z]'
+          title: Currency
+          description: ISO 4217 code for the currency in which the item's prices are sent
+          examples:
+          - GBP
+      type: object
+      required:
+      - amount
+      - currency
+      title: Price
+      description: Represents an absolute monetary value in a particular currency. Cannot be negative.
+    APIEventVenue:
+      properties:
+        latitude:
+          type: number
+          title: Latitude
+          description: Latitude in degrees
+          examples:
+          - 1.23456789
+        longitude:
+          type: number
+          title: Longitude
+          description: Longitude in degrees
+          examples:
+          - 1.23456789
+        id:
+          type: string
+          title: Id
+          description: Machine identifier for this place
+          default: ''
+          examples:
+          - '123'
+        venue_brand_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Venue Brand Id
+          description: The brand ID that operates the venue
+        venue_address:
+          type: string
+          title: Venue Address
+          description: Street address of the venue
+          examples:
+          - 27 Stadium Avenue
+        seatplan_images:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Image'
+            type: array
+          - type: 'null'
+          title: Seatplan Images
+          description: Images of the venue's seatplan.
+        configuration:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Configuration
+        venue_name:
+          type: string
+          title: Venue Name
+          description: Friendly venue name, in English
+          examples:
+          - Wembley Stadium
+        venue_brand:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Venue Brand
+          description: The brand name that operates the venue
+        venue_city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Venue City
+          description: The city of the venue
+          examples:
+          - London
+        venue_country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Venue Country
+          description: The country of the venue
+      type: object
+      required:
+      - latitude
+      - longitude
+      - venue_address
+      - venue_name
+      title: APIEventVenue
+    Error:
+      properties:
+        type:
+          type: string
+          title: Type
+        msg:
+          type: string
+          title: Msg
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Loc
+        payload:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Payload
+      type: object
+      required:
+      - type
+      - msg
+      - loc
+      title: Error
+    IsTbd:
+      properties:
+        time:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Time
+          description: Whether the event time is to be determined
+          default: false
+        date:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Date
+          description: Whether the event date is to be determined
+          default: false
+      type: object
+      title: IsTbd
+    AutocompleteField:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Title/name value of the field
+          examples:
+          - Dubai
+        score:
+          type: number
+          title: Score
+          description: MongoDB Atlas score for the autocomplete text match - larger is a better match
+          examples:
+          - 0.8567645
+        slug:
+          type: string
+          title: Slug
+          description: Slug value of the field
+          examples:
+          - the-cat-in-the-hat
+        id:
+          type: string
+          title: Id
+          description: ID value of the field
+          examples:
+          - 10
+      type: object
+      required:
+      - name
+      - score
+      - slug
+      - id
+      title: AutocompleteField
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: key
+    HTTPBearer:
+      type: http
+      scheme: bearer

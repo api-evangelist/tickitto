@@ -1,0 +1,72 @@
+openapi: 3.0.1
+info:
+  title: Authentication System Status API
+  version: 1.0.0
+tags:
+- name: System Status
+paths:
+  /api/status:
+    get:
+      tags:
+      - System Status
+      summary: Status
+      description: 'This endpoint can be used to check that the API is operational.
+
+
+        An ongoing problem is indicated if this returns any status code other than 200 or any status other than ''healthy''.'
+      operationId: get_status
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusObject'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+      parameters:
+      - required: false
+        description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+        example: 123e4567-e89b-12d3-a456-426614174000
+        schema:
+          type: string
+        name: X-Correlation-ID
+        in: header
+components:
+  schemas:
+    StatusObject:
+      properties:
+        status:
+          type: string
+          title: Status
+          examples:
+          - healthy
+        environment:
+          type: string
+          title: Environment
+          examples:
+          - PROD
+      type: object
+      required:
+      - status
+      - environment
+      title: StatusObject
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: key
+    HTTPBearer:
+      type: http
+      scheme: bearer

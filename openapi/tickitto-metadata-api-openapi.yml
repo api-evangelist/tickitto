@@ -1,0 +1,586 @@
+openapi: 3.0.1
+info:
+  title: Authentication Metadata API
+  version: 1.0.0
+tags:
+- name: Metadata
+paths:
+  /api/metadata/:
+    get:
+      tags:
+      - Metadata
+      summary: Get Metadata
+      description: Returns metadata describing the possible event locations and categories and any images or other information associated with them.
+      operationId: get_metadata
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: include_empty
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: If true, includes all locations and categories, even if they have no events. Note that this will significantly increase response size.
+          default: false
+          title: Include Empty
+        description: If true, includes all locations and categories, even if they have no events. Note that this will significantly increase response size.
+      - name: filter_children
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Filter Children
+      - name: profile_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Profile name
+          title: Profile Name
+        description: Profile name
+      - name: hostname
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Associated hostname
+          title: Hostname
+        description: Associated hostname
+      - name: should_raise
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Should Raise
+      - name: origin
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Origin
+      - name: accept-language
+        in: header
+        required: false
+        schema:
+          type: string
+          default: en
+          title: Accept-Language
+      - required: false
+        description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+        example: 123e4567-e89b-12d3-a456-426614174000
+        schema:
+          type: string
+        name: X-Correlation-ID
+        in: header
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metadata'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '401':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: authentication_error.insufficient_permissions
+                  msg: Invalid API key - this API key does not have the required permissions to access this resource
+                  loc: []
+                - type: authentication_error.invalid_key
+                  msg: Invalid API key - this API key either does not exist or is invalid
+                  loc: []
+                - type: authentication_error.key_missing
+                  msg: An API key is required to access this endpoint
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Unauthorized
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+components:
+  schemas:
+    State:
+      properties:
+        localised_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Localised Name
+          description: Localisable name.
+        name:
+          type: string
+          title: Name
+          description: Location name.
+        group_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Group Name
+          description: Location grouping name.
+        images:
+          items:
+            $ref: '#/components/schemas/Image'
+          type: array
+          title: Images
+          description: URLs of images which can be used to represent this location.
+          default: []
+        latitude:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Latitude
+          description: Latitudinal position of the centre point of this location.
+        longitude:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Longitude
+          description: Longitudinal position of the centre point of this location.
+        event_count:
+          type: integer
+          title: Event Count
+          description: Number of events in this location which have availability.
+          default: 0
+        country_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country Name
+          description: Country name e.g. United Arab Emirates
+      type: object
+      required:
+      - name
+      title: State
+      description: Metadata and images for a state.
+    Metadata:
+      properties:
+        categories:
+          items:
+            $ref: '#/components/schemas/Category'
+          type: array
+          title: Categories
+          description: Information about event categories.
+        locations:
+          items:
+            $ref: '#/components/schemas/Location'
+          type: array
+          title: Locations
+          description: Information about event locations
+      type: object
+      required:
+      - categories
+      - locations
+      title: Metadata
+      description: Metadata endpoint response model.
+    SourcedImage:
+      properties:
+        desktop:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desktop
+          description: URL to use on desktop devices
+        mobile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mobile
+          description: URL to use on mobile devices
+        thumbnail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Thumbnail
+          description: URL of a square version of this image
+        cache_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cache Id
+          description: Caching identifier
+        source:
+          type: string
+          title: Source
+          description: Where this image was sourced from e.g. teleport
+          default: ''
+      type: object
+      title: SourcedImage
+    Category:
+      properties:
+        localised_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Localised Name
+          description: Localisable name.
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+          description: Unique MongoDB ID for this category
+          default: ''
+        name:
+          type: string
+          title: Name
+          description: Category name
+        parent_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent Name
+          description: Parent category name.
+        children:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Children
+          description: List of child categories
+          default: []
+        images:
+          items:
+            $ref: '#/components/schemas/Image'
+          type: array
+          title: Images
+          description: URLs of images which can be used to represent this category.
+          default: []
+        event_count:
+          type: integer
+          title: Event Count
+          description: Number of events with this category which have availability.
+          default: 0
+      type: object
+      required:
+      - name
+      title: Category
+      description: Metadata and images for a category of events e.g. Tennis, Sports, Theatre.
+    Region:
+      properties:
+        localised_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Localised Name
+          description: Localisable name.
+        name:
+          type: string
+          title: Name
+          description: Location name.
+        group_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Group Name
+          description: Location grouping name.
+        images:
+          items:
+            $ref: '#/components/schemas/Image'
+          type: array
+          title: Images
+          description: URLs of images which can be used to represent this location.
+          default: []
+        latitude:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Latitude
+          description: Latitudinal position of the centre point of this location.
+        longitude:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Longitude
+          description: Longitudinal position of the centre point of this location.
+        event_count:
+          type: integer
+          title: Event Count
+          description: Number of events in this location which have availability.
+          default: 0
+        cities:
+          items:
+            $ref: '#/components/schemas/City'
+          type: array
+          title: Cities
+          description: An array containing a collection cities within the region.
+          default: []
+      type: object
+      required:
+      - name
+      title: Region
+    Image:
+      properties:
+        desktop:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desktop
+          description: URL to use on desktop devices
+        mobile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mobile
+          description: URL to use on mobile devices
+        thumbnail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Thumbnail
+          description: URL of a square version of this image
+      type: object
+      title: Image
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
+      type: object
+      required:
+      - request_id
+      - detail
+      title: ErrorBody
+    Location:
+      properties:
+        localised_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Localised Name
+          description: Localisable name.
+        country_code:
+          type: string
+          title: Country Code
+          description: Unique two-letter ISO country code e.g. GB, DE, US
+        alternate_names:
+          items:
+            type: string
+          type: array
+          title: Alternate Names
+          description: Alternate names and other country-codes e.g. UK, GBR, Great Britain
+          default: []
+        country_name:
+          type: string
+          title: Country Name
+          description: Country name e.g. United Arab Emirates
+        images:
+          items:
+            $ref: '#/components/schemas/SourcedImage'
+          type: array
+          title: Images
+          description: URLs of images which can be used to represent this country.
+          default: []
+        cities:
+          items:
+            $ref: '#/components/schemas/City'
+          type: array
+          title: Cities
+          description: An array containing metadata about cities in this country.
+          default: []
+        regions:
+          items:
+            $ref: '#/components/schemas/Region'
+          type: array
+          title: Regions
+          description: An array containing metadata about the regions in this country
+          default: []
+        states:
+          items:
+            $ref: '#/components/schemas/State'
+          type: array
+          title: States
+          description: An array containing metadata about states in this country
+          default: []
+        event_count:
+          type: integer
+          title: Event Count
+          description: Number of events in this location which have availability.
+          default: 0
+      type: object
+      required:
+      - country_code
+      - country_name
+      title: Location
+      description: Metadata and images for a country.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    City:
+      properties:
+        localised_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Localised Name
+          description: Localisable name.
+        name:
+          type: string
+          title: Name
+          description: Location name.
+        group_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Group Name
+          description: Location grouping name.
+        images:
+          items:
+            $ref: '#/components/schemas/Image'
+          type: array
+          title: Images
+          description: URLs of images which can be used to represent this location.
+          default: []
+        latitude:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Latitude
+          description: Latitudinal position of the centre point of this location.
+        longitude:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Longitude
+          description: Longitudinal position of the centre point of this location.
+        event_count:
+          type: integer
+          title: Event Count
+          description: Number of events in this location which have availability.
+          default: 0
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: State
+          description: Parent state, if applicable.
+      type: object
+      required:
+      - name
+      title: City
+      description: Metadata and images for a city.
+    Error:
+      properties:
+        type:
+          type: string
+          title: Type
+        msg:
+          type: string
+          title: Msg
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Loc
+        payload:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Payload
+      type: object
+      required:
+      - type
+      - msg
+      - loc
+      title: Error
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: key
+    HTTPBearer:
+      type: http
+      scheme: bearer

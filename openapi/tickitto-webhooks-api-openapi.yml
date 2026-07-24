@@ -1,0 +1,843 @@
+openapi: 3.0.1
+info:
+  title: Authentication Webhooks API
+  version: 1.0.0
+tags:
+- name: Webhooks
+paths:
+  /api/webhooks/vivid-file-push:
+    post:
+      tags:
+      - Webhooks
+      summary: Process File Endpoint
+      operationId: process_file_endpoint_api_webhooks_vivid_file_push_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VFPRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: authentication_error.insufficient_permissions
+                  msg: Invalid API key - this API key does not have the required permissions to access this resource
+                  loc: []
+                - type: authentication_error.invalid_key
+                  msg: Invalid API key - this API key either does not exist or is invalid
+                  loc: []
+                - type: authentication_error.key_missing
+                  msg: An API key is required to access this endpoint
+                  loc: []
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: reservation_error.product_band_not_found
+                  msg: The requested product band could not be found
+                  loc: []
+                - type: reservation_error.basket_not_found
+                  msg: The requested basket could not be found
+                  loc: []
+                - type: reservation_error.baskets_not_found
+                  msg: The requested baskets could not be found
+                  loc: []
+                - type: reservation_error.concession_not_found
+                  msg: The requested concession could not be found
+                  loc: []
+                  payload:
+                    id: ID123
+                - type: reservation_error.event_not_found
+                  msg: The requested event could not be found
+                  loc: []
+                - type: basket_error.item_not_found
+                  msg: The requested basket item could not be found
+                  loc: []
+                - type: reservation_error.option_not_found
+                  msg: The requested option could not be found
+                  loc: []
+                - type: reservation_error.option_value_not_found
+                  msg: The requested option value could not be found
+                  loc: []
+                - type: reservation_error.performance_not_found
+                  msg: The requested performance could not be found
+                  loc: []
+                - type: reservation_error.product_not_found
+                  msg: The requested product could not be found
+                  loc: []
+                - type: basket_error.promocode_not_applied
+                  msg: That promotional code has not been applied to your basket
+                  loc: []
+                - type: basket_error.promocode_not_found
+                  msg: A promotional code corresponding to that code could not be found
+                  loc: []
+                - type: reservation_error.seats_not_found
+                  msg: The requested seats could not be found
+                  loc: []
+                - type: basket_error.session_not_found
+                  msg: The requested availability session could not be found
+                  loc: []
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: basket_error.status_conflict
+                  msg: Your basket has either been checked out or is currently being checked out and can no longer be changed
+                  loc: []
+                - type: basket_error.status_conflict
+                  msg: Your basket has not been checked out, preventing the request from being fulfilled.
+                  loc: []
+                - type: basket_error.not_processable
+                  msg: Your basket is not currently in a status that allows it to be processed
+                  loc: []
+                - type: basket_error.status_conflict
+                  msg: The basket's status prevented the request from being fulfilled
+                  loc: []
+                - type: basket_error.flow_incomplete
+                  msg: Flow incomplete
+                  loc: []
+                - type: basket_error.flow_mismatch
+                  msg: Request body does not match flow state
+                  loc: []
+                - type: basket_error.item_status_conflict
+                  msg: The basket item's status prevented the request from being fulfilled
+                  loc: []
+                - type: basket_error.price_mismatch
+                  msg: Amount paid does not match basket price
+                  loc: []
+                - type: basket_error.promocode_already_applied
+                  msg: There is already a promocode applied to your basket
+                  loc: []
+                - type: basket_error.promocode_redeemed
+                  msg: Discount code already redeemed
+                  loc: []
+                - type: basket_error.apply_promocode_failed
+                  msg: We were unable to apply that promotional code to your basket, please try again
+                  loc: []
+                - type: basket_error.promocode_not_applicable
+                  msg: The requested promotional code is not applicable to the items in your basket
+                  loc: []
+                - type: basket_error.remove_promocode_failed
+                  msg: We were unable to remove that promotional code from your basket, please try again
+                  loc: []
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: basket_error.currency_not_set
+                  msg: The basket's currency could not be set
+                  loc: []
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: basket_error.basket_item_limit
+                  msg: Baskets cannot have more than 200 items
+                  loc: []
+                - type: reservation_error.concession_id_required
+                  msg: Concession ID required for products which have concessions
+                  loc: []
+                - type: reservation_error.missing_accompaniments
+                  msg: Concession missing required accompaniments
+                  loc: []
+                - type: reservation_error.invalid_booking
+                  msg: Invalid booking request
+                  loc: []
+                - type: basket_error.invalid_session
+                  msg: The availability session is invalid
+                  loc: []
+                - type: basket_error.item_limit
+                  msg: Cannot book more than 1 ticket(s) for the same product
+                  loc: []
+                - type: basket_error.not_cancellable
+                  msg: The requested basket item is not cancellable
+                  loc: []
+                - type: reservation_error.option_required
+                  msg: This option is required
+                  loc: []
+                - type: value_error.missing
+                  msg: This field is required
+                  loc: []
+                - type: value_error.missing
+                  msg: Ticket holder personalisation required for this event
+                  loc: []
+                - type: reservation_error.reassignment_proposal
+                  msg: The requested seats could not be reserved, and an alternative has been proposed
+                  loc: []
+                  payload:
+                    requested_seats:
+                    - row: 1
+                      seat: 2
+                    - row: 1
+                      seat: 4
+                    proposed_seats:
+                    - row: 1
+                      seat: 1
+                    - row: 1
+                      seat: 2
+                - type: basket_error.total_basket_product_quantity
+                  msg: Total basket product quantity exceeds limit
+                  loc: []
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '410':
+          description: Gone
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: reservation_error.event_gone
+                  msg: The requested event is no longer available for reservation
+                  loc: []
+                - type: reservation_error.performance_gone
+                  msg: The requested performance is no longer available for reservation
+                  loc: []
+                - type: reservation_error.performance_time
+                  msg: The order cannot be processed as the event start time is too close or has passed.
+                  loc: []
+                - type: basket_error.promocode_gone
+                  msg: We were unable to claim the promotional code, please remove it and try again
+                  loc: []
+                - type: reservation_error.seats_gone
+                  msg: The requested seats are no longer available for reservation
+                  loc: []
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: basket_error.payment_mismatch
+                  msg: 'The basket''s payment method is not suitable to fulfill this request (was: stripe, should be: tickitto)'
+                  loc: []
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '402':
+          description: Payment Required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: basket_error.payment_status
+                  msg: Payment id=ID123 requires action as it is currently in status=pending
+                  loc: []
+                  payload:
+                    payment_status: pending
+                    payment_id: ID123
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+      security:
+      - HTTPBearer: []
+      parameters:
+      - required: false
+        description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+        example: 123e4567-e89b-12d3-a456-426614174000
+        schema:
+          type: string
+        name: X-Correlation-ID
+        in: header
+  /api/webhooks/prio-order-update:
+    post:
+      tags:
+      - Webhooks
+      summary: Update Order
+      operationId: update_order_api_webhooks_prio_order_update_post
+      parameters:
+      - name: body
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Body
+      - required: false
+        description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+        example: 123e4567-e89b-12d3-a456-426614174000
+        schema:
+          type: string
+        name: X-Correlation-ID
+        in: header
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '401':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: authentication_error.insufficient_permissions
+                  msg: Invalid API key - this API key does not have the required permissions to access this resource
+                  loc: []
+                - type: authentication_error.invalid_key
+                  msg: Invalid API key - this API key either does not exist or is invalid
+                  loc: []
+                - type: authentication_error.key_missing
+                  msg: An API key is required to access this endpoint
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Unauthorized
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '404':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: reservation_error.product_band_not_found
+                  msg: The requested product band could not be found
+                  loc: []
+                - type: reservation_error.basket_not_found
+                  msg: The requested basket could not be found
+                  loc: []
+                - type: reservation_error.baskets_not_found
+                  msg: The requested baskets could not be found
+                  loc: []
+                - type: reservation_error.concession_not_found
+                  msg: The requested concession could not be found
+                  loc: []
+                  payload:
+                    id: ID123
+                - type: reservation_error.event_not_found
+                  msg: The requested event could not be found
+                  loc: []
+                - type: basket_error.item_not_found
+                  msg: The requested basket item could not be found
+                  loc: []
+                - type: reservation_error.option_not_found
+                  msg: The requested option could not be found
+                  loc: []
+                - type: reservation_error.option_value_not_found
+                  msg: The requested option value could not be found
+                  loc: []
+                - type: reservation_error.performance_not_found
+                  msg: The requested performance could not be found
+                  loc: []
+                - type: reservation_error.product_not_found
+                  msg: The requested product could not be found
+                  loc: []
+                - type: basket_error.promocode_not_applied
+                  msg: That promotional code has not been applied to your basket
+                  loc: []
+                - type: basket_error.promocode_not_found
+                  msg: A promotional code corresponding to that code could not be found
+                  loc: []
+                - type: reservation_error.seats_not_found
+                  msg: The requested seats could not be found
+                  loc: []
+                - type: basket_error.session_not_found
+                  msg: The requested availability session could not be found
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Not Found
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '409':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: basket_error.status_conflict
+                  msg: Your basket has either been checked out or is currently being checked out and can no longer be changed
+                  loc: []
+                - type: basket_error.status_conflict
+                  msg: Your basket has not been checked out, preventing the request from being fulfilled.
+                  loc: []
+                - type: basket_error.not_processable
+                  msg: Your basket is not currently in a status that allows it to be processed
+                  loc: []
+                - type: basket_error.status_conflict
+                  msg: The basket's status prevented the request from being fulfilled
+                  loc: []
+                - type: basket_error.flow_incomplete
+                  msg: Flow incomplete
+                  loc: []
+                - type: basket_error.flow_mismatch
+                  msg: Request body does not match flow state
+                  loc: []
+                - type: basket_error.item_status_conflict
+                  msg: The basket item's status prevented the request from being fulfilled
+                  loc: []
+                - type: basket_error.price_mismatch
+                  msg: Amount paid does not match basket price
+                  loc: []
+                - type: basket_error.promocode_already_applied
+                  msg: There is already a promocode applied to your basket
+                  loc: []
+                - type: basket_error.promocode_redeemed
+                  msg: Discount code already redeemed
+                  loc: []
+                - type: basket_error.apply_promocode_failed
+                  msg: We were unable to apply that promotional code to your basket, please try again
+                  loc: []
+                - type: basket_error.promocode_not_applicable
+                  msg: The requested promotional code is not applicable to the items in your basket
+                  loc: []
+                - type: basket_error.remove_promocode_failed
+                  msg: We were unable to remove that promotional code from your basket, please try again
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Conflict
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '400':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: basket_error.currency_not_set
+                  msg: The basket's currency could not be set
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Bad Request
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '422':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: basket_error.basket_item_limit
+                  msg: Baskets cannot have more than 200 items
+                  loc: []
+                - type: reservation_error.concession_id_required
+                  msg: Concession ID required for products which have concessions
+                  loc: []
+                - type: reservation_error.missing_accompaniments
+                  msg: Concession missing required accompaniments
+                  loc: []
+                - type: reservation_error.invalid_booking
+                  msg: Invalid booking request
+                  loc: []
+                - type: basket_error.invalid_session
+                  msg: The availability session is invalid
+                  loc: []
+                - type: basket_error.item_limit
+                  msg: Cannot book more than 1 ticket(s) for the same product
+                  loc: []
+                - type: basket_error.not_cancellable
+                  msg: The requested basket item is not cancellable
+                  loc: []
+                - type: reservation_error.option_required
+                  msg: This option is required
+                  loc: []
+                - type: value_error.missing
+                  msg: This field is required
+                  loc: []
+                - type: value_error.missing
+                  msg: Ticket holder personalisation required for this event
+                  loc: []
+                - type: reservation_error.reassignment_proposal
+                  msg: The requested seats could not be reserved, and an alternative has been proposed
+                  loc: []
+                  payload:
+                    requested_seats:
+                    - row: 1
+                      seat: 2
+                    - row: 1
+                      seat: 4
+                    proposed_seats:
+                    - row: 1
+                      seat: 1
+                    - row: 1
+                      seat: 2
+                - type: basket_error.total_basket_product_quantity
+                  msg: Total basket product quantity exceeds limit
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Unprocessable Entity
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '410':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: reservation_error.event_gone
+                  msg: The requested event is no longer available for reservation
+                  loc: []
+                - type: reservation_error.performance_gone
+                  msg: The requested performance is no longer available for reservation
+                  loc: []
+                - type: reservation_error.performance_time
+                  msg: The order cannot be processed as the event start time is too close or has passed.
+                  loc: []
+                - type: basket_error.promocode_gone
+                  msg: We were unable to claim the promotional code, please remove it and try again
+                  loc: []
+                - type: reservation_error.seats_gone
+                  msg: The requested seats are no longer available for reservation
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Gone
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '500':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: basket_error.payment_mismatch
+                  msg: 'The basket''s payment method is not suitable to fulfill this request (was: stripe, should be: tickitto)'
+                  loc: []
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Internal Server Error
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+        '402':
+          content:
+            application/json:
+              example:
+                request_id: REQUEST123
+                detail:
+                - type: basket_error.payment_status
+                  msg: Payment id=ID123 requires action as it is currently in status=pending
+                  loc: []
+                  payload:
+                    payment_status: pending
+                    payment_id: ID123
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Payment Required
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Server-generated UUID corresponding to this specific response and its initiating request.
+              example: 123e4567-e89b-12d3-a456-426614174000
+            X-Correlation-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.
+              example: 123e4567-e89b-12d3-a456-426614174000
+components:
+  schemas:
+    Error:
+      properties:
+        type:
+          type: string
+          title: Type
+        msg:
+          type: string
+          title: Msg
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Loc
+        payload:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Payload
+      type: object
+      required:
+      - type
+      - msg
+      - loc
+      title: Error
+    VFPRequest:
+      properties:
+        signedUrl:
+          type: string
+          title: Signedurl
+        date:
+          type: string
+          title: Date
+      type: object
+      required:
+      - signedUrl
+      - date
+      title: VFPRequest
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
+      type: object
+      required:
+      - request_id
+      - detail
+      title: ErrorBody
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: key
+    HTTPBearer:
+      type: http
+      scheme: bearer
