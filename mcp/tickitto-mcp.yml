@@ -1,0 +1,64 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: openapi/tickitto-openapi-original.json
+summary: >-
+  Tickitto does not publish an official hosted MCP server. This is a candidate tool list derived
+  one-to-one from the OpenAPI operations, for use in generating an MCP server that fronts the API.
+server:
+  name: tickitto
+  transport: http
+  url: null
+  auth: {type: apiKey, header: key}
+tools:
+- name: get_account
+  description: Get the signed-in distributor account (settings, booking fees).
+  source_operation: openapi/tickitto-openapi-original.json#get_account
+- name: search_events
+  description: Search event inventory by category, city, country, date range, price, and text.
+  source_operation: openapi/tickitto-openapi-original.json#search_events
+- name: get_event
+  description: Get a single event by event_id.
+  source_operation: openapi/tickitto-openapi-original.json#get_event
+- name: search
+  description: General event search.
+  source_operation: openapi/tickitto-openapi-original.json#search
+- name: search_autocomplete
+  description: Autocomplete suggestions for search text.
+  source_operation: openapi/tickitto-openapi-original.json#search_autocomplete
+- name: get_metadata
+  description: Retrieve reference metadata (categories, locations).
+  source_operation: openapi/tickitto-openapi-original.json#get_metadata
+- name: get_availability
+  description: Fetch availability for an event and return the Ticket Selection Widget URL.
+  source_operation: openapi/tickitto-openapi-original.json#get_availability
+- name: create_basket
+  description: Create a new basket, returning a basket_id.
+  source_operation: openapi/tickitto-openapi-original.json#create_basket
+- name: view_basket
+  description: View a basket's reserved items by basket_id.
+  source_operation: openapi/tickitto-openapi-original.json#view_basket
+- name: set_basket_currency
+  description: Set the currency for a basket.
+  source_operation: openapi/tickitto-openapi-original.json#set_basket_currency
+- name: add_basket_item
+  description: Add a selected ticket to a basket.
+  source_operation: openapi/tickitto-openapi-original.json#add_basket_item
+- name: apply_basket_promocode
+  description: Apply a promocode to a basket.
+  source_operation: openapi/tickitto-openapi-original.json#apply_basket_promocode_api_basket_promocode_put
+- name: remove_basket_promocode
+  description: Remove a promocode from a basket.
+  source_operation: openapi/tickitto-openapi-original.json#remove_basket_promocode_api_basket_promocode_delete
+- name: remove_basket_item
+  description: Remove and unreserve an item from a basket.
+  source_operation: openapi/tickitto-openapi-original.json#remove_basket_item
+- name: checkout_basket
+  description: Check out a basket.
+  source_operation: openapi/tickitto-openapi-original.json#checkout_basket
+- name: cancel_basket_item
+  description: Cancel a purchased item on an order.
+  source_operation: openapi/tickitto-openapi-original.json#cancel_basket_item
+- name: get_status
+  description: Health check for the Tickitto API.
+  source_operation: openapi/tickitto-openapi-original.json#get_status

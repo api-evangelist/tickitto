@@ -1,0 +1,28 @@
+generated: '2026-07-21'
+method: searched
+source: https://dev.tickitto.tech/openapi.json
+summary: >-
+  Tickitto operates a separate development/sandbox environment. Credentials are provisioned by a
+  Tickitto account manager rather than self-serve, so no public test keys, test cards, or magic
+  values are published. The dev environment mirrors the production API surface.
+environments:
+- name: development
+  host: https://dev.tickitto.tech
+  base_path: /api
+  openapi: https://dev.tickitto.tech/openapi.json
+- name: production
+  host: https://tickitto.tech
+  base_path: /api
+  openapi: https://tickitto.tech/openapi.json
+credentials:
+  model: account-manager-issued
+  header: key
+  self_serve: false
+  notes: >-
+    API keys are associated with your account settings (booking fees, search restrictions) and
+    must be requested from your dedicated Tickitto account manager.
+payment_testing:
+  notes: >-
+    Payment capture is delegated to Stripe and Careem Pay payment objects created via the basket
+    endpoints; use those providers' documented test instruments in the development environment.
+published_test_values: none

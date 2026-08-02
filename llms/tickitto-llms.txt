@@ -1,0 +1,27 @@
+# Tickitto
+
+> Tickitto is a B2B ticketing marketplace API that lets brands and platforms sell event tickets to their own customers. Its availability-aware, fully transactional REST API spans 90,000+ events globally and ships an embeddable, white-label Ticket Selection Widget so integrators avoid building bespoke seating maps and selection UIs. Distributors keep their customer and data ownership while Tickitto tracks commission.
+
+## API
+- [Developer Docs](https://docs.tickitto.com): Guides, key principles, and endpoint reference.
+- [API Reference — Overview](https://docs.tickitto.com/key-principles/overview): What the API does and how the Widget fits in.
+- [Authentication](https://docs.tickitto.com/key-principles/authentication): API key in the `key` request header; HTTPS only.
+- [API Semantics](https://docs.tickitto.com/key-principles/api-semantics): REST, resource-oriented URLs under tickitto.tech, JSON responses.
+- [Errors](https://docs.tickitto.com/key-principles/errors): Conventional HTTP status codes and a structured error envelope.
+- [System Status](https://docs.tickitto.com/system-status/overview): GET /api/status health check.
+
+## Specs
+- [OpenAPI (production)](https://tickitto.tech/openapi.json): OpenAPI 3.0.1, 22 operations.
+- [OpenAPI (development)](https://dev.tickitto.tech/openapi.json): Development environment service description.
+
+## Concepts
+- [Events](https://docs.tickitto.com/events/overview): Inventory model and the four admission types (open_entry, date_entry, slot_entry, timed_entry).
+- [Availability & Widget](https://docs.tickitto.com/availability/overview): Availability instances and the Ticket Selection Widget.
+- [Basket](https://docs.tickitto.com/basket/overview): Baskets, 15-minute reservation ttl, checkout.
+
+## Company
+- [Website](https://tickitto.com)
+- [Solutions](https://tickitto.com/solutions)
+- [Blog](https://tickitto.com/blog)
+- [Terms & Conditions](https://tickitto.com/terms-and-conditions)
+- [Privacy Policy](https://tickitto.com/privacy-policy)

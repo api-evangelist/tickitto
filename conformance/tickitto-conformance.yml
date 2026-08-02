@@ -1,0 +1,39 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/tickitto-openapi-original.json
+docs: https://docs.tickitto.com/key-principles/api-semantics
+standards:
+- id: rest
+  conforms: true
+  evidence: Resource-oriented URLs under /api, JSON responses (docs API Semantics).
+- id: openapi-3.0
+  conforms: true
+  evidence: openapi 3.0.1 document published at https://tickitto.tech/openapi.json.
+- id: api-key-auth
+  conforms: true
+  evidence: securityScheme APIKeyHeader (apiKey in header 'key').
+- id: http-bearer
+  conforms: true
+  evidence: securityScheme HTTPBearer (http bearer) defined.
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 security schemes declared.
+- id: openid-connect
+  conforms: false
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use a custom ErrorBody envelope (request_id + detail[]), not application/problem+json.
+- id: offset-pagination
+  conforms: true
+  evidence: skip/limit + sort_by on search operations.
+- id: idempotency-keys
+  conforms: false
+  evidence: No Idempotency-Key header/parameter documented or present.
+- id: webhooks
+  conforms: true
+  evidence: Inbound supplier webhooks (/api/webhooks/*) declared in the spec.
+- id: pci-dss
+  conforms: partial
+  evidence: >-
+    Payment capture is delegated to Stripe and Careem Pay objects; Tickitto does not publish a
+    compliance/trust program of its own. No Compliance pointer emitted.

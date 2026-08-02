@@ -1,0 +1,30 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.tickitto.com/availability/overview
+summary: >-
+  Tickitto ships a client-side embeddable UI surface — the Ticket Selection Widget — that removes
+  the need to build event-specific seating maps and selection front-ends. It is distinct from a
+  server-side SDK (Tickitto publishes none).
+components:
+- family: Ticket Selection Widget
+  type: embedded-iframe
+  description: >-
+    An availability-aware, white-labelable widget that renders the correct selection UI for an
+    event based on its admission type — interactive seating maps, calendar dates, and time slots,
+    plus add-ons, pickup points, and concession selection. Loads in real time what seats/dates/times
+    are available.
+  loader: >-
+    Generated as a URL by the availability endpoint (GET /api/availability/ with event_id and
+    basket_id). Injected into the booking flow as an <iframe>.
+  integration:
+    endpoint_operation: get_availability
+    inputs: [event_id, basket_id]
+    add_to_basket: >-
+      The widget posts the buyer's selected booking_options to the associated basket_id via
+      postMessage; selected tickets then appear under the basket's items[]. No extra API
+      orchestration is required to add items.
+  responsive: true
+  white_label: true
+  docs:
+  - https://docs.tickitto.com/availability/overview
+  - https://docs.tickitto.com/key-principles/overview

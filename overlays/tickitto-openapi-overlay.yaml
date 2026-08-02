@@ -1,0 +1,30 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Tickitto API
+  version: 1.0.0
+extends: openapi/tickitto-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: tickitto
+    x-api-host: https://tickitto.tech
+    x-base-path: /api
+    x-agent-ready: true
+    description: >-
+      Tickitto B2B ticketing marketplace API. Search event inventory, fetch real-time availability
+      (returns a Ticket Selection Widget URL), build and check out baskets, and receive supplier
+      webhooks. JSON over HTTPS, authenticated with an API key in the `key` header.
+- target: $.servers
+  update:
+  - url: https://tickitto.tech/api
+    description: Production
+  - url: https://dev.tickitto.tech/api
+    description: Development / sandbox
+- target: $
+  update:
+    x-conventions:
+      auth: api-key header 'key'
+      pagination: offset (skip/limit) + sort_by
+      request_tracing: X-Correlation-ID on every operation
+      idempotency: none-documented
+      error_envelope: ErrorBody { request_id, detail[] }

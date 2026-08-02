@@ -1,0 +1,25 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/tickitto-openapi-original.json
+spec_type: Webhooks
+summary: >-
+  Tickitto's OpenAPI declares a Webhooks tag with inbound receiver endpoints used by supply
+  partners to push inventory files and order updates into the platform. Tickitto does not publish
+  an AsyncAPI document; this captures the webhook surface present in the REST spec. These are
+  partner/supplier integration webhooks rather than consumer-subscribable event streams.
+webhooks:
+- name: vivid-file-push
+  operationId: process_file_endpoint_api_webhooks_vivid_file_push_post
+  method: POST
+  path: /api/webhooks/vivid-file-push
+  direction: inbound
+  summary: Receive a supplier inventory file push (Vivid).
+  request_schema: VFPRequest
+- name: prio-order-update
+  operationId: update_order_api_webhooks_prio_order_update_post
+  method: POST
+  path: /api/webhooks/prio-order-update
+  direction: inbound
+  summary: Receive an order status update from a supplier (Prio).
+notes:
+- No AsyncAPI document is published by Tickitto; there is no consumer-facing subscribable event catalog.

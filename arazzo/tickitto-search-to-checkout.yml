@@ -1,0 +1,94 @@
+arazzo: 1.0.1
+info:
+  title: Tickitto — Search to Checkout
+  version: 1.0.0
+  summary: Create a basket, search inventory, fetch availability, add a ticket, and check out.
+sourceDescriptions:
+- name: tickitto
+  url: ../openapi/tickitto-openapi-original.json
+  type: openapi
+workflows:
+- workflowId: search-to-checkout
+  summary: >-
+    End-to-end purchase flow — create an anonymous basket, search events, fetch availability
+    (which returns the Ticket Selection Widget URL), add a selected item to the basket, review it,
+    and check out.
+  inputs:
+    type: object
+    properties:
+      city: {type: string}
+      category: {type: string}
+      currency: {type: string, default: GBP}
+      availability_session_id: {type: string}
+  steps:
+  - stepId: createBasket
+    operationId: create_basket
+    parameters:
+    - name: currency
+      in: query
+      value: $inputs.currency
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      basketId: $response.body#/_id
+  - stepId: searchEvents
+    operationId: search_events
+    parameters:
+    - name: city
+      in: query
+      value: $inputs.city
+    - name: category
+      in: query
+      value: $inputs.category
+    - name: currency
+      in: query
+      value: $inputs.currency
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      firstEventId: $response.body#/results/0/event_id
+  - stepId: fetchAvailability
+    operationId: get_availability
+    parameters:
+    - name: event_id
+      in: query
+      value: $steps.searchEvents.outputs.firstEventId
+    - name: basket_id
+      in: query
+      value: $steps.createBasket.outputs.basketId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      widgetUrl: $response.body
+  - stepId: addItem
+    operationId: add_basket_item
+    parameters:
+    - name: basket_id
+      in: query
+      value: $steps.createBasket.outputs.basketId
+    - name: availability_session_id
+      in: query
+      value: $inputs.availability_session_id
+    - name: currency
+      in: query
+      value: $inputs.currency
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: viewBasket
+    operationId: view_basket
+    parameters:
+    - name: basket_id
+      in: query
+      value: $steps.createBasket.outputs.basketId
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: checkout
+    operationId: checkout_basket
+    parameters:
+    - name: basket_id
+      in: query
+      value: $steps.createBasket.outputs.basketId
+    successCriteria:
+    - condition: $statusCode == 200
+  outputs:
+    basketId: $steps.createBasket.outputs.basketId

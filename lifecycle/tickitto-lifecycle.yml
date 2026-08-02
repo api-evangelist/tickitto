@@ -1,0 +1,35 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.tickitto.com/system-status/overview
+spec: openapi/tickitto-openapi-original.json
+versioning:
+  scheme: uri-path
+  base_path: /api
+  spec_version: 1.0.0
+  docs: https://docs.tickitto.com/key-principles/api-semantics
+environments:
+- name: production
+  host: https://tickitto.tech
+  openapi: https://tickitto.tech/openapi.json
+- name: development
+  host: https://dev.tickitto.tech
+  openapi: https://dev.tickitto.tech/openapi.json
+health_check:
+  operation: get_status
+  method: GET
+  path: /api/status
+  response: '{ "status": "healthy" }'
+  docs: https://docs.tickitto.com/system-status/overview
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: >-
+    No published deprecation/sunset policy. The API does return HTTP 410 (Gone) for resources /
+    reservations that are no longer available, and reservations expire via a 15-minute ttl.
+status_page: null
+sla:
+  url: null
+deprecated_operations: []
+notes:
+- Tickitto exposes a programmatic health endpoint (/api/status) rather than a hosted status page.
+- API keys are issued and rotated via a dedicated Tickitto account manager.

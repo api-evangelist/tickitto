@@ -1,0 +1,25 @@
+generated: '2026-07-21'
+method: searched
+summary: >-
+  Probed the standard /.well-known/ discovery surface on the website and API hosts. No well-known
+  documents are published. Tickitto does, however, publish an unauthenticated OpenAPI document at
+  a conventional root path, recorded here as the machine-readable discovery artifact.
+hosts:
+- host: https://tickitto.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /llms.txt, status: 404}
+- host: https://tickitto.tech
+  documents:
+  - {path: /openapi.json, status: 200, note: OpenAPI 3.0.1 service description (not under /.well-known/)}
+  - {path: /.well-known/security.txt, status: 404}
+- host: https://dev.tickitto.tech
+  documents:
+  - {path: /openapi.json, status: 200, note: development environment OpenAPI}
+service_descriptions:
+- https://tickitto.tech/openapi.json
+- https://dev.tickitto.tech/openapi.json

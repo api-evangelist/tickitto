@@ -1,0 +1,115 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/tickitto-openapi-original.json
+docs: https://docs.tickitto.com/events/overview
+summary: >-
+  Entity-relationship graph derived from the OpenAPI component schemas ($ref links). The domain
+  is organised around Events (inventory), Availability/Reservations, and Baskets (transaction),
+  with an Account (ApiUser) that carries commission and payment settings.
+identifiers:
+  event: event_id
+  basket: basket_id ( _id )
+  basket_item: item_id
+  order: order_id
+  availability_session: availability_session_id
+entities:
+- name: APIEvent
+  description: A product in Tickitto's inventory (concert, match, museum, experience) keyed by event_id.
+  admission_types: [open_entry, date_entry, slot_entry, timed_entry]
+- name: LiteEvent
+  description: Compact event representation returned in search results.
+- name: APIEventVenue
+  description: Venue + geo-location for an event.
+- name: EventPerformer
+  description: A performer/team associated with an event.
+- name: Reservation
+  description: A held ticket within a basket item (15-minute ttl).
+- name: Ticket
+  description: An issued ticket, with barcodes and delivery methods.
+- name: Basket
+  description: An anonymous cart (basket_id) associated with a distributor; holds reserved items.
+- name: BasketItem
+  description: A reserved product line in a basket, with pricing, dates, and event data.
+- name: ApiUser
+  description: The authenticated distributor account, with booking-fee settings and payment methods.
+- name: Metadata
+  description: Reference data — categories and locations used to drive contextual search.
+- name: SearchResults
+  description: Paginated list of LiteEvent search hits.
+relationships:
+- from: APIEvent
+  to: APIEventVenue
+  kind: has_one
+  via: venue_location
+- from: APIEvent
+  to: EventPerformer
+  kind: has_many
+  via: performers
+- from: APIEvent
+  to: Addon
+  kind: has_many
+  via: addons
+- from: APIEvent
+  to: APIPickupPoint
+  kind: has_many
+  via: pickup_points
+- from: APIEvent
+  to: Price
+  kind: has_one
+  via: from_price
+- from: SearchResults
+  to: LiteEvent
+  kind: has_many
+  via: results
+- from: Basket
+  to: BasketItem
+  kind: has_many
+  via: items
+- from: Basket
+  to: ApiPromocode
+  kind: has_many
+  via: promocodes
+- from: Basket
+  to: Price
+  kind: has_many
+  via: [total_items_price, total_booking_fee, total_discount, total_price]
+- from: BasketItem
+  to: Reservation
+  kind: has_many
+  via: reservations
+- from: BasketItem
+  to: BasketItemEventData
+  kind: has_one
+  via: event
+- from: BasketItem
+  to: EventVenue
+  kind: has_one
+  via: location
+- from: BasketItem
+  to: Organiser
+  kind: has_one
+  via: organiser
+- from: Reservation
+  to: Ticket
+  kind: has_one
+  via: ticket
+- from: Reservation
+  to: Price
+  kind: has_many
+  via: [price, commission]
+- from: Ticket
+  to: Barcode
+  kind: has_many
+  via: barcodes
+- from: Metadata
+  to: Category
+  kind: has_many
+  via: categories
+- from: Metadata
+  to: Location
+  kind: has_many
+  via: locations
+- from: ApiUser
+  to: BookingFeeSettings
+  kind: has_one
+  via: booking_fee_settings

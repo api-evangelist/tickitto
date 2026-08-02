@@ -1,0 +1,57 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.tickitto.com/key-principles/overview
+spec: openapi/tickitto-openapi-original.json
+summary: >-
+  Cross-cutting request/response semantics for the Tickitto API, searched from the docs and
+  derived from the OpenAPI. REST, resource-oriented URLs under https://tickitto.tech/api,
+  JSON request/response, HTTPS required.
+authentication:
+  style: api-key
+  header: key
+  transport: https-only
+  notes: API key issued by a Tickitto account manager; also an HTTP bearer scheme is defined. See authentication/.
+  ref: authentication/tickitto-authentication.yml
+idempotency:
+  supported: false
+  notes: >-
+    No idempotency-key header or parameter is documented or present in the OpenAPI. Writes are
+    basket-scoped and reservation-based (see reservations) rather than idempotent by key.
+pagination:
+  style: offset
+  params:
+  - skip
+  - limit
+  sort_param: sort_by
+  applies_to:
+  - search_events
+  - search
+  - search_autocomplete
+request_tracing:
+  header: X-Correlation-ID
+  scope: every-operation
+  notes: X-Correlation-ID is accepted on all operations; the error envelope also returns request_id.
+currency:
+  param: currency
+  notes: Most operations accept a currency parameter; baskets carry a currency and can be re-priced (set-basket-currency).
+localization:
+  headers:
+  - accept-language
+  - origin
+reservations:
+  ttl_seconds: 900
+  notes: >-
+    Tickets added to a basket are reserved for 15 minutes (ttl). Expired-ttl items remain in the
+    basket but are not guaranteed available at checkout; check each item's ttl.
+versioning:
+  scheme: uri-path
+  base_path: /api
+  spec_version: 1.0.0
+  ref: lifecycle/tickitto-lifecycle.yml
+error_envelope:
+  shape: 'ErrorBody { request_id, detail[]: Error{ type, msg, loc, payload }, body }'
+  rfc9457: false
+  ref: errors/tickitto-problem-types.yml
+rate_limiting:
+  signal: http-429
+  notes: Documented 429 (Too Many Requests) on overload; no published quota headers observed.

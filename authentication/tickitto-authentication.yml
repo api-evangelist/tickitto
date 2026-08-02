@@ -1,0 +1,27 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/tickitto-openapi-original.json
+docs: https://docs.tickitto.com/key-principles/authentication
+notes: >-
+  Authenticate by sending your API key in the `key` request header (no password). All endpoints
+  require authentication and HTTPS; unauthenticated or plain-HTTP requests fail. Keys are issued
+  by a Tickitto account manager and are tied to your account settings (booking fees, search
+  restrictions). An HTTP bearer scheme is also defined in the spec.
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: APIKeyHeader
+  type: apiKey
+  in: header
+  parameter: key
+  sources:
+  - openapi/tickitto-openapi-original.json
+- name: HTTPBearer
+  type: http
+  scheme: bearer
+  sources:
+  - openapi/tickitto-openapi-original.json

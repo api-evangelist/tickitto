@@ -1,0 +1,28 @@
+{
+  "provider": "tickitto",
+  "sources": [
+    "tickitto-authentication-api-openapi.yml",
+    "tickitto-availability-api-openapi.yml",
+    "tickitto-basket-api-openapi.yml",
+    "tickitto-events-api-openapi.yml",
+    "tickitto-metadata-api-openapi.yml",
+    "tickitto-search-api-openapi.yml",
+    "tickitto-system-status-api-openapi.yml",
+    "tickitto-webhooks-api-openapi.yml"
+  ],
+  "outputs": [
+    "tickitto-authentication-api-openapi.yml",
+    "tickitto-availability-api-openapi.yml",
+    "tickitto-basket-api-openapi.yml",
+    "tickitto-events-api-openapi.yml",
+    "tickitto-metadata-api-openapi.yml",
+    "tickitto-search-api-openapi.yml",
+    "tickitto-system-status-api-openapi.yml",
+    "tickitto-webhooks-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

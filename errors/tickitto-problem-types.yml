@@ -1,0 +1,65 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/tickitto-openapi-original.json
+docs: https://docs.tickitto.com/key-principles/errors
+format: custom-error-body
+summary: >-
+  The Tickitto API uses conventional HTTP status codes and returns a structured error envelope
+  (schema ErrorBody). Errors are not RFC 9457 problem+json; they are a FastAPI-style body with a
+  request_id and a detail[] list of Error objects. This catalog is derived from the OpenAPI 4xx/5xx
+  responses and enriched from the published errors reference.
+envelope:
+  schema: ErrorBody
+  content_type: application/json
+  fields:
+    request_id: Unique identifier for the request, echo it when contacting support.
+    detail: Array of Error objects describing what went wrong.
+    body: Optional echo of the offending request body.
+  error_object:
+    schema: Error
+    fields:
+      type: A machine identifier for the type of error returned.
+      msg: A human-readable message providing more details about the error.
+      loc: Location (path) of where the error occurred.
+      payload: Optional additional error context.
+  example: |
+    {
+      "request_id": "…",
+      "detail": [
+        { "type": "value_error.jsondecode", "msg": "Expecting value: line 1 column 1 (char 0)", "loc": ["body", 0] }
+      ]
+    }
+problems:
+- status: 400
+  title: Bad Request
+  meaning: The request was unacceptable, often due to a missing required parameter.
+- status: 401
+  title: Unauthorized
+  meaning: No valid API key provided in the `key` header.
+- status: 402
+  title: Request Failed
+  meaning: The parameters were valid but the request failed.
+- status: 403
+  title: Forbidden
+  meaning: The API key doesn't have permission to perform the request (e.g. search restrictions on your account).
+- status: 404
+  title: Not Found
+  meaning: The requested resource (event, basket, or item) doesn't exist.
+- status: 409
+  title: Conflict
+  meaning: The request conflicts with another request (e.g. a basket/reservation state conflict).
+- status: 410
+  title: Gone
+  meaning: The resource is no longer available — used for expired reservations / no-longer-available inventory.
+- status: 422
+  title: Unprocessable Entity
+  meaning: Request validation failed (HTTPValidationError / ValidationError detail).
+- status: 429
+  title: Too Many Requests
+  meaning: Too many requests hit the API too quickly; back off and retry.
+- status: 500
+  title: Internal Server Error
+  meaning: Something went wrong on Tickitto's side.
+notes:
+- 429 is documented in the errors reference; the OpenAPI enumerates 400/401/402/404/409/410/422/500 across operations.
+- Every response also carries the X-Correlation-ID request header for tracing (see conventions).

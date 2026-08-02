@@ -1,0 +1,16 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/tickitto-openapi-original.json
+skills:
+- file: tickitto-sell-a-ticket.md
+  name: Sell an event ticket with Tickitto
+  api: openapi/tickitto-openapi-original.json
+  operations:
+  - create_basket
+  - search_events
+  - get_event
+  - get_availability
+  - add_basket_item
+  - view_basket
+  - checkout_basket
+  - get_status

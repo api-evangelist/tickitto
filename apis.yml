@@ -1,25 +1,216 @@
 aid: tickitto
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/tickitto.png
 name: Tickitto
-description: Tickitto is a company surfaced as a portfolio company of seedcamp and added to the API Evangelist
-  network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Tickitto is a London-based B2B ticketing marketplace that lets brands and platforms sell
+  event tickets to their own customers through a single, fully transactional REST API. Its
+  curated inventory spans 90,000+ events globally, mixing one-off sporting and music events
+  with ongoing experiences, attractions, and tours. Tickitto positions itself as a marketplace
+  rather than a channel manager: distributors keep their customer relationship and data while
+  Tickitto tracks commission through a real-time dashboard. The API is availability-aware,
+  organised around events, availability instances, and baskets, and ships an embeddable,
+  white-labelable Ticket Selection Widget that renders event-specific UI (interactive seating
+  maps, calendar dates, and time slots) so integrators avoid orchestrating multiple calls or
+  building bespoke selection front-ends. Tickitto is backed by Seedcamp.
 url: https://raw.githubusercontent.com/api-evangelist/tickitto/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - seedcamp
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profiled
+x-tier-reason: enriched-from-public-api
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
-apis: []
+- Ticketing
+- Events
+- Marketplace
+- Travel & Experiences
+- Entertainment
+- Payments
+- Commerce
+apis:
+- aid: tickitto:tickitto-authentication-api
+  name: Tickitto Authentication API
+  description: The Authentication API from Tickitto — 1 operation(s) for authentication.
+  humanURL: https://docs.tickitto.com
+  baseURL: https://tickitto.tech/api
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/tickitto-authentication-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tickitto.com
+  - type: APIReference
+    url: https://docs.tickitto.com/key-principles/overview
+- aid: tickitto:tickitto-availability-api
+  name: Tickitto Availability API
+  description: The Availability API from Tickitto — 1 operation(s) for availability.
+  humanURL: https://docs.tickitto.com
+  baseURL: https://tickitto.tech/api
+  tags:
+  - Availability
+  properties:
+  - type: OpenAPI
+    url: openapi/tickitto-availability-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tickitto.com
+  - type: APIReference
+    url: https://docs.tickitto.com/key-principles/overview
+- aid: tickitto:tickitto-basket-api
+  name: Tickitto Basket API
+  description: The Basket API from Tickitto — 10 operation(s) for basket.
+  humanURL: https://docs.tickitto.com
+  baseURL: https://tickitto.tech/api
+  tags:
+  - Basket
+  properties:
+  - type: OpenAPI
+    url: openapi/tickitto-basket-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tickitto.com
+  - type: APIReference
+    url: https://docs.tickitto.com/key-principles/overview
+- aid: tickitto:tickitto-events-api
+  name: Tickitto Events API
+  description: The Events API from Tickitto — 2 operation(s) for events.
+  humanURL: https://docs.tickitto.com
+  baseURL: https://tickitto.tech/api
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/tickitto-events-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tickitto.com
+  - type: APIReference
+    url: https://docs.tickitto.com/key-principles/overview
+- aid: tickitto:tickitto-metadata-api
+  name: Tickitto Metadata API
+  description: The Metadata API from Tickitto — 1 operation(s) for metadata.
+  humanURL: https://docs.tickitto.com
+  baseURL: https://tickitto.tech/api
+  tags:
+  - Metadata
+  properties:
+  - type: OpenAPI
+    url: openapi/tickitto-metadata-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tickitto.com
+  - type: APIReference
+    url: https://docs.tickitto.com/key-principles/overview
+- aid: tickitto:tickitto-search-api
+  name: Tickitto Search API
+  description: The Search API from Tickitto — 2 operation(s) for search.
+  humanURL: https://docs.tickitto.com
+  baseURL: https://tickitto.tech/api
+  tags:
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/tickitto-search-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tickitto.com
+  - type: APIReference
+    url: https://docs.tickitto.com/key-principles/overview
+- aid: tickitto:tickitto-system-status-api
+  name: Tickitto System Status API
+  description: The System Status API from Tickitto — 1 operation(s) for system status.
+  humanURL: https://docs.tickitto.com
+  baseURL: https://tickitto.tech/api
+  tags:
+  - System Status
+  properties:
+  - type: OpenAPI
+    url: openapi/tickitto-system-status-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tickitto.com
+  - type: APIReference
+    url: https://docs.tickitto.com/key-principles/overview
+- aid: tickitto:tickitto-webhooks-api
+  name: Tickitto Webhooks API
+  description: The Webhooks API from Tickitto — 2 operation(s) for webhooks.
+  humanURL: https://docs.tickitto.com
+  baseURL: https://tickitto.tech/api
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/tickitto-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tickitto.com
+  - type: APIReference
+    url: https://docs.tickitto.com/key-principles/overview
+common:
+- type: DeveloperPortal
+  url: https://docs.tickitto.com
+- type: Documentation
+  url: https://docs.tickitto.com
+- type: APIReference
+  url: https://docs.tickitto.com/key-principles/overview
+- type: Authentication
+  url: authentication/tickitto-authentication.yml
+- type: AgenticAccess
+  url: agentic-access/tickitto-agentic-access.yml
+- type: ErrorCatalog
+  url: errors/tickitto-problem-types.yml
+- type: Conventions
+  url: conventions/tickitto-conventions.yml
+- type: DataModel
+  url: data-model/tickitto-data-model.yml
+- type: Lifecycle
+  url: lifecycle/tickitto-lifecycle.yml
+- type: Conformance
+  url: conformance/tickitto-conformance.yml
+- type: Components
+  url: components/tickitto-components.yml
+- type: Sandbox
+  url: sandbox/tickitto-sandbox.yml
+- type: MCPServer
+  url: mcp/tickitto-mcp.yml
+- type: LLMsTxt
+  url: llms/tickitto-llms.txt
+- type: WellKnown
+  url: well-known/tickitto-well-known.yml
+- type: DomainSecurity
+  url: security/tickitto-domain-security.yml
+- type: Webhooks
+  url: asyncapi/tickitto-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Arazzo
+  name: Search to Checkout
+  url: arazzo/tickitto-search-to-checkout.yml
+- type: Blog
+  url: https://tickitto.com/blog
+- type: TermsOfService
+  url: https://tickitto.com/terms-and-conditions
+- type: PrivacyPolicy
+  url: https://tickitto.com/privacy-policy
+- type: Website
+  url: https://tickitto.com
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
-common:
-- type: Website
-  url: http://tickitto.com
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 20
+  pass: local-v1
