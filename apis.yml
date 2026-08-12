@@ -157,6 +157,8 @@ apis:
   - type: APIReference
     url: https://docs.tickitto.com/key-principles/overview
 common:
+- type: Overlay
+  url: overlays/tickitto-openapi-overlay.yaml
 - type: DeveloperPortal
   url: https://docs.tickitto.com
 - type: Documentation
