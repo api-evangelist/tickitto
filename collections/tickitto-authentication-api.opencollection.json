@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authentication API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Signed In Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/authentication/account",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Retrieves metadata and settings related to the account associated with the API key used."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

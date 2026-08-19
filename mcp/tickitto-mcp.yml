@@ -2,14 +2,15 @@ generated: '2026-07-21'
 method: derived
 status: candidate
 source: openapi/tickitto-openapi-original.json
-summary: >-
-  Tickitto does not publish an official hosted MCP server. This is a candidate tool list derived
+summary: Tickitto does not publish an official hosted MCP server. This is a candidate tool list derived
   one-to-one from the OpenAPI operations, for use in generating an MCP server that fronts the API.
 server:
   name: tickitto
   transport: http
   url: null
-  auth: {type: apiKey, header: key}
+  auth:
+    type: apiKey
+    header: key
 tools:
 - name: get_account
   description: Get the signed-in distributor account (settings, booking fees).
@@ -62,3 +63,9 @@ tools:
 - name: get_status
   description: Health check for the Tickitto API.
   source_operation: openapi/tickitto-openapi-original.json#get_status
+deployment:
+  mode: none
+  verified: derived
+  tools: 17
+  checked: '2026-08-12'
+  source: catalog MCP census

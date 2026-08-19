@@ -1,0 +1,1268 @@
+{
+  "item": [
+    {
+      "id": "2ffe73c2-a90d-4e2c-8a7e-74c974ada945",
+      "name": "Events",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "664d8fb7-9e55-4099-bbf4-e7f595991fad",
+          "name": "Search For Events",
+          "request": {
+            "name": "Search For Events",
+            "description": {
+              "content": "Retrieves events from the Tickitto inventory.\n\nThe search endpoint is typically the first endpoint called to initiate an interaction with the Tickitto API and retrieves events within the date ranges specified.\n\nThe Tickitto inventory is availability aware. Therefore, at the time of performing a search query, all events returned will have availability instances for the date range specified.\n\nIf an event does not have any availability within the specified search date, it will not be returned in searches.\n\nThe search endpoint supports text search as well as filters for different event categories, cities, countries, performers and more to create a powerful contextual search experience.\n\nThe default timespan is 14 days.\n\nThe endpoint supports pagination via the `skip` and `limit` parameters and the returned `X-Total-Count` header.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "t1",
+                  "value": "<date>",
+                  "description": "Start of the date range in which returned events should have availability. Defaults to today."
+                },
+                {
+                  "disabled": false,
+                  "key": "t2",
+                  "value": "<date>",
+                  "description": "End of the date range in which returned events should have availability. Defaults to 14 days from now."
+                },
+                {
+                  "disabled": false,
+                  "key": "min_price",
+                  "value": "<number>",
+                  "description": "The minimum price to restrict the query to."
+                },
+                {
+                  "disabled": false,
+                  "key": "max_price",
+                  "value": "<number>",
+                  "description": "The maximum price to restrict the query to."
+                },
+                {
+                  "disabled": false,
+                  "key": "currency",
+                  "value": "GBP",
+                  "description": "Currency to both display event prices and to restrict the min/max price query to."
+                },
+                {
+                  "disabled": false,
+                  "key": "text",
+                  "value": "",
+                  "description": "Text to perform a search of events with."
+                },
+                {
+                  "disabled": false,
+                  "key": "range",
+                  "value": "0",
+                  "description": "Maximum distance from the requested city or cities, in km."
+                },
+                {
+                  "disabled": false,
+                  "key": "skip",
+                  "value": "<integer>",
+                  "description": "Number of results to skip for pagination; see also `limit` and the `X-Total-Count` response header."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "Number of results to return for pagination; see also `skip` and the `X-Total-Count` response header."
+                },
+                {
+                  "disabled": false,
+                  "key": "partial_match",
+                  "value": "false",
+                  "description": "Perform partial/substring text matching, includes fuzzy search (max 1 character change)"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "<string>",
+                  "description": "Sort order to use.If not specified, the default sort order is textual relevance if applicable, else geographical distance if applicable, else an arbitrary stable order."
+                },
+                {
+                  "disabled": false,
+                  "key": "event_ids",
+                  "value": "<string>",
+                  "description": "List of event IDs to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "event_ids",
+                  "value": "<string>",
+                  "description": "List of event IDs to retrieve."
+                },
+                {
+                  "disabled": false,
+                  "key": "should_raise",
+                  "value": "false"
+                },
+                {
+                  "disabled": false,
+                  "key": "profile_name",
+                  "value": "<string>",
+                  "description": "Profile name"
+                },
+                {
+                  "disabled": false,
+                  "key": "hostname",
+                  "value": "<string>",
+                  "description": "Associated hostname"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "accept-language",
+                "value": "en",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "key": "origin",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                "key": "X-Correlation-ID",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6d2e9bc2-a805-418b-b6cc-0de00e1e19d7",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "t1",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "t2",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "min_price",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "max_price",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "GBP"
+                    },
+                    {
+                      "key": "text",
+                      "value": ""
+                    },
+                    {
+                      "key": "range",
+                      "value": "0"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "partial_match",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "event_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "event_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "should_raise",
+                      "value": "false"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "accept-language",
+                    "value": "en",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The total number of events that exist for this query, ignoring pagination.",
+                  "key": "X-Total-Count",
+                  "value": "7051"
+                },
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"admission_type\": \"timed_entry\",\n    \"event_id\": \"string\",\n    \"from_price\": {\n      \"amount\": \"+000000082767969\",\n      \"currency\": \"SPA\"\n    },\n    \"soft_availability_t1\": \"2018-05-10T12:20:50.484Z\",\n    \"soft_availability_t2\": \"2023-07-11T18:03:52.571Z\",\n    \"categories\": [\n      \"string\",\n      \"string\"\n    ],\n    \"title\": \"string\",\n    \"slug\": \"string\",\n    \"description\": \"string\",\n    \"short_description\": \"string\",\n    \"cancellation_policy\": \"string\",\n    \"performers\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\"\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\"\n      }\n    ],\n    \"popularity\": 1.912004264885626,\n    \"duration\": 9067,\n    \"event_type\": \"<string>\",\n    \"tags\": [\n      \"string\"\n    ],\n    \"is_tbd\": {\n      \"time\": false,\n      \"date\": false\n    },\n    \"no_fulfilment\": false,\n    \"cancellation_allowed\": false,\n    \"personalisations_required\": {\n      \"fields\": {}\n    },\n    \"delayed_fulfilment\": false,\n    \"addon_required\": false,\n    \"pickup_required\": false,\n    \"booking_type\": \"basket_booking\",\n    \"city\": \"string\",\n    \"region\": \"string\",\n    \"state\": \"string\",\n    \"country\": \"string\",\n    \"country_code\": \"BL\",\n    \"seatplan_overview\": \"string\"\n  },\n  {\n    \"admission_type\": \"open_entry\",\n    \"event_id\": \"string\",\n    \"from_price\": {\n      \"amount\": \"+00000026.4\",\n      \"currency\": \"ZGZ\"\n    },\n    \"soft_availability_t1\": \"1987-06-01T20:19:12.692Z\",\n    \"soft_availability_t2\": \"1973-07-13T06:38:53.176Z\",\n    \"categories\": [\n      \"string\",\n      \"string\"\n    ],\n    \"title\": \"string\",\n    \"slug\": \"string\",\n    \"description\": \"string\",\n    \"short_description\": \"string\",\n    \"cancellation_policy\": \"string\",\n    \"performers\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\"\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\"\n      }\n    ],\n    \"popularity\": 1.7175705106630894,\n    \"duration\": 3928,\n    \"event_type\": \"<string>\",\n    \"tags\": [\n      \"string\"\n    ],\n    \"is_tbd\": {\n      \"time\": false,\n      \"date\": true\n    },\n    \"no_fulfilment\": false,\n    \"cancellation_allowed\": false,\n    \"personalisations_required\": {\n      \"fields\": {}\n    },\n    \"delayed_fulfilment\": false,\n    \"addon_required\": false,\n    \"pickup_required\": false,\n    \"booking_type\": \"direct_booking\",\n    \"city\": \"string\",\n    \"region\": \"string\",\n    \"state\": \"string\",\n    \"country\": \"string\",\n    \"country_code\": \"HT\",\n    \"seatplan_overview\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b9e7105f-bc67-489a-ab99-8df0a0f3e9b1",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "t1",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "t2",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "min_price",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "max_price",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "GBP"
+                    },
+                    {
+                      "key": "text",
+                      "value": ""
+                    },
+                    {
+                      "key": "range",
+                      "value": "0"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "partial_match",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "event_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "event_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "should_raise",
+                      "value": "false"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "accept-language",
+                    "value": "en",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"REQUEST123\",\n  \"detail\": [\n    {\n      \"type\": \"authentication_error.insufficient_permissions\",\n      \"msg\": \"Invalid API key - this API key does not have the required permissions to access this resource\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"authentication_error.invalid_key\",\n      \"msg\": \"Invalid API key - this API key either does not exist or is invalid\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"authentication_error.key_missing\",\n      \"msg\": \"An API key is required to access this endpoint\",\n      \"loc\": []\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6cc6a395-a988-4ce1-a672-4b8b34f88f89",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "t1",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "t2",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "min_price",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "max_price",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "GBP"
+                    },
+                    {
+                      "key": "text",
+                      "value": ""
+                    },
+                    {
+                      "key": "range",
+                      "value": "0"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "partial_match",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "event_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "event_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "should_raise",
+                      "value": "false"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "accept-language",
+                    "value": "en",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"REQUEST123\",\n  \"detail\": [\n    {\n      \"type\": \"event_error.event_not_found\",\n      \"msg\": \"The requested event could not be found\",\n      \"loc\": []\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "38a97949-3d6f-4def-babd-dada14112d20",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "t1",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "t2",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "min_price",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "max_price",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "GBP"
+                    },
+                    {
+                      "key": "text",
+                      "value": ""
+                    },
+                    {
+                      "key": "range",
+                      "value": "0"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "partial_match",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "event_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "event_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "should_raise",
+                      "value": "false"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "accept-language",
+                    "value": "en",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f38a1466-d219-41bb-8a82-0960ac40f7e0",
+          "name": "Get Event By Id",
+          "request": {
+            "name": "Get Event By Id",
+            "description": {
+              "content": "This endpoint can be used to retrieve an event by its ID. You will need to pass the event_id as a URL parameter.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                ":event_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "currency",
+                  "value": "GBP",
+                  "description": "Currency to display event prices."
+                },
+                {
+                  "disabled": false,
+                  "key": "should_raise",
+                  "value": "false"
+                },
+                {
+                  "disabled": false,
+                  "key": "profile_name",
+                  "value": "<string>",
+                  "description": "Profile name"
+                },
+                {
+                  "disabled": false,
+                  "key": "hostname",
+                  "value": "<string>",
+                  "description": "Associated hostname"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "event_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "accept-language",
+                "value": "en",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "key": "origin",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                "key": "X-Correlation-ID",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d550f712-ca0a-4002-afd6-00fa24738c75",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "GBP"
+                    },
+                    {
+                      "key": "should_raise",
+                      "value": "false"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "accept-language",
+                    "value": "en",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"admission_type\": \"open_entry\",\n  \"event_id\": \"string\",\n  \"from_price\": {\n    \"amount\": \"7683735705\",\n    \"currency\": \"GEH\"\n  },\n  \"soft_availability_t1\": \"2021-07-31T14:18:28.419Z\",\n  \"soft_availability_t2\": \"2006-01-08T10:31:48.645Z\",\n  \"categories\": [\n    \"string\",\n    \"string\"\n  ],\n  \"title\": \"string\",\n  \"slug\": \"string\",\n  \"description\": \"string\",\n  \"short_description\": \"string\",\n  \"cancellation_policy\": \"string\",\n  \"performers\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"popularity\": 3.9490350765314015,\n  \"duration\": 8245,\n  \"event_type\": \"<string>\",\n  \"tags\": [\n    \"string\"\n  ],\n  \"is_tbd\": {\n    \"time\": false,\n    \"date\": false\n  },\n  \"no_fulfilment\": false,\n  \"cancellation_allowed\": false,\n  \"personalisations_required\": {\n    \"fields\": {}\n  },\n  \"delayed_fulfilment\": false,\n  \"addon_required\": false,\n  \"pickup_required\": false,\n  \"booking_type\": \"direct_booking\",\n  \"city\": \"string\",\n  \"region\": \"string\",\n  \"state\": \"string\",\n  \"country\": \"string\",\n  \"country_code\": \"KF\",\n  \"seatplan_overview\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "992e28b7-c0d0-4d2a-b6f6-e5653729eab1",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "GBP"
+                    },
+                    {
+                      "key": "should_raise",
+                      "value": "false"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "accept-language",
+                    "value": "en",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"REQUEST123\",\n  \"detail\": [\n    {\n      \"type\": \"authentication_error.insufficient_permissions\",\n      \"msg\": \"Invalid API key - this API key does not have the required permissions to access this resource\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"authentication_error.invalid_key\",\n      \"msg\": \"Invalid API key - this API key either does not exist or is invalid\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"authentication_error.key_missing\",\n      \"msg\": \"An API key is required to access this endpoint\",\n      \"loc\": []\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6d2451b5-04d0-48fe-b619-c4fc34b715ab",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "GBP"
+                    },
+                    {
+                      "key": "should_raise",
+                      "value": "false"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "accept-language",
+                    "value": "en",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"REQUEST123\",\n  \"detail\": [\n    {\n      \"type\": \"event_error.event_not_found\",\n      \"msg\": \"The requested event could not be found\",\n      \"loc\": []\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ccc856a6-e48a-49d4-84af-aec59dd2b8de",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    ":event_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "GBP"
+                    },
+                    {
+                      "key": "should_raise",
+                      "value": "false"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "event_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "accept-language",
+                    "value": "en",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "9f1fbeb9-c5e8-4db8-a679-2aea8ec8e897",
+    "name": "Authentication Events API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

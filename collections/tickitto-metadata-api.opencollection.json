@@ -1,0 +1,79 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authentication Metadata API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Metadata",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/metadata/",
+            "headers": [
+              {
+                "name": "origin",
+                "value": ""
+              },
+              {
+                "name": "accept-language",
+                "value": ""
+              },
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "include_empty",
+                "value": "",
+                "type": "query",
+                "description": "If true, includes all locations and categories, even if they have no events. Note that this will significantly increase response size."
+              },
+              {
+                "name": "filter_children",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "profile_name",
+                "value": "",
+                "type": "query",
+                "description": "Profile name"
+              },
+              {
+                "name": "hostname",
+                "value": "",
+                "type": "query",
+                "description": "Associated hostname"
+              },
+              {
+                "name": "should_raise",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns metadata describing the possible event locations and categories and any images or other information associated with them."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

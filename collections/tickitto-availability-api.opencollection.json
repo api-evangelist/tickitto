@@ -1,0 +1,88 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authentication Availability API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Availability",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Fetch Availability For An Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/availability/",
+            "headers": [
+              {
+                "name": "origin",
+                "value": ""
+              },
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "event_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "basket_id",
+                "value": "",
+                "type": "query",
+                "description": "REQUIRED FOR A VALID BOOKING FLOW. The ID of the basket associated with the current session. Only optional if you do not intend to add tickets to a basket using this availability session."
+              },
+              {
+                "name": "allow_cache",
+                "value": "",
+                "type": "query",
+                "description": "If true, allows reusing results which are up to 300.0 seconds old.The session is returned much faster but may contain old availabilities."
+              },
+              {
+                "name": "t1",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start of the date range from which to fetch initial availabilities."
+              },
+              {
+                "name": "t2",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end of the date range from which to fetch initial availabilities."
+              },
+              {
+                "name": "profile_name",
+                "value": "",
+                "type": "query",
+                "description": "Profile name"
+              },
+              {
+                "name": "hostname",
+                "value": "",
+                "type": "query",
+                "description": "Associated hostname"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint returns a URL to Tickitto's Ticket Selection Widget for the event being searched.\n\nThe Widgets are availability aware and load in real-time what seats, dates, and times are available to be selected for that event.\n\nAny additional selection required for add ons, pickup points, or concessions will be displayed in the Widget.\n\nYou will need to pass the event_id and a basket_id with this endpoint. To generate a basket_id, you will need to first create a basket by making a POST request "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

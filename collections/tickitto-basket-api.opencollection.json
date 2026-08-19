@@ -1,0 +1,623 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authentication Basket API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Basket",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "View Basket",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/basket/",
+            "headers": [
+              {
+                "name": "accept-language",
+                "value": ""
+              },
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "basket_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Currency to display event prices."
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "should_raise",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint returns a selected basket by basket_id and displays all tickets added and reserved along with the metadata associated with those tickets.\n\nYou will need to pass a basket_id with this endpoint."
+        },
+        {
+          "info": {
+            "name": "Create Basket",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/basket/",
+            "headers": [
+              {
+                "name": "origin",
+                "value": ""
+              },
+              {
+                "name": "accept-language",
+                "value": ""
+              },
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "payment_method_type",
+                "value": "",
+                "type": "query",
+                "description": "Payment method type to use for the basket. 'tickitto': on-account credit, distributor as MoR. 'stripe': Tickitto is MoR"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Currency to display event prices."
+              },
+              {
+                "name": "use_stripe_rate",
+                "value": "",
+                "type": "query",
+                "description": "Whether to use the Stripe FXQuote exchange rate and total_local_price."
+              },
+              {
+                "name": "profile_name",
+                "value": "",
+                "type": "query",
+                "description": "Profile name"
+              },
+              {
+                "name": "hostname",
+                "value": "",
+                "type": "query",
+                "description": "Associated hostname"
+              },
+              {
+                "name": "should_raise",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint is used to create a basket with a unique `basket_id`.\n\nThe basket_id needs to be passed to the availability endpoint to generate a URL for Tickitto's Ticket Selection Widget.\n\nBasket_ids are anonymous and not associated with a specific ticket buyer; only at the checkout endpoint do you need to pass user specific data.\n\nEach basket_id you generate with your API Key will be associated with your distributor_id so that ticket transactions occurring on your platform are recorded accurat"
+        },
+        {
+          "info": {
+            "name": "Set Basket Currency",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/basket/set-basket-currency",
+            "headers": [
+              {
+                "name": "accept-language",
+                "value": ""
+              },
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "basket_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Currency to display event prices."
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "should_raise",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This basket sets the total_local_price currency for a selected basket by basket_id.\n\nYou will need to pass a basket_id with this endpoint."
+        },
+        {
+          "info": {
+            "name": "Add To Basket",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/basket/add",
+            "headers": [
+              {
+                "name": "accept-language",
+                "value": ""
+              },
+              {
+                "name": "origin",
+                "value": ""
+              },
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "basket_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "availability_session_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Currency to display event prices."
+              },
+              {
+                "name": "profile_external_user_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "should_raise",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "profile_name",
+                "value": "",
+                "type": "query",
+                "description": "Profile name"
+              },
+              {
+                "name": "hostname",
+                "value": "",
+                "type": "query",
+                "description": "Associated hostname"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint is used to reserve products before purchase.\n\nEach item includes a `ttl` field which indicates the duration for which the item is guaranteed to stay reserved.\nAfter any one item's ttl has lapsed, the basket should be retrieved again before attemping to check out in order to confirm the current status of the items.\n\n**Note:** an associated availability session is required, along with details of the item to be reserved."
+        },
+        {
+          "info": {
+            "name": "Apply Basket Promocode",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/basket/promocode",
+            "headers": [
+              {
+                "name": "origin",
+                "value": ""
+              },
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "basket_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "promocode",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Currency to display event prices."
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "Domain to validate promocode against. If not included then profile domains will be used"
+              },
+              {
+                "name": "profile_name",
+                "value": "",
+                "type": "query",
+                "description": "Profile name"
+              },
+              {
+                "name": "hostname",
+                "value": "",
+                "type": "query",
+                "description": "Associated hostname"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Applies a promotional code to a basket."
+        },
+        {
+          "info": {
+            "name": "Remove Basket Promocode",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/basket/promocode",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "basket_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "promocode",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Currency to display event prices."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Removes a promotional code from a basket."
+        },
+        {
+          "info": {
+            "name": "Remove From Basket",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/basket/remove",
+            "headers": [
+              {
+                "name": "accept-language",
+                "value": ""
+              },
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "basket_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "item_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Currency to display event prices."
+              },
+              {
+                "name": "should_raise",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint is used to remove and unreserve products that have been added and reserved to a basket_id.\n\nYou will need to pass the basket_id and the item_id that you wish to remove and unreserve as URL parameters."
+        },
+        {
+          "info": {
+            "name": "Checkout",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/basket/checkout",
+            "headers": [
+              {
+                "name": "accept-language",
+                "value": ""
+              },
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "basket_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Currency to display event prices."
+              },
+              {
+                "name": "should_raise",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint is used to convert a basket's reservations into confirmed bookings.\n\nWhen this call is made, items which are `reserved` or `errored` will immediately move to the `booking` state.\nItems in any other state - i.e. those that have have expired, are currently being booked or which have already been booked - will not be acted upon.\n\nBy the time a response is returned, items will have moved to either `booked` or `errored`.\n\nA successful response indicates that all booking operations have "
+        },
+        {
+          "info": {
+            "name": "Cancel Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/basket/cancel",
+            "headers": [
+              {
+                "name": "accept-language",
+                "value": ""
+              },
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "order_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "item_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Currency to display event prices."
+              },
+              {
+                "name": "should_raise",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Cancel Item"
+        },
+        {
+          "info": {
+            "name": "Create Stripe Object",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/basket/stripe_object",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "basket_id",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "When using Tickitto as the Merchant of Record, creates and returns an object containing the Stripe intent needed for the front-end to handle basket payment.\n\n**Note:* the account associated with the provided key must first be enabled for Stripe checkout before this request can succeed."
+        },
+        {
+          "info": {
+            "name": "Create Careem Pay Object",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/basket/careem_pay_object",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "basket_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Currency for Careem Pay transaction"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "When using Tickitto as the Merchant of Record, creates and returns an object containing the careem pay details needed for the front-end to handle basket payment.\n\n**Note:* the account associated with the provided key must first be enabled for Careem Pay checkout before this request can succeed."
+        },
+        {
+          "info": {
+            "name": "Get Intele Commission",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/basket/intele_commission",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "basket_id",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint returns commission details for a basket for Intele."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

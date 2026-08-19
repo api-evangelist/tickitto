@@ -1,0 +1,128 @@
+{
+  "item": [
+    {
+      "id": "fd617b12-e552-48b1-9d36-e365877d2a6a",
+      "name": "System Status",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8ecb84ad-8e61-4950-9815-7d7ebaa5ec0f",
+          "name": "Status",
+          "request": {
+            "name": "Status",
+            "description": {
+              "content": "This endpoint can be used to check that the API is operational.\n\nAn ongoing problem is indicated if this returns any status code other than 200 or any status other than 'healthy'.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                "key": "X-Correlation-ID",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "54d8ca51-27b9-45e2-a3f5-c3df7e64c40a",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"string\",\n  \"environment\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "25a52449-dba9-415d-8fe7-653c02c77af0",
+    "name": "Authentication System Status API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

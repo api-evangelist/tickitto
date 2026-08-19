@@ -1,0 +1,255 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authentication Events API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Events",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search For Events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/events/",
+            "headers": [
+              {
+                "name": "accept-language",
+                "value": ""
+              },
+              {
+                "name": "origin",
+                "value": ""
+              },
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "t1",
+                "value": "",
+                "type": "query",
+                "description": "Start of the date range in which returned events should have availability. Defaults to today."
+              },
+              {
+                "name": "t2",
+                "value": "",
+                "type": "query",
+                "description": "End of the date range in which returned events should have availability. Defaults to 14 days from now."
+              },
+              {
+                "name": "category",
+                "value": "",
+                "type": "query",
+                "description": "Category or categories to restrict query to."
+              },
+              {
+                "name": "city",
+                "value": "",
+                "type": "query",
+                "description": "City or cities to restrict query to."
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "State or states to restrict query to."
+              },
+              {
+                "name": "region",
+                "value": "",
+                "type": "query",
+                "description": "Region or regions to restrict the query to."
+              },
+              {
+                "name": "country",
+                "value": "",
+                "type": "query",
+                "description": "Countries to restrict query to."
+              },
+              {
+                "name": "country_code",
+                "value": "",
+                "type": "query",
+                "description": "Two-letter ISO country codes to restrict query to."
+              },
+              {
+                "name": "performer",
+                "value": "",
+                "type": "query",
+                "description": "Performers to restrict query to."
+              },
+              {
+                "name": "venue",
+                "value": "",
+                "type": "query",
+                "description": "Venues to restrict query to."
+              },
+              {
+                "name": "event_type",
+                "value": "",
+                "type": "query",
+                "description": "Event types to restrict the query to."
+              },
+              {
+                "name": "min_price",
+                "value": "",
+                "type": "query",
+                "description": "The minimum price to restrict the query to."
+              },
+              {
+                "name": "max_price",
+                "value": "",
+                "type": "query",
+                "description": "The maximum price to restrict the query to."
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Currency to both display event prices and to restrict the min/max price query to."
+              },
+              {
+                "name": "text",
+                "value": "",
+                "type": "query",
+                "description": "Text to perform a search of events with."
+              },
+              {
+                "name": "range",
+                "value": "",
+                "type": "query",
+                "description": "Maximum distance from the requested city or cities, in km."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to skip for pagination; see also `limit` and the `X-Total-Count` response header."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return for pagination; see also `skip` and the `X-Total-Count` response header."
+              },
+              {
+                "name": "partial_match",
+                "value": "",
+                "type": "query",
+                "description": "Perform partial/substring text matching, includes fuzzy search (max 1 character change)"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort order to use.If not specified, the default sort order is textual relevance if applicable, else geographical distance if applicable, else an arbitrary stable order."
+              },
+              {
+                "name": "event_ids",
+                "value": "",
+                "type": "query",
+                "description": "List of event IDs to retrieve."
+              },
+              {
+                "name": "should_raise",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "profile_name",
+                "value": "",
+                "type": "query",
+                "description": "Profile name"
+              },
+              {
+                "name": "hostname",
+                "value": "",
+                "type": "query",
+                "description": "Associated hostname"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Retrieves events from the Tickitto inventory.\n\nThe search endpoint is typically the first endpoint called to initiate an interaction with the Tickitto API and retrieves events within the date ranges specified.\n\nThe Tickitto inventory is availability aware. Therefore, at the time of performing a search query, all events returned will have availability instances for the date range specified.\n\nIf an event does not have any availability within the specified search date, it will not be returned in se"
+        },
+        {
+          "info": {
+            "name": "Get Event By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/events/:event_id",
+            "headers": [
+              {
+                "name": "accept-language",
+                "value": ""
+              },
+              {
+                "name": "origin",
+                "value": ""
+              },
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ],
+            "params": [
+              {
+                "name": "event_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Currency to display event prices."
+              },
+              {
+                "name": "should_raise",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "profile_name",
+                "value": "",
+                "type": "query",
+                "description": "Profile name"
+              },
+              {
+                "name": "hostname",
+                "value": "",
+                "type": "query",
+                "description": "Associated hostname"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "key",
+              "value": "{{key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint can be used to retrieve an event by its ID. You will need to pass the event_id as a URL parameter."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

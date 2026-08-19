@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authentication System Status API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "System Status",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/status",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": "123e4567-e89b-12d3-a456-426614174000"
+              }
+            ]
+          },
+          "docs": "This endpoint can be used to check that the API is operational.\n\nAn ongoing problem is indicated if this returns any status code other than 200 or any status other than 'healthy'."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

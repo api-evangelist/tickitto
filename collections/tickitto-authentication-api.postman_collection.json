@@ -1,0 +1,217 @@
+{
+  "item": [
+    {
+      "id": "767ae7d6-8107-4149-96a1-435aa3c84043",
+      "name": "Authentication",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2edf07c0-8053-4e60-9052-aa8446bbc6c5",
+          "name": "Get Signed In Account",
+          "request": {
+            "name": "Get Signed In Account",
+            "description": {
+              "content": "Retrieves metadata and settings related to the account associated with the API key used.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "authentication",
+                "account"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                "key": "X-Correlation-ID",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "bfe362bf-eb1f-4327-bfae-a94f98c9527d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "authentication",
+                    "account"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"booking_fee_settings\": {\n    \"item_min_charge\": 0,\n    \"item_max_charge\": 999.999,\n    \"item_variable_charge\": 1,\n    \"item_fixed_charge\": 0\n  },\n  \"payment_methods\": {\n    \"tickitto\": {\n      \"amendment_trigger\": \"external\",\n      \"enabled\": false,\n      \"name\": \"tickitto\"\n    },\n    \"stripe\": {\n      \"amendment_trigger\": \"iterative\",\n      \"enabled\": false,\n      \"name\": \"stripe\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "77dbfc43-e040-4f2b-9075-900265da6400",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "authentication",
+                    "account"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"REQUEST123\",\n  \"detail\": [\n    {\n      \"type\": \"authentication_error.insufficient_permissions\",\n      \"msg\": \"Invalid API key - this API key does not have the required permissions to access this resource\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"authentication_error.invalid_key\",\n      \"msg\": \"Invalid API key - this API key either does not exist or is invalid\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"authentication_error.key_missing\",\n      \"msg\": \"An API key is required to access this endpoint\",\n      \"loc\": []\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "161e3d74-15e0-4227-88ee-339d02a59b04",
+    "name": "Authentication API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

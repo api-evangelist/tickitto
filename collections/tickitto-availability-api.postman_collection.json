@@ -1,0 +1,924 @@
+{
+  "item": [
+    {
+      "id": "e5bbee8e-8724-4342-9934-077d47b27093",
+      "name": "Availability",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6f593cbd-58c3-4215-8ca2-6110009f13ad",
+          "name": "Fetch Availability For An Event",
+          "request": {
+            "name": "Fetch Availability For An Event",
+            "description": {
+              "content": "This endpoint returns a URL to Tickitto's Ticket Selection Widget for the event being searched.\n\nThe Widgets are availability aware and load in real-time what seats, dates, and times are available to be selected for that event.\n\nAny additional selection required for add ons, pickup points, or concessions will be displayed in the Widget.\n\nYou will need to pass the event_id and a basket_id with this endpoint. To generate a basket_id, you will need to first create a basket by making a POST request to the create\nbasket endpoint.\n\nWhen the ticket buyer selects a ticket via the Widget, they will then need to invoke the 'add to basket' action. This action will add the chosen ticket(s) to the basket_id\nassociated with that widget URL.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "availability",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "event_id",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "basket_id",
+                  "value": "<string>",
+                  "description": "REQUIRED FOR A VALID BOOKING FLOW. The ID of the basket associated with the current session. Only optional if you do not intend to add tickets to a basket using this availability session."
+                },
+                {
+                  "disabled": false,
+                  "key": "allow_cache",
+                  "value": "false",
+                  "description": "If true, allows reusing results which are up to 300.0 seconds old.The session is returned much faster but may contain old availabilities."
+                },
+                {
+                  "disabled": false,
+                  "key": "t1",
+                  "value": "<date>",
+                  "description": "Inclusive start of the date range from which to fetch initial availabilities."
+                },
+                {
+                  "disabled": false,
+                  "key": "t2",
+                  "value": "<date>",
+                  "description": "Inclusive end of the date range from which to fetch initial availabilities."
+                },
+                {
+                  "disabled": false,
+                  "key": "profile_name",
+                  "value": "<string>",
+                  "description": "Profile name"
+                },
+                {
+                  "disabled": false,
+                  "key": "hostname",
+                  "value": "<string>",
+                  "description": "Associated hostname"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "origin",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                "key": "X-Correlation-ID",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "10f0cb82-5c43-4d06-b737-0f0b2b091405",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "availability",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "event_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "basket_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "allow_cache",
+                      "value": "false"
+                    },
+                    {
+                      "key": "t1",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "t2",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"session_id\": \"string\",\n  \"view_url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe14d7e7-fdb5-4111-ab7b-17d2e61edd57",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "availability",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "event_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "basket_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "allow_cache",
+                      "value": "false"
+                    },
+                    {
+                      "key": "t1",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "t2",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"REQUEST123\",\n  \"detail\": [\n    {\n      \"type\": \"availability_error.flow_not_supported\",\n      \"msg\": \"Flow is not supported for this availability\",\n      \"loc\": []\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "60c71fda-f95e-4338-b522-770a93ac4ebe",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "availability",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "event_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "basket_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "allow_cache",
+                      "value": "false"
+                    },
+                    {
+                      "key": "t1",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "t2",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"REQUEST123\",\n  \"detail\": [\n    {\n      \"type\": \"authentication_error.insufficient_permissions\",\n      \"msg\": \"Invalid API key - this API key does not have the required permissions to access this resource\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"authentication_error.invalid_key\",\n      \"msg\": \"Invalid API key - this API key either does not exist or is invalid\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"authentication_error.key_missing\",\n      \"msg\": \"An API key is required to access this endpoint\",\n      \"loc\": []\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4ebe4911-9fd3-4f26-b584-5a4db68ebcfa",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "availability",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "event_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "basket_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "allow_cache",
+                      "value": "false"
+                    },
+                    {
+                      "key": "t1",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "t2",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"REQUEST123\",\n  \"detail\": [\n    {\n      \"type\": \"availability_error.performance_not_found\",\n      \"msg\": \"The requested performance could not be found\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"availability_error.basket_not_found\",\n      \"msg\": \"The requested basket could not be found\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"availability_error.event_not_found\",\n      \"msg\": \"The requested event could not be found\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"availability_error.flow_not_found\",\n      \"msg\": \"No active flow was found for the requested session\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"availability_error.session_not_found\",\n      \"msg\": \"The requested availability session could not be found\",\n      \"loc\": []\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e6cc891f-7b94-4f9b-bf81-677e43b9d861",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "availability",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "event_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "basket_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "allow_cache",
+                      "value": "false"
+                    },
+                    {
+                      "key": "t1",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "t2",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"REQUEST123\",\n  \"detail\": [\n    {\n      \"type\": \"availability_error.status_conflict\",\n      \"msg\": \"The basket's status prevented the request from being fulfilled\",\n      \"loc\": []\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7814fca5-93d7-4e22-8d3d-b235f068293d",
+              "name": "Gone",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "availability",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "event_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "basket_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "allow_cache",
+                      "value": "false"
+                    },
+                    {
+                      "key": "t1",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "t2",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Gone",
+              "code": 410,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"REQUEST123\",\n  \"detail\": [\n    {\n      \"type\": \"availability_error.event_gone\",\n      \"msg\": \"The requested event is no longer available\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"availability_error.availability_gone\",\n      \"msg\": \"The requested event is no longer available for reservation\",\n      \"loc\": []\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "68dca845-d281-427c-8216-8b347592199c",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "availability",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "event_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "basket_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "allow_cache",
+                      "value": "false"
+                    },
+                    {
+                      "key": "t1",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "t2",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8b2d7a9b-98c0-4e15-9c8a-def940561850",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "availability",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "event_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "basket_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "allow_cache",
+                      "value": "false"
+                    },
+                    {
+                      "key": "t1",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "t2",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"REQUEST123\",\n  \"detail\": [\n    {\n      \"type\": \"availability_error.flow_error\",\n      \"msg\": \"The availability flow failed permanently\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"availability_error.session_errored\",\n      \"msg\": \"The availability session could not be initialised\",\n      \"loc\": []\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "00bb16b0-9cbc-4477-8b8d-bb8b192d1faf",
+    "name": "Authentication Availability API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

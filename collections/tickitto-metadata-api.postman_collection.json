@@ -1,0 +1,420 @@
+{
+  "item": [
+    {
+      "id": "e0ef4598-e852-412e-bc5f-269900bb89be",
+      "name": "Metadata",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4b92b4f8-baf4-4cbd-93dd-3e651df429f2",
+          "name": "Get Metadata",
+          "request": {
+            "name": "Get Metadata",
+            "description": {
+              "content": "Returns metadata describing the possible event locations and categories and any images or other information associated with them.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "metadata",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include_empty",
+                  "value": "false",
+                  "description": "If true, includes all locations and categories, even if they have no events. Note that this will significantly increase response size."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter_children",
+                  "value": "false"
+                },
+                {
+                  "disabled": false,
+                  "key": "profile_name",
+                  "value": "<string>",
+                  "description": "Profile name"
+                },
+                {
+                  "disabled": false,
+                  "key": "hostname",
+                  "value": "<string>",
+                  "description": "Associated hostname"
+                },
+                {
+                  "disabled": false,
+                  "key": "should_raise",
+                  "value": "false"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "origin",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "key": "accept-language",
+                "value": "en",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                "key": "X-Correlation-ID",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4b22d6d1-5419-480e-8abb-0489ae8221e9",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "metadata",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_empty",
+                      "value": "false"
+                    },
+                    {
+                      "key": "filter_children",
+                      "value": "false"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "should_raise",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "accept-language",
+                    "value": "en",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"categories\": [\n    {\n      \"name\": \"string\",\n      \"localised_name\": \"string\",\n      \"id\": \"string\",\n      \"parent_name\": \"string\",\n      \"children\": [\n        \"string\",\n        \"string\"\n      ],\n      \"event_count\": 0\n    },\n    {\n      \"name\": \"string\",\n      \"localised_name\": \"string\",\n      \"id\": \"string\",\n      \"parent_name\": \"string\",\n      \"children\": [\n        \"string\",\n        \"string\"\n      ],\n      \"event_count\": 0\n    }\n  ],\n  \"locations\": [\n    {\n      \"country_code\": \"string\",\n      \"country_name\": \"string\",\n      \"localised_name\": \"string\",\n      \"event_count\": 0\n    },\n    {\n      \"country_code\": \"string\",\n      \"country_name\": \"string\",\n      \"localised_name\": \"string\",\n      \"event_count\": 0\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "65f04f99-9f5d-4354-acfe-dd563efade91",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "metadata",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_empty",
+                      "value": "false"
+                    },
+                    {
+                      "key": "filter_children",
+                      "value": "false"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "should_raise",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "accept-language",
+                    "value": "en",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"REQUEST123\",\n  \"detail\": [\n    {\n      \"type\": \"authentication_error.insufficient_permissions\",\n      \"msg\": \"Invalid API key - this API key does not have the required permissions to access this resource\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"authentication_error.invalid_key\",\n      \"msg\": \"Invalid API key - this API key either does not exist or is invalid\",\n      \"loc\": []\n    },\n    {\n      \"type\": \"authentication_error.key_missing\",\n      \"msg\": \"An API key is required to access this endpoint\",\n      \"loc\": []\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "11b8e70b-bc26-42fc-9f33-6b02c065fa26",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "metadata",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_empty",
+                      "value": "false"
+                    },
+                    {
+                      "key": "filter_children",
+                      "value": "false"
+                    },
+                    {
+                      "key": "profile_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hostname",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "should_raise",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "accept-language",
+                    "value": "en",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                    "key": "X-Correlation-ID",
+                    "value": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Server-generated UUID corresponding to this specific response and its initiating request.",
+                  "key": "X-Request-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "disabled": false,
+                  "description": "Optional transaction reference provided by the client. Used to correlate API requests and responses with client flow in logs, errors etc.",
+                  "key": "X-Correlation-ID",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "5970a3d9-13f2-4b5e-b872-254d84b97784",
+    "name": "Authentication Metadata API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}
