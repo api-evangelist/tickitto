@@ -37,6 +37,15 @@ modified: '2026-07-21'
 tags:
 - Company
 - Ticketing
+- Event
+- Marketplace
+- Travel & Experiences
+- Entertainment
+- Payments
+- Commerce
+tags_raw:
+- Company
+- Ticketing
 - Events
 - Marketplace
 - Travel & Experiences
@@ -92,6 +101,8 @@ apis:
   humanURL: https://docs.tickitto.com
   baseURL: https://tickitto.tech/api
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -148,6 +159,8 @@ apis:
   humanURL: https://docs.tickitto.com
   baseURL: https://tickitto.tech/api
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
