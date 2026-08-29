@@ -4,8 +4,14 @@ info:
   version: 1.0.0
   summary: Create a basket, search inventory, fetch availability, add a ticket, and check out.
 sourceDescriptions:
-- name: tickitto
-  url: ../openapi/tickitto-openapi-original.json
+- name: availabilityApi
+  url: ../openapi/tickitto-availability-api-openapi.yml
+  type: openapi
+- name: basketApi
+  url: ../openapi/tickitto-basket-api-openapi.yml
+  type: openapi
+- name: eventsApi
+  url: ../openapi/tickitto-events-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: search-to-checkout
