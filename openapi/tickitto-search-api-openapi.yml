@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Authentication Search API
+  title: Search API
   version: 1.0.0
 tags:
 - name: Search
@@ -10,7 +10,16 @@ paths:
       tags:
       - Search
       summary: Search For Events
-      description: "Searches for events from the Tickitto inventory and provides additional metadata about the search result. \n\nThe search endpoint is meant for use with the Tickitto website. \n\nThe search endpoint supports text search as well as filters for different event categories, cities, or countries to create a powerful contextual search experience. \n\nThe endpoint supports pagination via the `skip` and `limit` parameters and the returned `X-Total-Count` header."
+      description: 'Searches for events from the Tickitto inventory and provides additional metadata about the search result.
+
+
+        The search endpoint is meant for use with the Tickitto website.
+
+
+        The search endpoint supports text search as well as filters for different event categories, cities, or countries to create a powerful contextual search experience.
+
+
+        The endpoint supports pagination via the `skip` and `limit` parameters and the returned `X-Total-Count` header.'
       operationId: search
       security:
       - APIKeyHeader: []
@@ -594,13 +603,6 @@ paths:
               example: 123e4567-e89b-12d3-a456-426614174000
 components:
   schemas:
-    ResultSort:
-      type: string
-      enum:
-      - price_asc
-      - price_desc
-      - popularity
-      title: ResultSort
     Image:
       properties:
         desktop:
@@ -644,55 +646,32 @@ components:
       - request_id
       - detail
       title: ErrorBody
-    SearchResults:
+    Error:
       properties:
-        results:
+        type:
+          type: string
+          title: Type
+        msg:
+          type: string
+          title: Msg
+        loc:
           items:
-            $ref: '#/components/schemas/LiteEvent'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Results
-          description: Event results (lightweight on event information for smaller response size).
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of events found.
-          examples:
-          - 10
-        category_count:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Category Count
-          description: Category count for this search result
-          examples:
-          - Attractions: 1
-            Tours: 2
-        city_count:
-          additionalProperties:
-            type: integer
-          type: object
-          title: City Count
-          description: City count for this search result set
-          examples:
-          - London: 1
-            Paris: 2
-        country_count:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Country Count
-          description: Country code count for this search result set
-          examples:
-          - FR: 2
-            GB: 1
+          title: Loc
+        payload:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Payload
       type: object
       required:
-      - results
-      - total_count
-      - category_count
-      - city_count
-      - country_count
-      title: SearchResults
+      - type
+      - msg
+      - loc
+      title: Error
     LiteEvent:
       properties:
         title:
@@ -906,18 +885,13 @@ components:
           default: []
       type: object
       title: AutocompleteResults
-    EventType:
+    ResultSort:
       type: string
       enum:
-      - Standard
-      - Cinema
-      title: EventType
-      description: 'Event type classification.
-
-
-        - STANDARD: (Currently) All non-cinema events
-
-        - CINEMA: All cinema experiences'
+      - price_asc
+      - price_desc
+      - popularity
+      title: ResultSort
     ValidationError:
       properties:
         loc:
@@ -939,30 +913,127 @@ components:
       - msg
       - type
       title: ValidationError
-    Price:
+    AutocompleteField:
       properties:
-        amount:
+        name:
           type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-          description: Monetary value of this price in the given currency, with decimal point i.e. not integer format
+          title: Name
+          description: Title/name value of the field
           examples:
-          - '3.99'
-        currency:
+          - Dubai
+        score:
+          type: number
+          title: Score
+          description: MongoDB Atlas score for the autocomplete text match - larger is a better match
+          examples:
+          - 0.8567645
+        slug:
           type: string
-          maxLength: 3
-          minLength: 3
-          pattern: '[A-Z][A-Z][A-Z]'
-          title: Currency
-          description: ISO 4217 code for the currency in which the item's prices are sent
+          title: Slug
+          description: Slug value of the field
           examples:
-          - GBP
+          - the-cat-in-the-hat
+        id:
+          type: string
+          title: Id
+          description: ID value of the field
+          examples:
+          - 10
       type: object
       required:
-      - amount
-      - currency
-      title: Price
-      description: Represents an absolute monetary value in a particular currency. Cannot be negative.
+      - name
+      - score
+      - slug
+      - id
+      title: AutocompleteField
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    EventType:
+      type: string
+      enum:
+      - Standard
+      - Cinema
+      title: EventType
+      description: 'Event type classification.
+
+
+        - STANDARD: (Currently) All non-cinema events
+
+        - CINEMA: All cinema experiences'
+    IsTbd:
+      properties:
+        time:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Time
+          description: Whether the event time is to be determined
+          default: false
+        date:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Date
+          description: Whether the event date is to be determined
+          default: false
+      type: object
+      title: IsTbd
+    SearchResults:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/LiteEvent'
+          type: array
+          title: Results
+          description: Event results (lightweight on event information for smaller response size).
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of events found.
+          examples:
+          - 10
+        category_count:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Category Count
+          description: Category count for this search result
+          examples:
+          - Attractions: 1
+            Tours: 2
+        city_count:
+          additionalProperties:
+            type: integer
+          type: object
+          title: City Count
+          description: City count for this search result set
+          examples:
+          - London: 1
+            Paris: 2
+        country_count:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Country Count
+          description: Country code count for this search result set
+          examples:
+          - FR: 2
+            GB: 1
+      type: object
+      required:
+      - results
+      - total_count
+      - category_count
+      - city_count
+      - country_count
+      title: SearchResults
     APIEventVenue:
       properties:
         latitude:
@@ -1043,92 +1114,30 @@ components:
       - venue_address
       - venue_name
       title: APIEventVenue
-    Error:
+    Price:
       properties:
-        type:
+        amount:
           type: string
-          title: Type
-        msg:
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: Monetary value of this price in the given currency, with decimal point i.e. not integer format
+          examples:
+          - '3.99'
+        currency:
           type: string
-          title: Msg
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Loc
-        payload:
-          anyOf:
-          - {}
-          - type: 'null'
-          title: Payload
+          maxLength: 3
+          minLength: 3
+          pattern: '[A-Z][A-Z][A-Z]'
+          title: Currency
+          description: ISO 4217 code for the currency in which the item's prices are sent
+          examples:
+          - GBP
       type: object
       required:
-      - type
-      - msg
-      - loc
-      title: Error
-    IsTbd:
-      properties:
-        time:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Time
-          description: Whether the event time is to be determined
-          default: false
-        date:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Date
-          description: Whether the event date is to be determined
-          default: false
-      type: object
-      title: IsTbd
-    AutocompleteField:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Title/name value of the field
-          examples:
-          - Dubai
-        score:
-          type: number
-          title: Score
-          description: MongoDB Atlas score for the autocomplete text match - larger is a better match
-          examples:
-          - 0.8567645
-        slug:
-          type: string
-          title: Slug
-          description: Slug value of the field
-          examples:
-          - the-cat-in-the-hat
-        id:
-          type: string
-          title: Id
-          description: ID value of the field
-          examples:
-          - 10
-      type: object
-      required:
-      - name
-      - score
-      - slug
-      - id
-      title: AutocompleteField
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      - amount
+      - currency
+      title: Price
+      description: Represents an absolute monetary value in a particular currency. Cannot be negative.
   securitySchemes:
     APIKeyHeader:
       type: apiKey

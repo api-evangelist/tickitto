@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Authentication Metadata API
+  title: Metadata API
   version: 1.0.0
 tags:
 - name: Metadata
@@ -152,59 +152,6 @@ paths:
               example: 123e4567-e89b-12d3-a456-426614174000
 components:
   schemas:
-    State:
-      properties:
-        localised_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Localised Name
-          description: Localisable name.
-        name:
-          type: string
-          title: Name
-          description: Location name.
-        group_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Group Name
-          description: Location grouping name.
-        images:
-          items:
-            $ref: '#/components/schemas/Image'
-          type: array
-          title: Images
-          description: URLs of images which can be used to represent this location.
-          default: []
-        latitude:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Latitude
-          description: Latitudinal position of the centre point of this location.
-        longitude:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Longitude
-          description: Longitudinal position of the centre point of this location.
-        event_count:
-          type: integer
-          title: Event Count
-          description: Number of events in this location which have availability.
-          default: 0
-        country_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Country Name
-          description: Country name e.g. United Arab Emirates
-      type: object
-      required:
-      - name
-      title: State
-      description: Metadata and images for a state.
     Metadata:
       properties:
         categories:
@@ -258,6 +205,128 @@ components:
           default: ''
       type: object
       title: SourcedImage
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
+      type: object
+      required:
+      - request_id
+      - detail
+      title: ErrorBody
+    Error:
+      properties:
+        type:
+          type: string
+          title: Type
+        msg:
+          type: string
+          title: Msg
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Loc
+        payload:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Payload
+      type: object
+      required:
+      - type
+      - msg
+      - loc
+      title: Error
+    Image:
+      properties:
+        desktop:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desktop
+          description: URL to use on desktop devices
+        mobile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mobile
+          description: URL to use on mobile devices
+        thumbnail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Thumbnail
+          description: URL of a square version of this image
+      type: object
+      title: Image
+    State:
+      properties:
+        localised_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Localised Name
+          description: Localisable name.
+        name:
+          type: string
+          title: Name
+          description: Location name.
+        group_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Group Name
+          description: Location grouping name.
+        images:
+          items:
+            $ref: '#/components/schemas/Image'
+          type: array
+          title: Images
+          description: URLs of images which can be used to represent this location.
+          default: []
+        latitude:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Latitude
+          description: Latitudinal position of the centre point of this location.
+        longitude:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Longitude
+          description: Longitudinal position of the centre point of this location.
+        event_count:
+          type: integer
+          title: Event Count
+          description: Number of events in this location which have availability.
+          default: 0
+        country_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country Name
+          description: Country name e.g. United Arab Emirates
+      type: object
+      required:
+      - name
+      title: State
+      description: Metadata and images for a state.
     Category:
       properties:
         localised_name:
@@ -309,6 +378,89 @@ components:
       - name
       title: Category
       description: Metadata and images for a category of events e.g. Tennis, Sports, Theatre.
+    City:
+      properties:
+        localised_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Localised Name
+          description: Localisable name.
+        name:
+          type: string
+          title: Name
+          description: Location name.
+        group_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Group Name
+          description: Location grouping name.
+        images:
+          items:
+            $ref: '#/components/schemas/Image'
+          type: array
+          title: Images
+          description: URLs of images which can be used to represent this location.
+          default: []
+        latitude:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Latitude
+          description: Latitudinal position of the centre point of this location.
+        longitude:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Longitude
+          description: Longitudinal position of the centre point of this location.
+        event_count:
+          type: integer
+          title: Event Count
+          description: Number of events in this location which have availability.
+          default: 0
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: State
+          description: Parent state, if applicable.
+      type: object
+      required:
+      - name
+      title: City
+      description: Metadata and images for a city.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     Region:
       properties:
         localised_name:
@@ -362,49 +514,6 @@ components:
       required:
       - name
       title: Region
-    Image:
-      properties:
-        desktop:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Desktop
-          description: URL to use on desktop devices
-        mobile:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Mobile
-          description: URL to use on mobile devices
-        thumbnail:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Thumbnail
-          description: URL of a square version of this image
-      type: object
-      title: Image
-    ErrorBody:
-      properties:
-        request_id:
-          type: string
-          title: Request Id
-        detail:
-          items:
-            $ref: '#/components/schemas/Error'
-          type: array
-          title: Detail
-        body:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Body
-      type: object
-      required:
-      - request_id
-      - detail
-      title: ErrorBody
     Location:
       properties:
         localised_name:
@@ -467,115 +576,6 @@ components:
       - country_name
       title: Location
       description: Metadata and images for a country.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    City:
-      properties:
-        localised_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Localised Name
-          description: Localisable name.
-        name:
-          type: string
-          title: Name
-          description: Location name.
-        group_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Group Name
-          description: Location grouping name.
-        images:
-          items:
-            $ref: '#/components/schemas/Image'
-          type: array
-          title: Images
-          description: URLs of images which can be used to represent this location.
-          default: []
-        latitude:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Latitude
-          description: Latitudinal position of the centre point of this location.
-        longitude:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Longitude
-          description: Longitudinal position of the centre point of this location.
-        event_count:
-          type: integer
-          title: Event Count
-          description: Number of events in this location which have availability.
-          default: 0
-        state:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: State
-          description: Parent state, if applicable.
-      type: object
-      required:
-      - name
-      title: City
-      description: Metadata and images for a city.
-    Error:
-      properties:
-        type:
-          type: string
-          title: Type
-        msg:
-          type: string
-          title: Msg
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Loc
-        payload:
-          anyOf:
-          - {}
-          - type: 'null'
-          title: Payload
-      type: object
-      required:
-      - type
-      - msg
-      - loc
-      title: Error
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

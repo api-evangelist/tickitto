@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Authentication Basket API
+  title: Basket API
   version: 1.0.0
 tags:
 - name: Basket
@@ -5061,249 +5061,6 @@ paths:
               example: 123e4567-e89b-12d3-a456-426614174000
 components:
   schemas:
-    StripeObject:
-      properties:
-        stripe_payment_intent:
-          type: string
-          title: Stripe Payment Intent
-        stripe_payment_intent_secret:
-          type: string
-          title: Stripe Payment Intent Secret
-        customer:
-          $ref: '#/components/schemas/Customer'
-      type: object
-      required:
-      - stripe_payment_intent
-      - stripe_payment_intent_secret
-      - customer
-      title: StripeObject
-    BasketItem:
-      properties:
-        cancellation_policy_information:
-          items:
-            type: string
-          type: array
-          title: Cancellation Policy Information
-          description: Cancellation and refund policy for the item itself.
-          default: []
-          examples:
-          - - Attendees must cancel at least 3 days in advance.
-            - 50% of total price refundable only.
-        cancellation_policy:
-          type: string
-          title: Cancellation Policy
-          description: (DEPRECATED) Cancellation policy for the item itself.
-          deprecated: true
-        id:
-          type: string
-          title: Id
-        created_on:
-          type: string
-          format: date-time
-          title: Created On
-          default: '2026-07-21T09:25:48.786410+00:00'
-          examples:
-          - '2026-07-21T09:25:48.786420Z'
-        booked_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Booked At
-          description: When this item was booked, if it was booked successfully.
-          examples:
-          - '2026-07-21T09:25:48.786476Z'
-        external_reference:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: External Reference
-          description: Distributor reference for this basket item
-        event_id:
-          type: string
-          title: Event Id
-        event_slug:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Event Slug
-        availability_id:
-          type: string
-          title: Availability Id
-          default: ''
-        product_id:
-          type: string
-          title: Product Id
-        band_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Band Id
-        event_name:
-          type: string
-          title: Event Name
-        cancellation_allowed:
-          type: boolean
-          title: Cancellation Allowed
-          default: false
-        important_information:
-          items:
-            type: string
-          type: array
-          title: Important Information
-          default: []
-        notes:
-          anyOf:
-          - $ref: '#/components/schemas/Notes'
-          - type: 'null'
-        ticket_instructions:
-          items:
-            type: string
-          type: array
-          title: Ticket Instructions
-          default: []
-        billing_information:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Billing Information
-        from_date:
-          $ref: '#/components/schemas/EventDateTime'
-          description: Item start date and time.
-        to_date:
-          $ref: '#/components/schemas/EventDateTime'
-          description: Item end date and time.
-        reservations:
-          items:
-            $ref: '#/components/schemas/Reservation'
-          type: array
-          title: Reservations
-          description: The specific reservations associated with this item, or tickets if the item has been checked out.
-          default: []
-        price:
-          $ref: '#/components/schemas/Price'
-          description: Total price of all tickets belonging to this item. Inclusive of all other prices EXCEPT `booking_fee`.
-          examples:
-          - amount: 4.99
-            currency: GBP
-        booking_fee:
-          $ref: '#/components/schemas/Price'
-          description: Distributor booking fee for this item.
-          default:
-            amount: 0
-            currency: GBP
-          examples:
-          - amount: 1.0
-            currency: GBP
-        adjustments:
-          items:
-            $ref: '#/components/schemas/Adjustment'
-          type: array
-          title: Adjustments
-          description: 'Specific named surcharges/discounts (NOTE: already included in the `price` field) e.g. transfers or addons'
-          default: []
-        supplier_adjustment:
-          $ref: '#/components/schemas/PriceDelta'
-          description: Net supplier discount/surcharge for this item.
-          default:
-            amount: 0
-            currency: GBP
-          examples:
-          - amount: -0.99
-            currency: GBP
-        organiser:
-          anyOf:
-          - $ref: '#/components/schemas/Organiser'
-          - type: 'null'
-          description: Event organiser information.
-        pickup:
-          anyOf:
-          - $ref: '#/components/schemas/Pickup'
-          - type: 'null'
-          description: Information about pickup of the ticket holders.
-        dropoff:
-          anyOf:
-          - $ref: '#/components/schemas/Dropoff'
-          - type: 'null'
-          description: Information about dropoff of the ticket holders.
-        location:
-          anyOf:
-          - $ref: '#/components/schemas/EventVenue'
-          - type: 'null'
-          description: Venue where this takes place
-          examples:
-          - id: '123'
-            latitude: 1.2345678
-            longitude: 1.2345678
-            venue_address: 1 Event Way, Bristol
-            venue_name: Event Stadium
-        event_image:
-          anyOf:
-          - $ref: '#/components/schemas/Image'
-          - type: 'null'
-          description: Image which represents this item
-          examples:
-          - https://example.com/event.png
-        ttl:
-          type: string
-          format: date-time
-          title: Ttl
-          description: Item reservation expiry time.
-        booked_successfully:
-          type: boolean
-          title: Booked Successfully
-          description: After checkout, whether this item has been successfully booked.
-          default: false
-        status:
-          $ref: '#/components/schemas/BasketItemStatus'
-          description: Status of the basket item. See BasketItemStatus for the meaning of each status.
-        display_data:
-          additionalProperties: true
-          type: object
-          title: Display Data
-          default: {}
-        reservation_attempts:
-          type: integer
-          title: Reservation Attempts
-          description: Number of re-reservation attempts made for this item.
-          default: 0
-          examples:
-          - 2
-        voucher_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Voucher Url
-          description: URL of merged ticket vouchers.
-        resources:
-          items:
-            type: string
-          type: array
-          title: Resources
-          description: Additional resources for the ticket buyer's use, such as itineraries.
-          default: []
-        event:
-          $ref: '#/components/schemas/BasketItemEventData'
-          description: Event details for the item.
-          examples:
-          - admission_type: date_entry
-            delivery_methods: []
-            is_tbd:
-              date: false
-              time: false
-      type: object
-      required:
-      - id
-      - event_id
-      - product_id
-      - event_name
-      - from_date
-      - to_date
-      - price
-      - ttl
-      - status
-      - event
-      title: BasketItem
     Dropoff:
       properties:
         latitude:
@@ -5347,65 +5104,280 @@ components:
       - dropoff_point_address
       - time
       title: Dropoff
-    Customer:
+    Pickup:
       properties:
-        first_name:
-          type: string
-          title: First Name
-          description: Customer's first name
+        latitude:
+          type: number
+          title: Latitude
+          description: Latitude in degrees
           examples:
-          - John
-        last_name:
-          type: string
-          title: Last Name
-          description: Customer's surname/family name
+          - 1.23456789
+        longitude:
+          type: number
+          title: Longitude
+          description: Longitude in degrees
           examples:
-          - Doe
-        phone_number:
+          - 1.23456789
+        id:
           type: string
-          maxLength: 16
-          minLength: 3
-          pattern: \+?[0-9]{2,15}
-          title: Phone Number
-          description: Customer's phone number in E.164 format
+          title: Id
+          description: Machine identifier for this place
+          default: ''
           examples:
-          - '+442087599036'
-        email:
+          - '123'
+        pickup_point_name:
           type: string
-          format: email
-          title: Email
-          description: Customer's email; must be a valid email
+          title: Pickup Point Name
+          description: Friendly pickup point name, in English
           examples:
-          - customer@example.com
-        currency:
+          - North Hotel
+        pickup_point_address:
           type: string
-          maxLength: 3
-          minLength: 3
-          pattern: '[A-Z][A-Z][A-Z]'
-          title: Currency
-          description: Customer's chosen currency
-          default: GBP
+          title: Pickup Point Address
+          description: Street address of the pickup point
           examples:
-          - AED
-        billing_details:
-          anyOf:
-          - $ref: '#/components/schemas/BillingDetails'
-          - type: 'null'
-        agent_pin:
+          - ''
+        time:
+          $ref: '#/components/schemas/EventDateTime'
+      type: object
+      required:
+      - latitude
+      - longitude
+      - pickup_point_name
+      - pickup_point_address
+      - time
+      title: Pickup
+    Image:
+      properties:
+        desktop:
           anyOf:
           - type: string
           - type: 'null'
-          title: Agent Pin
-          description: Agent identifier, currently only used for Intele
-          examples:
-          - '12345'
+          title: Desktop
+          description: URL to use on desktop devices
+        mobile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mobile
+          description: URL to use on mobile devices
+        thumbnail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Thumbnail
+          description: URL of a square version of this image
+      type: object
+      title: Image
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
       type: object
       required:
-      - first_name
-      - last_name
-      - phone_number
-      - email
-      title: Customer
+      - request_id
+      - detail
+      title: ErrorBody
+    StripeObject:
+      properties:
+        stripe_payment_intent:
+          type: string
+          title: Stripe Payment Intent
+        stripe_payment_intent_secret:
+          type: string
+          title: Stripe Payment Intent Secret
+        customer:
+          $ref: '#/components/schemas/Customer'
+      type: object
+      required:
+      - stripe_payment_intent
+      - stripe_payment_intent_secret
+      - customer
+      title: StripeObject
+    Barcode:
+      properties:
+        format:
+          $ref: '#/components/schemas/BarcodeFormat'
+          description: Data representation format.
+        data:
+          type: string
+          minLength: 1
+          title: Data
+          description: Textual data represented by this barcode.
+        raw_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Raw Code
+          description: The raw barcode code where it's not obtainable from `data`.
+        image:
+          type: string
+          title: Image
+          description: URL of this barcode; generally but not necessarily a data URL containing base64-encoded data.
+      type: object
+      required:
+      - format
+      - data
+      - image
+      title: Barcode
+      description: Contains information about a barcode used to e.g. admit entry to an event by scanning using specialised hardware, a tablet or a smartphone.
+    EventDateTime:
+      properties:
+        local:
+          type: string
+          format: date-time
+          title: Local
+          description: The date and time in the event's local timezone.
+        utc:
+          type: string
+          format: date-time
+          title: Utc
+          description: The date and time in UTC.
+      type: object
+      required:
+      - local
+      - utc
+      title: EventDateTime
+      description: Represents a date and time relating to an event.
+    OptionChoice:
+      properties:
+        option_id:
+          type: string
+          title: Option Id
+        choice_value:
+          title: Choice Value
+          description: "Value chosen by the user. Type depends on the option:\n - `choice` ⇒ `values.*.value`\n - `number` ⇒ `number`\n - `datetime` ⇒ `datetime`\n - `location` ⇒ `LatitudeLongitude`\n - `text` ⇒ `string`"
+        quantity:
+          type: integer
+          minimum: 1.0
+          title: Quantity
+          description: The amount of this option to book. Defaults to 1.
+          default: 1
+      additionalProperties: false
+      type: object
+      required:
+      - option_id
+      - choice_value
+      title: OptionChoice
+    Notes:
+      properties:
+        ticket_notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ticket Notes
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        short_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Short Description
+      type: object
+      title: Notes
+    EventVenue:
+      properties:
+        latitude:
+          type: number
+          title: Latitude
+          description: Latitude in degrees
+          examples:
+          - 1.23456789
+        longitude:
+          type: number
+          title: Longitude
+          description: Longitude in degrees
+          examples:
+          - 1.23456789
+        id:
+          type: string
+          title: Id
+          description: Machine identifier for this place
+          default: ''
+          examples:
+          - '123'
+        venue_brand_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Venue Brand Id
+          description: The brand ID that operates the venue
+        venue_address:
+          type: string
+          title: Venue Address
+          description: Street address of the venue
+          examples:
+          - 27 Stadium Avenue
+        seatplan_images:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Image'
+            type: array
+          - type: 'null'
+          title: Seatplan Images
+          description: Images of the venue's seatplan.
+        configuration:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Configuration
+        venue_name:
+          type: string
+          title: Venue Name
+          description: Friendly venue name, in English
+          examples:
+          - Wembley Stadium
+        venue_brand:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Venue Brand
+          description: The brand name that operates the venue
+        venue_city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Venue City
+          description: The city of the venue
+          examples:
+          - London
+        venue_country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Venue Country
+          description: The country of the venue
+      type: object
+      required:
+      - latitude
+      - longitude
+      - venue_address
+      - venue_name
+      title: EventVenue
+    AdmissionType:
+      type: string
+      enum:
+      - open_entry
+      - date_entry
+      - slot_entry
+      - timed_entry
+      title: AdmissionType
     Reservation:
       properties:
         supplier_reference:
@@ -5465,6 +5437,221 @@ components:
       - price
       title: Reservation
       description: Represents a single seat, ticket etc. reservation to an event.
+    Adjustment:
+      properties:
+        name:
+          type: string
+          title: Name
+        type:
+          $ref: '#/components/schemas/AdjustmentType'
+        price:
+          $ref: '#/components/schemas/PriceDelta'
+      type: object
+      required:
+      - name
+      - type
+      - price
+      title: Adjustment
+    IsTbd:
+      properties:
+        time:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Time
+          description: Whether the event time is to be determined
+          default: false
+        date:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Date
+          description: Whether the event date is to be determined
+          default: false
+      type: object
+      title: IsTbd
+    InteleCommissionItem:
+      properties:
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+        currency:
+          type: string
+          title: Currency
+        commission_percent:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Commission Percent
+      type: object
+      required:
+      - amount
+      - currency
+      - commission_percent
+      title: InteleCommissionItem
+    Price:
+      properties:
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: Monetary value of this price in the given currency, with decimal point i.e. not integer format
+          examples:
+          - '3.99'
+        currency:
+          type: string
+          maxLength: 3
+          minLength: 3
+          pattern: '[A-Z][A-Z][A-Z]'
+          title: Currency
+          description: ISO 4217 code for the currency in which the item's prices are sent
+          examples:
+          - GBP
+      type: object
+      required:
+      - amount
+      - currency
+      title: Price
+      description: Represents an absolute monetary value in a particular currency. Cannot be negative.
+    CareemPayObject:
+      properties:
+        invoice_id:
+          type: string
+          title: Invoice Id
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+        currency:
+          type: string
+          title: Currency
+        customer:
+          $ref: '#/components/schemas/CareemCustomer'
+        additional:
+          additionalProperties: true
+          type: object
+          title: Additional
+          default: {}
+      type: object
+      required:
+      - invoice_id
+      - amount
+      - currency
+      - customer
+      title: CareemPayObject
+    Personalisation:
+      properties:
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+          description: Ticket holder's first name
+          examples:
+          - John
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: Ticket holder's surname/family name
+          examples:
+          - Doe
+        phone_number:
+          anyOf:
+          - type: string
+            maxLength: 16
+            minLength: 3
+            pattern: \+?[0-9]{2,15}
+          - type: 'null'
+          title: Phone Number
+          description: Ticket holder's phone number in E.164 format
+          examples:
+          - '+442087599036'
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: Ticket holder's email; must be a valid email
+          examples:
+          - customer@example.com
+        birthdate:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Birthdate
+          examples:
+          - '2013-03-07'
+        house_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: House Number
+          examples:
+          - 132B
+        street_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Street Name
+          examples:
+          - Example Road
+        postal_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Postal Code
+          examples:
+          - TK17 T00
+        city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: City
+          examples:
+          - Exampleham
+        country_code:
+          anyOf:
+          - type: string
+            maxLength: 2
+            minLength: 2
+            pattern: '[A-Z][A-Z]'
+          - type: 'null'
+          title: Country Code
+          examples:
+          - GB
+      additionalProperties: false
+      type: object
+      title: Personalisation
+    BasketCheckoutStatus:
+      type: string
+      enum:
+      - not_checked_out
+      - checkout_pending
+      - payment_failed
+      - checked_out
+      - checked_out_with_errors
+      title: BasketCheckoutStatus
+      description: '- not_checked_out: the basket has neither been, nor is being checked out
+
+        - checkout_pending: the basket is currently in the process of checking out
+
+        - payment_failed: the basket payment failed, and thus wasn''t checked out
+
+        - checked_out: the basket has already been checked out
+
+        - checked_out_with_errors: the basket has been checked out but 1 or more items errored'
+    AdjustmentType:
+      type: string
+      enum:
+      - charge_transfer
+      - charge_addon
+      - charge_other
+      - discount_other
+      title: AdjustmentType
     BasketItemEventData:
       properties:
         delivery_methods:
@@ -5496,30 +5683,81 @@ components:
       required:
       - admission_type
       title: BasketItemEventData
-    Price:
+    BookingOptions:
       properties:
-        amount:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-          description: Monetary value of this price in the given currency, with decimal point i.e. not integer format
+        concession_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Concession Id
+        concession_options:
+          items:
+            $ref: '#/components/schemas/OptionChoice'
+          type: array
+          title: Concession Options
+          default: []
           examples:
-          - '3.99'
-        currency:
-          type: string
-          maxLength: 3
-          minLength: 3
-          pattern: '[A-Z][A-Z][A-Z]'
-          title: Currency
-          description: ISO 4217 code for the currency in which the item's prices are sent
+          - - choice_value: cake
+              option_id: meal
+              quantity: 1
+        quantity:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Quantity
+          description: Number of tickets to reserve.
+          default: 1
+        seat_ids:
+          items:
+            type: string
+          type: array
+          title: Seat Ids
+          default: []
           examples:
-          - GBP
+          - - BALCONY31A
+            - BALCONY32A
+        customers:
+          items:
+            $ref: '#/components/schemas/Personalisation'
+          type: array
+          title: Customers
+          description: Ticket personalisation to apply. This should either be empty or the same length as the quantity specified. Whether this is required or not and which fields are required depends on the value of `personalisations_required` from the event/availability. Personalisations are applied to each booked seat in order, and then to allocated (best seat or unseated) bookings.
+          default: []
+      additionalProperties: false
+      type: object
+      title: BookingOptions
+    Ticket:
+      properties:
+        barcodes:
+          items:
+            $ref: '#/components/schemas/Barcode'
+          type: array
+          title: Barcodes
+          description: Barcodes for this ticket, if applicable (i.e. not collection etc).
+          default: []
+        delivery_methods:
+          items:
+            $ref: '#/components/schemas/DeliveryMethod'
+          type: array
+          uniqueItems: true
+          title: Delivery Methods
+          description: List of supported delivery methods.
+      additionalProperties: false
       type: object
       required:
-      - amount
-      - currency
-      title: Price
-      description: Represents an absolute monetary value in a particular currency. Cannot be negative.
+      - delivery_methods
+      title: Ticket
+    PaymentMethodType:
+      type: string
+      enum:
+      - stripe
+      - careem_pay
+      - tickitto
+      title: PaymentMethodType
+      description: 'STRIPE: Tickitto is MOR, and retrieves payment for the items via Stripe.
+
+        CAREEM_PAY: Tickitto is MOR, and retrieves payment via Careem Pay.
+
+        TICKITTO: The distributor is MOR, and tickitto purchases the items directly.'
     BarcodeFormat:
       type: string
       enum:
@@ -5539,36 +5777,45 @@ components:
       - image
       title: BarcodeFormat
       description: Supported barcode formats.
-    BasketCheckoutStatus:
+    BasketItemStatus:
       type: string
       enum:
-      - not_checked_out
-      - checkout_pending
-      - payment_failed
-      - checked_out
-      - checked_out_with_errors
-      title: BasketCheckoutStatus
-      description: '- not_checked_out: the basket has neither been, nor is being checked out
+      - unreserved
+      - reservation_pending
+      - reserving
+      - reserved
+      - booking
+      - fulfilment_pending
+      - fulfilment_errored
+      - booked
+      - errored
+      - seller_rejected
+      - cancelling
+      - cancelled
+      - saved
+      - errored_and_refunded
+      title: BasketItemStatus
+      description: '- unreserved: rereservation failed or hit max attempts and item will not attempt checkout
 
-        - checkout_pending: the basket is currently in the process of checking out
+        - reservation_pending: item is pending re-reservation due to ttl expiry
 
-        - payment_failed: the basket payment failed, and thus wasn''t checked out
+        - reserving: item is currently locked for pending re-reservation due to ttl expiry
 
-        - checked_out: the basket has already been checked out
+        - reserved: item availability is locked and being held until checkout
 
-        - checked_out_with_errors: the basket has been checked out but 1 or more items errored'
-    PaymentMethodType:
-      type: string
-      enum:
-      - stripe
-      - careem_pay
-      - tickitto
-      title: PaymentMethodType
-      description: 'STRIPE: Tickitto is MOR, and retrieves payment for the items via Stripe.
+        - saved: item availability is not locked and item will attempt to book at checkout
 
-        CAREEM_PAY: Tickitto is MOR, and retrieves payment via Careem Pay.
+        - booking: item is currently locked for pending checkout due to /basket/checkout or Stripe webhook
 
-        TICKITTO: The distributor is MOR, and tickitto purchases the items directly.'
+        - fulfilment_pending: item is waiting for fulfilment
+
+        - fulfilment_errored: item booked but details not successfully retrieved
+
+        - booked: item booked successfully
+
+        - errored: item booking error
+
+        - cancelled: item cancelled'
     BillingDetails:
       properties:
         first_name:
@@ -5587,90 +5834,89 @@ components:
           - type: 'null'
       type: object
       title: BillingDetails
-    ApiPromocode:
+    InteleCommissionResults:
       properties:
-        code:
-          type: string
-          title: Code
-        title:
-          type: string
-          title: Title
-        description:
-          type: string
-          title: Description
-        image:
-          anyOf:
-          - $ref: '#/components/schemas/Image'
-          - type: 'null'
-        applicable:
-          type: boolean
-          title: Applicable
-        expired:
-          type: boolean
-          title: Expired
-        discount:
+        item_commissions:
+          additionalProperties:
+            $ref: '#/components/schemas/InteleCommissionItem'
+          type: object
+          title: Item Commissions
+          description: Dictionary of item IDs to their commission amounts.
+          default: {}
+        total_commission:
           $ref: '#/components/schemas/Price'
+          description: Total commission amount for the basket.
+          default:
+            amount: 0
+            currency: GBP
       type: object
-      required:
-      - code
-      - title
-      - description
-      - applicable
-      - expired
-      - discount
-      title: ApiPromocode
-    DeliveryMethod:
-      type: string
-      enum:
-      - external
-      - collection
-      - document
-      - eticket
-      - print
-      title: DeliveryMethod
-    Image:
+      title: InteleCommissionResults
+    BasketItemCreate:
       properties:
-        desktop:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Desktop
-          description: URL to use on desktop devices
-        mobile:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Mobile
-          description: URL to use on mobile devices
-        thumbnail:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Thumbnail
-          description: URL of a square version of this image
-      type: object
-      title: Image
-    ErrorBody:
-      properties:
-        request_id:
+        availability_id:
           type: string
-          title: Request Id
-        detail:
-          items:
-            $ref: '#/components/schemas/Error'
-          type: array
-          title: Detail
-        body:
+          title: Availability Id
+        product_id:
+          type: string
+          title: Product Id
+        band_id:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: string
           - type: 'null'
-          title: Body
+          title: Band Id
+        booking_options:
+          items:
+            $ref: '#/components/schemas/BookingOptions'
+          type: array
+          minItems: 1
+          title: Booking Options
+          description: Specifies groups of seats, concessions and option choices for this booking.
+          default:
+          - concession_options: []
+            quantity: 1
+            seat_ids: []
+            customers: []
+          examples:
+          - - concession_options: []
+              customers: []
+              quantity: 1
+              seat_ids: []
+            - concession_id: CONCESSION_CHILD
+              concession_options:
+              - choice_value: eggs_bacon
+                option_id: meal
+                quantity: 1
+              - choice_value: water
+                option_id: drink
+                quantity: 1
+              customers:
+              - first_name: John
+                last_name: Doe
+              - first_name: Jane
+                last_name: Doe
+              quantity: 2
+              seat_ids:
+              - SEAT1
+              - SEAT2
+        product_options:
+          items:
+            $ref: '#/components/schemas/OptionChoice'
+          type: array
+          title: Product Options
+          default: []
+        display_data:
+          additionalProperties: true
+          type: object
+          title: Display Data
+          description: Extra data to associate with this booking; will be included verbatim in the basket
+          default: {}
+          deprecated: true
+      additionalProperties: false
       type: object
       required:
-      - request_id
-      - detail
-      title: ErrorBody
+      - availability_id
+      - product_id
+      title: BasketItemCreate
     Basket:
       properties:
         _id:
@@ -5951,131 +6197,260 @@ components:
       required:
       - _id
       title: Basket
-    Notes:
+    BasketItem:
       properties:
-        ticket_notes:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Ticket Notes
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        short_description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Short Description
-      type: object
-      title: Notes
-    CareemPayObject:
-      properties:
-        invoice_id:
-          type: string
-          title: Invoice Id
-        amount:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-        currency:
-          type: string
-          title: Currency
-        customer:
-          $ref: '#/components/schemas/CareemCustomer'
-        additional:
-          additionalProperties: true
-          type: object
-          title: Additional
-          default: {}
-      type: object
-      required:
-      - invoice_id
-      - amount
-      - currency
-      - customer
-      title: CareemPayObject
-    EventVenue:
-      properties:
-        latitude:
-          type: number
-          title: Latitude
-          description: Latitude in degrees
+        cancellation_policy_information:
+          items:
+            type: string
+          type: array
+          title: Cancellation Policy Information
+          description: Cancellation and refund policy for the item itself.
+          default: []
           examples:
-          - 1.23456789
-        longitude:
-          type: number
-          title: Longitude
-          description: Longitude in degrees
-          examples:
-          - 1.23456789
+          - - Attendees must cancel at least 3 days in advance.
+            - 50% of total price refundable only.
+        cancellation_policy:
+          type: string
+          title: Cancellation Policy
+          description: (DEPRECATED) Cancellation policy for the item itself.
+          deprecated: true
         id:
           type: string
           title: Id
-          description: Machine identifier for this place
+        created_on:
+          type: string
+          format: date-time
+          title: Created On
+          default: '2026-07-21T09:25:48.786410+00:00'
+          examples:
+          - '2026-07-21T09:25:48.786420Z'
+        booked_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Booked At
+          description: When this item was booked, if it was booked successfully.
+          examples:
+          - '2026-07-21T09:25:48.786476Z'
+        external_reference:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: External Reference
+          description: Distributor reference for this basket item
+        event_id:
+          type: string
+          title: Event Id
+        event_slug:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Event Slug
+        availability_id:
+          type: string
+          title: Availability Id
           default: ''
-          examples:
-          - '123'
-        venue_brand_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Venue Brand Id
-          description: The brand ID that operates the venue
-        venue_address:
+        product_id:
           type: string
-          title: Venue Address
-          description: Street address of the venue
-          examples:
-          - 27 Stadium Avenue
-        seatplan_images:
+          title: Product Id
+        band_id:
           anyOf:
-          - items:
-              $ref: '#/components/schemas/Image'
-            type: array
+          - type: string
           - type: 'null'
-          title: Seatplan Images
-          description: Images of the venue's seatplan.
-        configuration:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Configuration
-        venue_name:
+          title: Band Id
+        event_name:
           type: string
-          title: Venue Name
-          description: Friendly venue name, in English
+          title: Event Name
+        cancellation_allowed:
+          type: boolean
+          title: Cancellation Allowed
+          default: false
+        important_information:
+          items:
+            type: string
+          type: array
+          title: Important Information
+          default: []
+        notes:
+          anyOf:
+          - $ref: '#/components/schemas/Notes'
+          - type: 'null'
+        ticket_instructions:
+          items:
+            type: string
+          type: array
+          title: Ticket Instructions
+          default: []
+        billing_information:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Billing Information
+        from_date:
+          $ref: '#/components/schemas/EventDateTime'
+          description: Item start date and time.
+        to_date:
+          $ref: '#/components/schemas/EventDateTime'
+          description: Item end date and time.
+        reservations:
+          items:
+            $ref: '#/components/schemas/Reservation'
+          type: array
+          title: Reservations
+          description: The specific reservations associated with this item, or tickets if the item has been checked out.
+          default: []
+        price:
+          $ref: '#/components/schemas/Price'
+          description: Total price of all tickets belonging to this item. Inclusive of all other prices EXCEPT `booking_fee`.
           examples:
-          - Wembley Stadium
-        venue_brand:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Venue Brand
-          description: The brand name that operates the venue
-        venue_city:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Venue City
-          description: The city of the venue
+          - amount: 4.99
+            currency: GBP
+        booking_fee:
+          $ref: '#/components/schemas/Price'
+          description: Distributor booking fee for this item.
+          default:
+            amount: 0
+            currency: GBP
           examples:
-          - London
-        venue_country:
+          - amount: 1.0
+            currency: GBP
+        adjustments:
+          items:
+            $ref: '#/components/schemas/Adjustment'
+          type: array
+          title: Adjustments
+          description: 'Specific named surcharges/discounts (NOTE: already included in the `price` field) e.g. transfers or addons'
+          default: []
+        supplier_adjustment:
+          $ref: '#/components/schemas/PriceDelta'
+          description: Net supplier discount/surcharge for this item.
+          default:
+            amount: 0
+            currency: GBP
+          examples:
+          - amount: -0.99
+            currency: GBP
+        organiser:
+          anyOf:
+          - $ref: '#/components/schemas/Organiser'
+          - type: 'null'
+          description: Event organiser information.
+        pickup:
+          anyOf:
+          - $ref: '#/components/schemas/Pickup'
+          - type: 'null'
+          description: Information about pickup of the ticket holders.
+        dropoff:
+          anyOf:
+          - $ref: '#/components/schemas/Dropoff'
+          - type: 'null'
+          description: Information about dropoff of the ticket holders.
+        location:
+          anyOf:
+          - $ref: '#/components/schemas/EventVenue'
+          - type: 'null'
+          description: Venue where this takes place
+          examples:
+          - id: '123'
+            latitude: 1.2345678
+            longitude: 1.2345678
+            venue_address: 1 Event Way, Bristol
+            venue_name: Event Stadium
+        event_image:
+          anyOf:
+          - $ref: '#/components/schemas/Image'
+          - type: 'null'
+          description: Image which represents this item
+          examples:
+          - https://example.com/event.png
+        ttl:
+          type: string
+          format: date-time
+          title: Ttl
+          description: Item reservation expiry time.
+        booked_successfully:
+          type: boolean
+          title: Booked Successfully
+          description: After checkout, whether this item has been successfully booked.
+          default: false
+        status:
+          $ref: '#/components/schemas/BasketItemStatus'
+          description: Status of the basket item. See BasketItemStatus for the meaning of each status.
+        display_data:
+          additionalProperties: true
+          type: object
+          title: Display Data
+          default: {}
+        reservation_attempts:
+          type: integer
+          title: Reservation Attempts
+          description: Number of re-reservation attempts made for this item.
+          default: 0
+          examples:
+          - 2
+        voucher_url:
           anyOf:
           - type: string
           - type: 'null'
-          title: Venue Country
-          description: The country of the venue
+          title: Voucher Url
+          description: URL of merged ticket vouchers.
+        resources:
+          items:
+            type: string
+          type: array
+          title: Resources
+          description: Additional resources for the ticket buyer's use, such as itineraries.
+          default: []
+        event:
+          $ref: '#/components/schemas/BasketItemEventData'
+          description: Event details for the item.
+          examples:
+          - admission_type: date_entry
+            delivery_methods: []
+            is_tbd:
+              date: false
+              time: false
       type: object
       required:
-      - latitude
-      - longitude
-      - venue_address
-      - venue_name
-      title: EventVenue
+      - id
+      - event_id
+      - product_id
+      - event_name
+      - from_date
+      - to_date
+      - price
+      - ttl
+      - status
+      - event
+      title: BasketItem
+    Organiser:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Company name.
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: Email address to contact in case of post-booking issues.
+        phone_number:
+          anyOf:
+          - type: string
+            maxLength: 16
+            minLength: 3
+            pattern: \+?[0-9]{2,15}
+          - type: 'null'
+          title: Phone Number
+          description: Number to call in case of post-booking issues.
+      type: object
+      title: Organiser
+      description: Describes an event/activity organiser.
     Error:
       properties:
         type:
@@ -6102,6 +6477,140 @@ components:
       - msg
       - loc
       title: Error
+    DeliveryMethod:
+      type: string
+      enum:
+      - external
+      - collection
+      - document
+      - eticket
+      - print
+      title: DeliveryMethod
+    BillingAddress:
+      properties:
+        city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: City
+        country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country
+        line1:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Line1
+        line2:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Line2
+        postal_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Postal Code
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: State
+      type: object
+      title: BillingAddress
+    ApiPromocode:
+      properties:
+        code:
+          type: string
+          title: Code
+        title:
+          type: string
+          title: Title
+        description:
+          type: string
+          title: Description
+        image:
+          anyOf:
+          - $ref: '#/components/schemas/Image'
+          - type: 'null'
+        applicable:
+          type: boolean
+          title: Applicable
+        expired:
+          type: boolean
+          title: Expired
+        discount:
+          $ref: '#/components/schemas/Price'
+      type: object
+      required:
+      - code
+      - title
+      - description
+      - applicable
+      - expired
+      - discount
+      title: ApiPromocode
+    Customer:
+      properties:
+        first_name:
+          type: string
+          title: First Name
+          description: Customer's first name
+          examples:
+          - John
+        last_name:
+          type: string
+          title: Last Name
+          description: Customer's surname/family name
+          examples:
+          - Doe
+        phone_number:
+          type: string
+          maxLength: 16
+          minLength: 3
+          pattern: \+?[0-9]{2,15}
+          title: Phone Number
+          description: Customer's phone number in E.164 format
+          examples:
+          - '+442087599036'
+        email:
+          type: string
+          format: email
+          title: Email
+          description: Customer's email; must be a valid email
+          examples:
+          - customer@example.com
+        currency:
+          type: string
+          maxLength: 3
+          minLength: 3
+          pattern: '[A-Z][A-Z][A-Z]'
+          title: Currency
+          description: Customer's chosen currency
+          default: GBP
+          examples:
+          - AED
+        billing_details:
+          anyOf:
+          - $ref: '#/components/schemas/BillingDetails'
+          - type: 'null'
+        agent_pin:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Agent Pin
+          description: Agent identifier, currently only used for Intele
+          examples:
+          - '12345'
+      type: object
+      required:
+      - first_name
+      - last_name
+      - phone_number
+      - email
+      title: Customer
     CareemCustomer:
       properties:
         first_name:
@@ -6166,142 +6675,6 @@ components:
       - email
       - careem_user_id
       title: CareemCustomer
-    InteleCommissionItem:
-      properties:
-        amount:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-        currency:
-          type: string
-          title: Currency
-        commission_percent:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Commission Percent
-      type: object
-      required:
-      - amount
-      - currency
-      - commission_percent
-      title: InteleCommissionItem
-    BillingAddress:
-      properties:
-        city:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: City
-        country:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Country
-        line1:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Line1
-        line2:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Line2
-        postal_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Postal Code
-        state:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: State
-      type: object
-      title: BillingAddress
-    BookingOptions:
-      properties:
-        concession_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Concession Id
-        concession_options:
-          items:
-            $ref: '#/components/schemas/OptionChoice'
-          type: array
-          title: Concession Options
-          default: []
-          examples:
-          - - choice_value: cake
-              option_id: meal
-              quantity: 1
-        quantity:
-          type: integer
-          exclusiveMinimum: 0.0
-          title: Quantity
-          description: Number of tickets to reserve.
-          default: 1
-        seat_ids:
-          items:
-            type: string
-          type: array
-          title: Seat Ids
-          default: []
-          examples:
-          - - BALCONY31A
-            - BALCONY32A
-        customers:
-          items:
-            $ref: '#/components/schemas/Personalisation'
-          type: array
-          title: Customers
-          description: Ticket personalisation to apply. This should either be empty or the same length as the quantity specified. Whether this is required or not and which fields are required depends on the value of `personalisations_required` from the event/availability. Personalisations are applied to each booked seat in order, and then to allocated (best seat or unseated) bookings.
-          default: []
-      additionalProperties: false
-      type: object
-      title: BookingOptions
-    OptionChoice:
-      properties:
-        option_id:
-          type: string
-          title: Option Id
-        choice_value:
-          title: Choice Value
-          description: "Value chosen by the user. Type depends on the option:\n - `choice` ⇒ `values.*.value`\n - `number` ⇒ `number`\n - `datetime` ⇒ `datetime`\n - `location` ⇒ `LatitudeLongitude`\n - `text` ⇒ `string`"
-        quantity:
-          type: integer
-          minimum: 1.0
-          title: Quantity
-          description: The amount of this option to book. Defaults to 1.
-          default: 1
-      additionalProperties: false
-      type: object
-      required:
-      - option_id
-      - choice_value
-      title: OptionChoice
-    Ticket:
-      properties:
-        barcodes:
-          items:
-            $ref: '#/components/schemas/Barcode'
-          type: array
-          title: Barcodes
-          description: Barcodes for this ticket, if applicable (i.e. not collection etc).
-          default: []
-        delivery_methods:
-          items:
-            $ref: '#/components/schemas/DeliveryMethod'
-          type: array
-          uniqueItems: true
-          title: Delivery Methods
-          description: List of supported delivery methods.
-      additionalProperties: false
-      type: object
-      required:
-      - delivery_methods
-      title: Ticket
     PriceDelta:
       properties:
         amount:
@@ -6326,379 +6699,6 @@ components:
       - currency
       title: PriceDelta
       description: Represents the difference between two monetary values. May be negative.
-    EventDateTime:
-      properties:
-        local:
-          type: string
-          format: date-time
-          title: Local
-          description: The date and time in the event's local timezone.
-        utc:
-          type: string
-          format: date-time
-          title: Utc
-          description: The date and time in UTC.
-      type: object
-      required:
-      - local
-      - utc
-      title: EventDateTime
-      description: Represents a date and time relating to an event.
-    Adjustment:
-      properties:
-        name:
-          type: string
-          title: Name
-        type:
-          $ref: '#/components/schemas/AdjustmentType'
-        price:
-          $ref: '#/components/schemas/PriceDelta'
-      type: object
-      required:
-      - name
-      - type
-      - price
-      title: Adjustment
-    InteleCommissionResults:
-      properties:
-        item_commissions:
-          additionalProperties:
-            $ref: '#/components/schemas/InteleCommissionItem'
-          type: object
-          title: Item Commissions
-          description: Dictionary of item IDs to their commission amounts.
-          default: {}
-        total_commission:
-          $ref: '#/components/schemas/Price'
-          description: Total commission amount for the basket.
-          default:
-            amount: 0
-            currency: GBP
-      type: object
-      title: InteleCommissionResults
-    Personalisation:
-      properties:
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Name
-          description: Ticket holder's first name
-          examples:
-          - John
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-          description: Ticket holder's surname/family name
-          examples:
-          - Doe
-        phone_number:
-          anyOf:
-          - type: string
-            maxLength: 16
-            minLength: 3
-            pattern: \+?[0-9]{2,15}
-          - type: 'null'
-          title: Phone Number
-          description: Ticket holder's phone number in E.164 format
-          examples:
-          - '+442087599036'
-        email:
-          anyOf:
-          - type: string
-            format: email
-          - type: 'null'
-          title: Email
-          description: Ticket holder's email; must be a valid email
-          examples:
-          - customer@example.com
-        birthdate:
-          anyOf:
-          - type: string
-            format: date
-          - type: 'null'
-          title: Birthdate
-          examples:
-          - '2013-03-07'
-        house_number:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: House Number
-          examples:
-          - 132B
-        street_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Street Name
-          examples:
-          - Example Road
-        postal_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Postal Code
-          examples:
-          - TK17 T00
-        city:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: City
-          examples:
-          - Exampleham
-        country_code:
-          anyOf:
-          - type: string
-            maxLength: 2
-            minLength: 2
-            pattern: '[A-Z][A-Z]'
-          - type: 'null'
-          title: Country Code
-          examples:
-          - GB
-      additionalProperties: false
-      type: object
-      title: Personalisation
-    Barcode:
-      properties:
-        format:
-          $ref: '#/components/schemas/BarcodeFormat'
-          description: Data representation format.
-        data:
-          type: string
-          minLength: 1
-          title: Data
-          description: Textual data represented by this barcode.
-        raw_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Raw Code
-          description: The raw barcode code where it's not obtainable from `data`.
-        image:
-          type: string
-          title: Image
-          description: URL of this barcode; generally but not necessarily a data URL containing base64-encoded data.
-      type: object
-      required:
-      - format
-      - data
-      - image
-      title: Barcode
-      description: Contains information about a barcode used to e.g. admit entry to an event by scanning using specialised hardware, a tablet or a smartphone.
-    BasketItemStatus:
-      type: string
-      enum:
-      - unreserved
-      - reservation_pending
-      - reserving
-      - reserved
-      - booking
-      - fulfilment_pending
-      - fulfilment_errored
-      - booked
-      - errored
-      - seller_rejected
-      - cancelling
-      - cancelled
-      - saved
-      - errored_and_refunded
-      title: BasketItemStatus
-      description: '- unreserved: rereservation failed or hit max attempts and item will not attempt checkout
-
-        - reservation_pending: item is pending re-reservation due to ttl expiry
-
-        - reserving: item is currently locked for pending re-reservation due to ttl expiry
-
-        - reserved: item availability is locked and being held until checkout
-
-        - saved: item availability is not locked and item will attempt to book at checkout
-
-        - booking: item is currently locked for pending checkout due to /basket/checkout or Stripe webhook
-
-        - fulfilment_pending: item is waiting for fulfilment
-
-        - fulfilment_errored: item booked but details not successfully retrieved
-
-        - booked: item booked successfully
-
-        - errored: item booking error
-
-        - cancelled: item cancelled'
-    BasketItemCreate:
-      properties:
-        availability_id:
-          type: string
-          title: Availability Id
-        product_id:
-          type: string
-          title: Product Id
-        band_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Band Id
-        booking_options:
-          items:
-            $ref: '#/components/schemas/BookingOptions'
-          type: array
-          minItems: 1
-          title: Booking Options
-          description: Specifies groups of seats, concessions and option choices for this booking.
-          default:
-          - concession_options: []
-            quantity: 1
-            seat_ids: []
-            customers: []
-          examples:
-          - - concession_options: []
-              customers: []
-              quantity: 1
-              seat_ids: []
-            - concession_id: CONCESSION_CHILD
-              concession_options:
-              - choice_value: eggs_bacon
-                option_id: meal
-                quantity: 1
-              - choice_value: water
-                option_id: drink
-                quantity: 1
-              customers:
-              - first_name: John
-                last_name: Doe
-              - first_name: Jane
-                last_name: Doe
-              quantity: 2
-              seat_ids:
-              - SEAT1
-              - SEAT2
-        product_options:
-          items:
-            $ref: '#/components/schemas/OptionChoice'
-          type: array
-          title: Product Options
-          default: []
-        display_data:
-          additionalProperties: true
-          type: object
-          title: Display Data
-          description: Extra data to associate with this booking; will be included verbatim in the basket
-          default: {}
-          deprecated: true
-      additionalProperties: false
-      type: object
-      required:
-      - availability_id
-      - product_id
-      title: BasketItemCreate
-    Pickup:
-      properties:
-        latitude:
-          type: number
-          title: Latitude
-          description: Latitude in degrees
-          examples:
-          - 1.23456789
-        longitude:
-          type: number
-          title: Longitude
-          description: Longitude in degrees
-          examples:
-          - 1.23456789
-        id:
-          type: string
-          title: Id
-          description: Machine identifier for this place
-          default: ''
-          examples:
-          - '123'
-        pickup_point_name:
-          type: string
-          title: Pickup Point Name
-          description: Friendly pickup point name, in English
-          examples:
-          - North Hotel
-        pickup_point_address:
-          type: string
-          title: Pickup Point Address
-          description: Street address of the pickup point
-          examples:
-          - ''
-        time:
-          $ref: '#/components/schemas/EventDateTime'
-      type: object
-      required:
-      - latitude
-      - longitude
-      - pickup_point_name
-      - pickup_point_address
-      - time
-      title: Pickup
-    AdmissionType:
-      type: string
-      enum:
-      - open_entry
-      - date_entry
-      - slot_entry
-      - timed_entry
-      title: AdmissionType
-    AdjustmentType:
-      type: string
-      enum:
-      - charge_transfer
-      - charge_addon
-      - charge_other
-      - discount_other
-      title: AdjustmentType
-    IsTbd:
-      properties:
-        time:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Time
-          description: Whether the event time is to be determined
-          default: false
-        date:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Date
-          description: Whether the event date is to be determined
-          default: false
-      type: object
-      title: IsTbd
-    Organiser:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Company name.
-        email:
-          anyOf:
-          - type: string
-            format: email
-          - type: 'null'
-          title: Email
-          description: Email address to contact in case of post-booking issues.
-        phone_number:
-          anyOf:
-          - type: string
-            maxLength: 16
-            minLength: 3
-            pattern: \+?[0-9]{2,15}
-          - type: 'null'
-          title: Phone Number
-          description: Number to call in case of post-booking issues.
-      type: object
-      title: Organiser
-      description: Describes an event/activity organiser.
   securitySchemes:
     APIKeyHeader:
       type: apiKey

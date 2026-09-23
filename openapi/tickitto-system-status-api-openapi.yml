@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Authentication System Status API
+  title: System Status API
   version: 1.0.0
 tags:
 - name: System Status

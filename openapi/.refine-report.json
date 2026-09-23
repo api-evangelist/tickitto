@@ -1,14 +1,7 @@
 {
   "provider": "tickitto",
   "sources": [
-    "tickitto-authentication-api-openapi.yml",
-    "tickitto-availability-api-openapi.yml",
-    "tickitto-basket-api-openapi.yml",
-    "tickitto-events-api-openapi.yml",
-    "tickitto-metadata-api-openapi.yml",
-    "tickitto-search-api-openapi.yml",
-    "tickitto-system-status-api-openapi.yml",
-    "tickitto-webhooks-api-openapi.yml"
+    "_original/tickitto-openapi-original.json"
   ],
   "outputs": [
     "tickitto-authentication-api-openapi.yml",
@@ -23,6 +16,27 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "tickitto-openapi-original.json: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "tickitto-openapi-original.json: declared missing tag: Authentication",
+    "tickitto-openapi-original.json: declared missing tag: Availability",
+    "tickitto-openapi-original.json: declared missing tag: Basket",
+    "tickitto-openapi-original.json: declared missing tag: Events",
+    "tickitto-openapi-original.json: declared missing tag: Metadata",
+    "tickitto-openapi-original.json: declared missing tag: Search",
+    "tickitto-openapi-original.json: declared missing tag: System Status",
+    "tickitto-openapi-original.json: declared missing tag: Webhooks",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "tickitto-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tickitto-availability-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tickitto-basket-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tickitto-events-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tickitto-metadata-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tickitto-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tickitto-system-status-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tickitto-webhooks-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

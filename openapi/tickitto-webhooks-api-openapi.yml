@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Authentication Webhooks API
+  title: Webhooks API
   version: 1.0.0
 tags:
 - name: Webhooks
@@ -773,6 +773,19 @@ paths:
               example: 123e4567-e89b-12d3-a456-426614174000
 components:
   schemas:
+    VFPRequest:
+      properties:
+        signedUrl:
+          type: string
+          title: Signedurl
+        date:
+          type: string
+          title: Date
+      type: object
+      required:
+      - signedUrl
+      - date
+      title: VFPRequest
     Error:
       properties:
         type:
@@ -799,19 +812,6 @@ components:
       - msg
       - loc
       title: Error
-    VFPRequest:
-      properties:
-        signedUrl:
-          type: string
-          title: Signedurl
-        date:
-          type: string
-          title: Date
-      type: object
-      required:
-      - signedUrl
-      - date
-      title: VFPRequest
     ErrorBody:
       properties:
         request_id:
