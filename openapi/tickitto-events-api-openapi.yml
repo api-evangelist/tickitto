@@ -619,6 +619,12 @@ paths:
               example: 123e4567-e89b-12d3-a456-426614174000
 components:
   schemas:
+    BookingType:
+      type: string
+      enum:
+      - basket_booking
+      - direct_booking
+      title: BookingType
     Image:
       properties:
         desktop:
@@ -641,6 +647,15 @@ components:
           description: URL of a square version of this image
       type: object
       title: Image
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ErrorBody:
       properties:
         request_id:
@@ -662,16 +677,94 @@ components:
       - request_id
       - detail
       title: ErrorBody
-    PersonalisationFieldConstraints:
+    Error:
       properties:
-        regex:
+        type:
+          type: string
+          title: Type
+        msg:
+          type: string
+          title: Msg
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Loc
+        payload:
           anyOf:
-          - type: string
+          - {}
           - type: 'null'
-          title: Regex
-          description: The regular expression that the field input should validate against
+          title: Payload
       type: object
-      title: PersonalisationFieldConstraints
+      required:
+      - type
+      - msg
+      - loc
+      title: Error
+    PersonalisationFields:
+      properties:
+        fields:
+          additionalProperties:
+            $ref: '#/components/schemas/PersonalisationFieldConstraints'
+          propertyNames:
+            $ref: '#/components/schemas/PersonalisationField'
+          type: object
+          title: Fields
+          description: A list of personalisations fields, included their regex-based constraints.
+          default: {}
+      type: object
+      title: PersonalisationFields
+    ResultSort:
+      type: string
+      enum:
+      - price_asc
+      - price_desc
+      - popularity
+      title: ResultSort
+    Price:
+      properties:
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: Monetary value of this price in the given currency, with decimal point i.e. not integer format
+          examples:
+          - '3.99'
+        currency:
+          type: string
+          maxLength: 3
+          minLength: 3
+          pattern: '[A-Z][A-Z][A-Z]'
+          title: Currency
+          description: ISO 4217 code for the currency in which the item's prices are sent
+          examples:
+          - GBP
+      type: object
+      required:
+      - amount
+      - currency
+      title: Price
+      description: Represents an absolute monetary value in a particular currency. Cannot be negative.
+    IsTbd:
+      properties:
+        time:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Time
+          description: Whether the event time is to be determined
+          default: false
+        date:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Date
+          description: Whether the event date is to be determined
+          default: false
+      type: object
+      title: IsTbd
     APIEvent:
       properties:
         cancellation_policy_information:
@@ -1014,6 +1107,43 @@ components:
         For example, Moulin Rouge is an event that occurs at 14:30 and 19:30 from Monday to Saturday for the next upcoming 12 months.
 
         In this example, an availability instance would be Saturday, 19th January 2021, at 19:30.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PersonalisationField:
+      type: string
+      enum:
+      - prefix
+      - first_name
+      - last_name
+      - phone_number
+      - email
+      - birthdate
+      - house_number
+      - street_name
+      - postal_code
+      - country_code
+      - city
+      - nationality
+      title: PersonalisationField
     EventPerformer:
       properties:
         id:
@@ -1034,6 +1164,58 @@ components:
       - name
       title: EventPerformer
       description: Small performer model used in the events table
+    APIPickupPoint:
+      properties:
+        latitude:
+          type: number
+          title: Latitude
+          description: Latitude in degrees
+          examples:
+          - 1.23456789
+        longitude:
+          type: number
+          title: Longitude
+          description: Longitude in degrees
+          examples:
+          - 1.23456789
+        id:
+          type: string
+          title: Id
+          description: Machine identifier for this place
+          default: ''
+          examples:
+          - '123'
+        pickup_point_name:
+          type: string
+          title: Pickup Point Name
+          description: Friendly pickup point name
+          examples:
+          - North Hotel
+        pickup_point_address:
+          type: string
+          title: Pickup Point Address
+          description: Street address of the pickup point
+          examples:
+          - ''
+      type: object
+      required:
+      - latitude
+      - longitude
+      - pickup_point_name
+      - pickup_point_address
+      title: APIPickupPoint
+    EventType:
+      type: string
+      enum:
+      - Standard
+      - Cinema
+      title: EventType
+      description: 'Event type classification.
+
+
+        - STANDARD: (Currently) All non-cinema events
+
+        - CINEMA: All cinema experiences'
     APIEventVenue:
       properties:
         latitude:
@@ -1114,140 +1296,6 @@ components:
       - venue_address
       - venue_name
       title: APIEventVenue
-    AdmissionType:
-      type: string
-      enum:
-      - open_entry
-      - date_entry
-      - slot_entry
-      - timed_entry
-      title: AdmissionType
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    EventType:
-      type: string
-      enum:
-      - Standard
-      - Cinema
-      title: EventType
-      description: 'Event type classification.
-
-
-        - STANDARD: (Currently) All non-cinema events
-
-        - CINEMA: All cinema experiences'
-    APIPickupPoint:
-      properties:
-        latitude:
-          type: number
-          title: Latitude
-          description: Latitude in degrees
-          examples:
-          - 1.23456789
-        longitude:
-          type: number
-          title: Longitude
-          description: Longitude in degrees
-          examples:
-          - 1.23456789
-        id:
-          type: string
-          title: Id
-          description: Machine identifier for this place
-          default: ''
-          examples:
-          - '123'
-        pickup_point_name:
-          type: string
-          title: Pickup Point Name
-          description: Friendly pickup point name
-          examples:
-          - North Hotel
-        pickup_point_address:
-          type: string
-          title: Pickup Point Address
-          description: Street address of the pickup point
-          examples:
-          - ''
-      type: object
-      required:
-      - latitude
-      - longitude
-      - pickup_point_name
-      - pickup_point_address
-      title: APIPickupPoint
-    IsTbd:
-      properties:
-        time:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Time
-          description: Whether the event time is to be determined
-          default: false
-        date:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Date
-          description: Whether the event date is to be determined
-          default: false
-      type: object
-      title: IsTbd
-    Price:
-      properties:
-        amount:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-          description: Monetary value of this price in the given currency, with decimal point i.e. not integer format
-          examples:
-          - '3.99'
-        currency:
-          type: string
-          maxLength: 3
-          minLength: 3
-          pattern: '[A-Z][A-Z][A-Z]'
-          title: Currency
-          description: ISO 4217 code for the currency in which the item's prices are sent
-          examples:
-          - GBP
-      type: object
-      required:
-      - amount
-      - currency
-      title: Price
-      description: Represents an absolute monetary value in a particular currency. Cannot be negative.
-    ResultSort:
-      type: string
-      enum:
-      - price_asc
-      - price_desc
-      - popularity
-      title: ResultSort
-    PersonalisationField:
-      type: string
-      enum:
-      - prefix
-      - first_name
-      - last_name
-      - phone_number
-      - email
-      - birthdate
-      - house_number
-      - street_name
-      - postal_code
-      - country_code
-      - city
-      - nationality
-      title: PersonalisationField
     Addon:
       properties:
         id:
@@ -1261,32 +1309,14 @@ components:
       - id
       - name
       title: Addon
-    Error:
-      properties:
-        type:
-          type: string
-          title: Type
-        msg:
-          type: string
-          title: Msg
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Loc
-        payload:
-          anyOf:
-          - {}
-          - type: 'null'
-          title: Payload
-      type: object
-      required:
-      - type
-      - msg
-      - loc
-      title: Error
+    AdmissionType:
+      type: string
+      enum:
+      - open_entry
+      - date_entry
+      - slot_entry
+      - timed_entry
+      title: AdmissionType
     DeliveryMethod:
       type: string
       enum:
@@ -1296,46 +1326,16 @@ components:
       - eticket
       - print
       title: DeliveryMethod
-    ValidationError:
+    PersonalisationFieldConstraints:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+        regex:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Regex
+          description: The regular expression that the field input should validate against
       type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    PersonalisationFields:
-      properties:
-        fields:
-          additionalProperties:
-            $ref: '#/components/schemas/PersonalisationFieldConstraints'
-          propertyNames:
-            $ref: '#/components/schemas/PersonalisationField'
-          type: object
-          title: Fields
-          description: A list of personalisations fields, included their regex-based constraints.
-          default: {}
-      type: object
-      title: PersonalisationFields
-    BookingType:
-      type: string
-      enum:
-      - basket_booking
-      - direct_booking
-      title: BookingType
+      title: PersonalisationFieldConstraints
   securitySchemes:
     APIKeyHeader:
       type: apiKey

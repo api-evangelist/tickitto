@@ -786,6 +786,27 @@ components:
       - signedUrl
       - date
       title: VFPRequest
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
+      type: object
+      required:
+      - request_id
+      - detail
+      title: ErrorBody
     Error:
       properties:
         type:
@@ -812,27 +833,6 @@ components:
       - msg
       - loc
       title: Error
-    ErrorBody:
-      properties:
-        request_id:
-          type: string
-          title: Request Id
-        detail:
-          items:
-            $ref: '#/components/schemas/Error'
-          type: array
-          title: Detail
-        body:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Body
-      type: object
-      required:
-      - request_id
-      - detail
-      title: ErrorBody
   securitySchemes:
     APIKeyHeader:
       type: apiKey

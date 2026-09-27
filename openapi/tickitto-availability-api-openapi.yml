@@ -328,6 +328,57 @@ paths:
               example: 123e4567-e89b-12d3-a456-426614174000
 components:
   schemas:
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
+      type: object
+      required:
+      - request_id
+      - detail
+      title: ErrorBody
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     Error:
       properties:
         type:
@@ -354,57 +405,6 @@ components:
       - msg
       - loc
       title: Error
-    ErrorBody:
-      properties:
-        request_id:
-          type: string
-          title: Request Id
-        detail:
-          items:
-            $ref: '#/components/schemas/Error'
-          type: array
-          title: Detail
-        body:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Body
-      type: object
-      required:
-      - request_id
-      - detail
-      title: ErrorBody
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     SessionObject:
       properties:
         session_id:
