@@ -619,43 +619,53 @@ paths:
               example: 123e4567-e89b-12d3-a456-426614174000
 components:
   schemas:
-    BookingType:
+    ResultSort:
       type: string
       enum:
-      - basket_booking
-      - direct_booking
-      title: BookingType
-    Image:
+      - price_asc
+      - price_desc
+      - popularity
+      title: ResultSort
+    APIPickupPoint:
       properties:
-        desktop:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Desktop
-          description: URL to use on desktop devices
-        mobile:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Mobile
-          description: URL to use on mobile devices
-        thumbnail:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Thumbnail
-          description: URL of a square version of this image
+        latitude:
+          type: number
+          title: Latitude
+          description: Latitude in degrees
+          examples:
+          - 1.23456789
+        longitude:
+          type: number
+          title: Longitude
+          description: Longitude in degrees
+          examples:
+          - 1.23456789
+        id:
+          type: string
+          title: Id
+          description: Machine identifier for this place
+          default: ''
+          examples:
+          - '123'
+        pickup_point_name:
+          type: string
+          title: Pickup Point Name
+          description: Friendly pickup point name
+          examples:
+          - North Hotel
+        pickup_point_address:
+          type: string
+          title: Pickup Point Address
+          description: Street address of the pickup point
+          examples:
+          - ''
       type: object
-      title: Image
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      required:
+      - latitude
+      - longitude
+      - pickup_point_name
+      - pickup_point_address
+      title: APIPickupPoint
     ErrorBody:
       properties:
         request_id:
@@ -677,6 +687,15 @@ components:
       - request_id
       - detail
       title: ErrorBody
+    DeliveryMethod:
+      type: string
+      enum:
+      - external
+      - collection
+      - document
+      - eticket
+      - print
+      title: DeliveryMethod
     Error:
       properties:
         type:
@@ -703,50 +722,40 @@ components:
       - msg
       - loc
       title: Error
-    PersonalisationFields:
+    Image:
       properties:
-        fields:
-          additionalProperties:
-            $ref: '#/components/schemas/PersonalisationFieldConstraints'
-          propertyNames:
-            $ref: '#/components/schemas/PersonalisationField'
-          type: object
-          title: Fields
-          description: A list of personalisations fields, included their regex-based constraints.
-          default: {}
+        desktop:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desktop
+          description: URL to use on desktop devices
+        mobile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mobile
+          description: URL to use on mobile devices
+        thumbnail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Thumbnail
+          description: URL of a square version of this image
       type: object
-      title: PersonalisationFields
-    ResultSort:
+      title: Image
+    EventType:
       type: string
       enum:
-      - price_asc
-      - price_desc
-      - popularity
-      title: ResultSort
-    Price:
-      properties:
-        amount:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-          description: Monetary value of this price in the given currency, with decimal point i.e. not integer format
-          examples:
-          - '3.99'
-        currency:
-          type: string
-          maxLength: 3
-          minLength: 3
-          pattern: '[A-Z][A-Z][A-Z]'
-          title: Currency
-          description: ISO 4217 code for the currency in which the item's prices are sent
-          examples:
-          - GBP
-      type: object
-      required:
-      - amount
-      - currency
-      title: Price
-      description: Represents an absolute monetary value in a particular currency. Cannot be negative.
+      - Standard
+      - Cinema
+      title: EventType
+      description: 'Event type classification.
+
+
+        - STANDARD: (Currently) All non-cinema events
+
+        - CINEMA: All cinema experiences'
     IsTbd:
       properties:
         time:
@@ -765,6 +774,49 @@ components:
           default: false
       type: object
       title: IsTbd
+    Addon:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: Addon
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     APIEvent:
       properties:
         cancellation_policy_information:
@@ -1107,43 +1159,19 @@ components:
         For example, Moulin Rouge is an event that occurs at 14:30 and 19:30 from Monday to Saturday for the next upcoming 12 months.
 
         In this example, an availability instance would be Saturday, 19th January 2021, at 19:30.'
-    ValidationError:
+    PersonalisationFields:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+        fields:
+          additionalProperties:
+            $ref: '#/components/schemas/PersonalisationFieldConstraints'
+          propertyNames:
+            $ref: '#/components/schemas/PersonalisationField'
+          type: object
+          title: Fields
+          description: A list of personalisations fields, included their regex-based constraints.
+          default: {}
       type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    PersonalisationField:
-      type: string
-      enum:
-      - prefix
-      - first_name
-      - last_name
-      - phone_number
-      - email
-      - birthdate
-      - house_number
-      - street_name
-      - postal_code
-      - country_code
-      - city
-      - nationality
-      title: PersonalisationField
+      title: PersonalisationFields
     EventPerformer:
       properties:
         id:
@@ -1164,58 +1192,60 @@ components:
       - name
       title: EventPerformer
       description: Small performer model used in the events table
-    APIPickupPoint:
-      properties:
-        latitude:
-          type: number
-          title: Latitude
-          description: Latitude in degrees
-          examples:
-          - 1.23456789
-        longitude:
-          type: number
-          title: Longitude
-          description: Longitude in degrees
-          examples:
-          - 1.23456789
-        id:
-          type: string
-          title: Id
-          description: Machine identifier for this place
-          default: ''
-          examples:
-          - '123'
-        pickup_point_name:
-          type: string
-          title: Pickup Point Name
-          description: Friendly pickup point name
-          examples:
-          - North Hotel
-        pickup_point_address:
-          type: string
-          title: Pickup Point Address
-          description: Street address of the pickup point
-          examples:
-          - ''
-      type: object
-      required:
-      - latitude
-      - longitude
-      - pickup_point_name
-      - pickup_point_address
-      title: APIPickupPoint
-    EventType:
+    AdmissionType:
       type: string
       enum:
-      - Standard
-      - Cinema
-      title: EventType
-      description: 'Event type classification.
-
-
-        - STANDARD: (Currently) All non-cinema events
-
-        - CINEMA: All cinema experiences'
+      - open_entry
+      - date_entry
+      - slot_entry
+      - timed_entry
+      title: AdmissionType
+    BookingType:
+      type: string
+      enum:
+      - basket_booking
+      - direct_booking
+      title: BookingType
+    PersonalisationField:
+      type: string
+      enum:
+      - prefix
+      - first_name
+      - last_name
+      - phone_number
+      - email
+      - birthdate
+      - house_number
+      - street_name
+      - postal_code
+      - country_code
+      - city
+      - nationality
+      title: PersonalisationField
+    Price:
+      properties:
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: Monetary value of this price in the given currency, with decimal point i.e. not integer format
+          examples:
+          - '3.99'
+        currency:
+          type: string
+          maxLength: 3
+          minLength: 3
+          pattern: '[A-Z][A-Z][A-Z]'
+          title: Currency
+          description: ISO 4217 code for the currency in which the item's prices are sent
+          examples:
+          - GBP
+      type: object
+      required:
+      - amount
+      - currency
+      title: Price
+      description: Represents an absolute monetary value in a particular currency. Cannot be negative.
     APIEventVenue:
       properties:
         latitude:
@@ -1296,36 +1326,6 @@ components:
       - venue_address
       - venue_name
       title: APIEventVenue
-    Addon:
-      properties:
-        id:
-          type: string
-          title: Id
-        name:
-          type: string
-          title: Name
-      type: object
-      required:
-      - id
-      - name
-      title: Addon
-    AdmissionType:
-      type: string
-      enum:
-      - open_entry
-      - date_entry
-      - slot_entry
-      - timed_entry
-      title: AdmissionType
-    DeliveryMethod:
-      type: string
-      enum:
-      - external
-      - collection
-      - document
-      - eticket
-      - print
-      title: DeliveryMethod
     PersonalisationFieldConstraints:
       properties:
         regex:

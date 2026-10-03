@@ -603,6 +603,147 @@ paths:
               example: 123e4567-e89b-12d3-a456-426614174000
 components:
   schemas:
+    APIEventVenue:
+      properties:
+        latitude:
+          type: number
+          title: Latitude
+          description: Latitude in degrees
+          examples:
+          - 1.23456789
+        longitude:
+          type: number
+          title: Longitude
+          description: Longitude in degrees
+          examples:
+          - 1.23456789
+        id:
+          type: string
+          title: Id
+          description: Machine identifier for this place
+          default: ''
+          examples:
+          - '123'
+        venue_brand_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Venue Brand Id
+          description: The brand ID that operates the venue
+        venue_address:
+          type: string
+          title: Venue Address
+          description: Street address of the venue
+          examples:
+          - 27 Stadium Avenue
+        seatplan_images:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Image'
+            type: array
+          - type: 'null'
+          title: Seatplan Images
+          description: Images of the venue's seatplan.
+        configuration:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Configuration
+        venue_name:
+          type: string
+          title: Venue Name
+          description: Friendly venue name, in English
+          examples:
+          - Wembley Stadium
+        venue_brand:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Venue Brand
+          description: The brand name that operates the venue
+        venue_city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Venue City
+          description: The city of the venue
+          examples:
+          - London
+        venue_country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Venue Country
+          description: The country of the venue
+      type: object
+      required:
+      - latitude
+      - longitude
+      - venue_address
+      - venue_name
+      title: APIEventVenue
+    ResultSort:
+      type: string
+      enum:
+      - price_asc
+      - price_desc
+      - popularity
+      title: ResultSort
+    AutocompleteField:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Title/name value of the field
+          examples:
+          - Dubai
+        score:
+          type: number
+          title: Score
+          description: MongoDB Atlas score for the autocomplete text match - larger is a better match
+          examples:
+          - 0.8567645
+        slug:
+          type: string
+          title: Slug
+          description: Slug value of the field
+          examples:
+          - the-cat-in-the-hat
+        id:
+          type: string
+          title: Id
+          description: ID value of the field
+          examples:
+          - 10
+      type: object
+      required:
+      - name
+      - score
+      - slug
+      - id
+      title: AutocompleteField
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
+      type: object
+      required:
+      - request_id
+      - detail
+      title: ErrorBody
     LiteEvent:
       properties:
         title:
@@ -749,27 +890,6 @@ components:
       - soft_availability_t2
       - event_id
       title: LiteEvent
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     EventType:
       type: string
       enum:
@@ -782,199 +902,55 @@ components:
         - STANDARD: (Currently) All non-cinema events
 
         - CINEMA: All cinema experiences'
-    APIEventVenue:
+    SearchResults:
       properties:
-        latitude:
-          type: number
-          title: Latitude
-          description: Latitude in degrees
-          examples:
-          - 1.23456789
-        longitude:
-          type: number
-          title: Longitude
-          description: Longitude in degrees
-          examples:
-          - 1.23456789
-        id:
-          type: string
-          title: Id
-          description: Machine identifier for this place
-          default: ''
-          examples:
-          - '123'
-        venue_brand_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Venue Brand Id
-          description: The brand ID that operates the venue
-        venue_address:
-          type: string
-          title: Venue Address
-          description: Street address of the venue
-          examples:
-          - 27 Stadium Avenue
-        seatplan_images:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/Image'
-            type: array
-          - type: 'null'
-          title: Seatplan Images
-          description: Images of the venue's seatplan.
-        configuration:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Configuration
-        venue_name:
-          type: string
-          title: Venue Name
-          description: Friendly venue name, in English
-          examples:
-          - Wembley Stadium
-        venue_brand:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Venue Brand
-          description: The brand name that operates the venue
-        venue_city:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Venue City
-          description: The city of the venue
-          examples:
-          - London
-        venue_country:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Venue Country
-          description: The country of the venue
-      type: object
-      required:
-      - latitude
-      - longitude
-      - venue_address
-      - venue_name
-      title: APIEventVenue
-    AutocompleteField:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Title/name value of the field
-          examples:
-          - Dubai
-        score:
-          type: number
-          title: Score
-          description: MongoDB Atlas score for the autocomplete text match - larger is a better match
-          examples:
-          - 0.8567645
-        slug:
-          type: string
-          title: Slug
-          description: Slug value of the field
-          examples:
-          - the-cat-in-the-hat
-        id:
-          type: string
-          title: Id
-          description: ID value of the field
+        results:
+          items:
+            $ref: '#/components/schemas/LiteEvent'
+          type: array
+          title: Results
+          description: Event results (lightweight on event information for smaller response size).
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of events found.
           examples:
           - 10
+        category_count:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Category Count
+          description: Category count for this search result
+          examples:
+          - Attractions: 1
+            Tours: 2
+        city_count:
+          additionalProperties:
+            type: integer
+          type: object
+          title: City Count
+          description: City count for this search result set
+          examples:
+          - London: 1
+            Paris: 2
+        country_count:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Country Count
+          description: Country code count for this search result set
+          examples:
+          - FR: 2
+            GB: 1
       type: object
       required:
-      - name
-      - score
-      - slug
-      - id
-      title: AutocompleteField
-    Image:
-      properties:
-        desktop:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Desktop
-          description: URL to use on desktop devices
-        mobile:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Mobile
-          description: URL to use on mobile devices
-        thumbnail:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Thumbnail
-          description: URL of a square version of this image
-      type: object
-      title: Image
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ResultSort:
-      type: string
-      enum:
-      - price_asc
-      - price_desc
-      - popularity
-      title: ResultSort
-    IsTbd:
-      properties:
-        time:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Time
-          description: Whether the event time is to be determined
-          default: false
-        date:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Date
-          description: Whether the event date is to be determined
-          default: false
-      type: object
-      title: IsTbd
-    Price:
-      properties:
-        amount:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-          description: Monetary value of this price in the given currency, with decimal point i.e. not integer format
-          examples:
-          - '3.99'
-        currency:
-          type: string
-          maxLength: 3
-          minLength: 3
-          pattern: '[A-Z][A-Z][A-Z]'
-          title: Currency
-          description: ISO 4217 code for the currency in which the item's prices are sent
-          examples:
-          - GBP
-      type: object
-      required:
-      - amount
-      - currency
-      title: Price
-      description: Represents an absolute monetary value in a particular currency. Cannot be negative.
+      - results
+      - total_count
+      - category_count
+      - city_count
+      - country_count
+      title: SearchResults
     AutocompleteResults:
       properties:
         event_count:
@@ -1042,76 +1018,24 @@ components:
           default: []
       type: object
       title: AutocompleteResults
-    SearchResults:
+    IsTbd:
       properties:
-        results:
-          items:
-            $ref: '#/components/schemas/LiteEvent'
-          type: array
-          title: Results
-          description: Event results (lightweight on event information for smaller response size).
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of events found.
-          examples:
-          - 10
-        category_count:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Category Count
-          description: Category count for this search result
-          examples:
-          - Attractions: 1
-            Tours: 2
-        city_count:
-          additionalProperties:
-            type: integer
-          type: object
-          title: City Count
-          description: City count for this search result set
-          examples:
-          - London: 1
-            Paris: 2
-        country_count:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Country Count
-          description: Country code count for this search result set
-          examples:
-          - FR: 2
-            GB: 1
-      type: object
-      required:
-      - results
-      - total_count
-      - category_count
-      - city_count
-      - country_count
-      title: SearchResults
-    ErrorBody:
-      properties:
-        request_id:
-          type: string
-          title: Request Id
-        detail:
-          items:
-            $ref: '#/components/schemas/Error'
-          type: array
-          title: Detail
-        body:
+        time:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: boolean
           - type: 'null'
-          title: Body
+          title: Time
+          description: Whether the event time is to be determined
+          default: false
+        date:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Date
+          description: Whether the event date is to be determined
+          default: false
       type: object
-      required:
-      - request_id
-      - detail
-      title: ErrorBody
+      title: IsTbd
     Error:
       properties:
         type:
@@ -1138,6 +1062,82 @@ components:
       - msg
       - loc
       title: Error
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Image:
+      properties:
+        desktop:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desktop
+          description: URL to use on desktop devices
+        mobile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mobile
+          description: URL to use on mobile devices
+        thumbnail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Thumbnail
+          description: URL of a square version of this image
+      type: object
+      title: Image
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Price:
+      properties:
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: Monetary value of this price in the given currency, with decimal point i.e. not integer format
+          examples:
+          - '3.99'
+        currency:
+          type: string
+          maxLength: 3
+          minLength: 3
+          pattern: '[A-Z][A-Z][A-Z]'
+          title: Currency
+          description: ISO 4217 code for the currency in which the item's prices are sent
+          examples:
+          - GBP
+      type: object
+      required:
+      - amount
+      - currency
+      title: Price
+      description: Represents an absolute monetary value in a particular currency. Cannot be negative.
   securitySchemes:
     APIKeyHeader:
       type: apiKey

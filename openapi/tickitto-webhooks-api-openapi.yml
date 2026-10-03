@@ -773,6 +773,32 @@ paths:
               example: 123e4567-e89b-12d3-a456-426614174000
 components:
   schemas:
+    Error:
+      properties:
+        type:
+          type: string
+          title: Type
+        msg:
+          type: string
+          title: Msg
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Loc
+        payload:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Payload
+      type: object
+      required:
+      - type
+      - msg
+      - loc
+      title: Error
     VFPRequest:
       properties:
         signedUrl:
@@ -807,32 +833,6 @@ components:
       - request_id
       - detail
       title: ErrorBody
-    Error:
-      properties:
-        type:
-          type: string
-          title: Type
-        msg:
-          type: string
-          title: Msg
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Loc
-        payload:
-          anyOf:
-          - {}
-          - type: 'null'
-          title: Payload
-      type: object
-      required:
-      - type
-      - msg
-      - loc
-      title: Error
   securitySchemes:
     APIKeyHeader:
       type: apiKey

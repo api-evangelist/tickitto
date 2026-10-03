@@ -349,6 +349,47 @@ components:
       - request_id
       - detail
       title: ErrorBody
+    SessionObject:
+      properties:
+        session_id:
+          type: string
+          title: Session Id
+          description: Machine identifier of this session
+        view_url:
+          type: string
+          title: View Url
+          description: URL where the widget can be used to book this session
+      type: object
+      required:
+      - session_id
+      - view_url
+      title: SessionObject
+    Error:
+      properties:
+        type:
+          type: string
+          title: Type
+        msg:
+          type: string
+          title: Msg
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Loc
+        payload:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Payload
+      type: object
+      required:
+      - type
+      - msg
+      - loc
+      title: Error
     HTTPValidationError:
       properties:
         detail:
@@ -379,47 +420,6 @@ components:
       - msg
       - type
       title: ValidationError
-    Error:
-      properties:
-        type:
-          type: string
-          title: Type
-        msg:
-          type: string
-          title: Msg
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Loc
-        payload:
-          anyOf:
-          - {}
-          - type: 'null'
-          title: Payload
-      type: object
-      required:
-      - type
-      - msg
-      - loc
-      title: Error
-    SessionObject:
-      properties:
-        session_id:
-          type: string
-          title: Session Id
-          description: Machine identifier of this session
-        view_url:
-          type: string
-          title: View Url
-          description: URL where the widget can be used to book this session
-      type: object
-      required:
-      - session_id
-      - view_url
-      title: SessionObject
   securitySchemes:
     APIKeyHeader:
       type: apiKey
