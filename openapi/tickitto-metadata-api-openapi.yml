@@ -152,7 +152,33 @@ paths:
               example: 123e4567-e89b-12d3-a456-426614174000
 components:
   schemas:
-    Location:
+    Error:
+      properties:
+        type:
+          type: string
+          title: Type
+        msg:
+          type: string
+          title: Msg
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Loc
+        payload:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Payload
+      type: object
+      required:
+      - type
+      - msg
+      - loc
+      title: Error
+    State:
       properties:
         localised_name:
           anyOf:
@@ -160,81 +186,71 @@ components:
           - type: 'null'
           title: Localised Name
           description: Localisable name.
-        country_code:
+        name:
           type: string
-          title: Country Code
-          description: Unique two-letter ISO country code e.g. GB, DE, US
-        alternate_names:
-          items:
-            type: string
-          type: array
-          title: Alternate Names
-          description: Alternate names and other country-codes e.g. UK, GBR, Great Britain
-          default: []
-        country_name:
-          type: string
-          title: Country Name
-          description: Country name e.g. United Arab Emirates
+          title: Name
+          description: Location name.
+        group_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Group Name
+          description: Location grouping name.
         images:
           items:
-            $ref: '#/components/schemas/SourcedImage'
+            $ref: '#/components/schemas/Image'
           type: array
           title: Images
-          description: URLs of images which can be used to represent this country.
+          description: URLs of images which can be used to represent this location.
           default: []
-        cities:
-          items:
-            $ref: '#/components/schemas/City'
-          type: array
-          title: Cities
-          description: An array containing metadata about cities in this country.
-          default: []
-        regions:
-          items:
-            $ref: '#/components/schemas/Region'
-          type: array
-          title: Regions
-          description: An array containing metadata about the regions in this country
-          default: []
-        states:
-          items:
-            $ref: '#/components/schemas/State'
-          type: array
-          title: States
-          description: An array containing metadata about states in this country
-          default: []
+        latitude:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Latitude
+          description: Latitudinal position of the centre point of this location.
+        longitude:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Longitude
+          description: Longitudinal position of the centre point of this location.
         event_count:
           type: integer
           title: Event Count
           description: Number of events in this location which have availability.
           default: 0
-      type: object
-      required:
-      - country_code
-      - country_name
-      title: Location
-      description: Metadata and images for a country.
-    ErrorBody:
-      properties:
-        request_id:
-          type: string
-          title: Request Id
-        detail:
-          items:
-            $ref: '#/components/schemas/Error'
-          type: array
-          title: Detail
-        body:
+        country_name:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: string
           - type: 'null'
-          title: Body
+          title: Country Name
+          description: Country name e.g. United Arab Emirates
       type: object
       required:
-      - request_id
-      - detail
-      title: ErrorBody
+      - name
+      title: State
+      description: Metadata and images for a state.
+    Metadata:
+      properties:
+        categories:
+          items:
+            $ref: '#/components/schemas/Category'
+          type: array
+          title: Categories
+          description: Information about event categories.
+        locations:
+          items:
+            $ref: '#/components/schemas/Location'
+          type: array
+          title: Locations
+          description: Information about event locations
+      type: object
+      required:
+      - categories
+      - locations
+      title: Metadata
+      description: Metadata endpoint response model.
     Category:
       properties:
         localised_name:
@@ -319,105 +335,27 @@ components:
           default: ''
       type: object
       title: SourcedImage
-    Region:
+    ValidationError:
       properties:
-        localised_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Localised Name
-          description: Localisable name.
-        name:
-          type: string
-          title: Name
-          description: Location name.
-        group_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Group Name
-          description: Location grouping name.
-        images:
-          items:
-            $ref: '#/components/schemas/Image'
-          type: array
-          title: Images
-          description: URLs of images which can be used to represent this location.
-          default: []
-        latitude:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Latitude
-          description: Latitudinal position of the centre point of this location.
-        longitude:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Longitude
-          description: Longitudinal position of the centre point of this location.
-        event_count:
-          type: integer
-          title: Event Count
-          description: Number of events in this location which have availability.
-          default: 0
-        cities:
-          items:
-            $ref: '#/components/schemas/City'
-          type: array
-          title: Cities
-          description: An array containing a collection cities within the region.
-          default: []
-      type: object
-      required:
-      - name
-      title: Region
-    Metadata:
-      properties:
-        categories:
-          items:
-            $ref: '#/components/schemas/Category'
-          type: array
-          title: Categories
-          description: Information about event categories.
-        locations:
-          items:
-            $ref: '#/components/schemas/Location'
-          type: array
-          title: Locations
-          description: Information about event locations
-      type: object
-      required:
-      - categories
-      - locations
-      title: Metadata
-      description: Metadata endpoint response model.
-    Error:
-      properties:
-        type:
-          type: string
-          title: Type
-        msg:
-          type: string
-          title: Msg
         loc:
           items:
             anyOf:
             - type: string
             - type: integer
           type: array
-          title: Loc
-        payload:
-          anyOf:
-          - {}
-          - type: 'null'
-          title: Payload
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
       required:
-      - type
-      - msg
       - loc
-      title: Error
+      - msg
+      - type
+      title: ValidationError
     City:
       properties:
         localised_name:
@@ -471,59 +409,69 @@ components:
       - name
       title: City
       description: Metadata and images for a city.
-    HTTPValidationError:
+    Location:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    Image:
-      properties:
-        desktop:
+        localised_name:
           anyOf:
           - type: string
           - type: 'null'
-          title: Desktop
-          description: URL to use on desktop devices
-        mobile:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Mobile
-          description: URL to use on mobile devices
-        thumbnail:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Thumbnail
-          description: URL of a square version of this image
-      type: object
-      title: Image
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+          title: Localised Name
+          description: Localisable name.
+        country_code:
           type: string
-          title: Message
-        type:
+          title: Country Code
+          description: Unique two-letter ISO country code e.g. GB, DE, US
+        alternate_names:
+          items:
+            type: string
+          type: array
+          title: Alternate Names
+          description: Alternate names and other country-codes e.g. UK, GBR, Great Britain
+          default: []
+        country_name:
           type: string
-          title: Error Type
+          title: Country Name
+          description: Country name e.g. United Arab Emirates
+        images:
+          items:
+            $ref: '#/components/schemas/SourcedImage'
+          type: array
+          title: Images
+          description: URLs of images which can be used to represent this country.
+          default: []
+        cities:
+          items:
+            $ref: '#/components/schemas/City'
+          type: array
+          title: Cities
+          description: An array containing metadata about cities in this country.
+          default: []
+        regions:
+          items:
+            $ref: '#/components/schemas/Region'
+          type: array
+          title: Regions
+          description: An array containing metadata about the regions in this country
+          default: []
+        states:
+          items:
+            $ref: '#/components/schemas/State'
+          type: array
+          title: States
+          description: An array containing metadata about states in this country
+          default: []
+        event_count:
+          type: integer
+          title: Event Count
+          description: Number of events in this location which have availability.
+          default: 0
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    State:
+      - country_code
+      - country_name
+      title: Location
+      description: Metadata and images for a country.
+    Region:
       properties:
         localised_name:
           anyOf:
@@ -565,17 +513,69 @@ components:
           title: Event Count
           description: Number of events in this location which have availability.
           default: 0
-        country_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Country Name
-          description: Country name e.g. United Arab Emirates
+        cities:
+          items:
+            $ref: '#/components/schemas/City'
+          type: array
+          title: Cities
+          description: An array containing a collection cities within the region.
+          default: []
       type: object
       required:
       - name
-      title: State
-      description: Metadata and images for a state.
+      title: Region
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
+      type: object
+      required:
+      - request_id
+      - detail
+      title: ErrorBody
+    Image:
+      properties:
+        desktop:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desktop
+          description: URL to use on desktop devices
+        mobile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mobile
+          description: URL to use on mobile devices
+        thumbnail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Thumbnail
+          description: URL of a square version of this image
+      type: object
+      title: Image
   securitySchemes:
     APIKeyHeader:
       type: apiKey

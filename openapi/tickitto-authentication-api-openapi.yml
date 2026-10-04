@@ -75,39 +75,61 @@ paths:
         in: header
 components:
   schemas:
-    ErrorBody:
+    BookingFeeSettings:
       properties:
-        request_id:
+        item_min_charge:
           type: string
-          title: Request Id
-        detail:
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Item Min Charge
+          description: Lower bound per item for the booking charge calculation
+          default: 0.0
+        item_max_charge:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Item Max Charge
+          description: Upper bound per item for the booking charge calculation
+          default: 999.999
+        item_variable_charge:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Item Variable Charge
+          description: Charge to apply as a multiplier of each item price
+          default: 1.0
+        item_fixed_charge:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Item Fixed Charge
+          description: Fixed charge per item
+          default: 0.0
+      type: object
+      title: BookingFeeSettings
+      description: Settings for booking charge calculation
+    Error:
+      properties:
+        type:
+          type: string
+          title: Type
+        msg:
+          type: string
+          title: Msg
+        loc:
           items:
-            $ref: '#/components/schemas/Error'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
-        body:
+          title: Loc
+        payload:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - {}
           - type: 'null'
-          title: Body
+          title: Payload
       type: object
       required:
-      - request_id
-      - detail
-      title: ErrorBody
-    PaymentAmendmentType:
-      type: string
-      enum:
-      - iterative
-      - checkout
-      - external
-      title: PaymentAmendmentType
-      description: 'ITERATIVE: Payment intents, invoices, etc, are made/amended when the basket is created, or items are added/removed from it
-
-        CHECKOUT: Payment intents, invoices, etc, are made at checkout only.
-
-        EXTERNAL: The distributor is MOR, handling the payment in its entirety.'
+      - type
+      - msg
+      - loc
+      title: Error
     ApiUser:
       properties:
         id:
@@ -147,64 +169,6 @@ components:
       - name
       - booking_fee_settings
       title: ApiUser
-    CreditPaymentMethod:
-      properties:
-        name:
-          $ref: '#/components/schemas/PaymentMethodType'
-          default: tickitto
-        enabled:
-          type: boolean
-          title: Enabled
-          description: Whether this payment method is currently enabled.
-          default: false
-        amendment_trigger:
-          $ref: '#/components/schemas/PaymentAmendmentType'
-          default: external
-      type: object
-      title: CreditPaymentMethod
-      description: Payment method used where Tickitto is a creditor to the user.
-    Error:
-      properties:
-        type:
-          type: string
-          title: Type
-        msg:
-          type: string
-          title: Msg
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Loc
-        payload:
-          anyOf:
-          - {}
-          - type: 'null'
-          title: Payload
-      type: object
-      required:
-      - type
-      - msg
-      - loc
-      title: Error
-    CareemPayPaymentMethod:
-      properties:
-        name:
-          $ref: '#/components/schemas/PaymentMethodType'
-          default: careem_pay
-        enabled:
-          type: boolean
-          title: Enabled
-          description: Whether this payment method is currently enabled.
-          default: false
-        amendment_trigger:
-          $ref: '#/components/schemas/PaymentAmendmentType'
-          default: checkout
-      type: object
-      title: CareemPayPaymentMethod
-      description: Payment method used for Careem Pay.
     StripePaymentMethod:
       properties:
         name:
@@ -233,35 +197,6 @@ components:
       type: object
       title: StripePaymentMethod
       description: Payments method used for stripe.
-    BookingFeeSettings:
-      properties:
-        item_min_charge:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Item Min Charge
-          description: Lower bound per item for the booking charge calculation
-          default: 0.0
-        item_max_charge:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Item Max Charge
-          description: Upper bound per item for the booking charge calculation
-          default: 999.999
-        item_variable_charge:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Item Variable Charge
-          description: Charge to apply as a multiplier of each item price
-          default: 1.0
-        item_fixed_charge:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Item Fixed Charge
-          description: Fixed charge per item
-          default: 0.0
-      type: object
-      title: BookingFeeSettings
-      description: Settings for booking charge calculation
     PaymentMethodType:
       type: string
       enum:
@@ -274,6 +209,71 @@ components:
         CAREEM_PAY: Tickitto is MOR, and retrieves payment via Careem Pay.
 
         TICKITTO: The distributor is MOR, and tickitto purchases the items directly.'
+    CareemPayPaymentMethod:
+      properties:
+        name:
+          $ref: '#/components/schemas/PaymentMethodType'
+          default: careem_pay
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether this payment method is currently enabled.
+          default: false
+        amendment_trigger:
+          $ref: '#/components/schemas/PaymentAmendmentType'
+          default: checkout
+      type: object
+      title: CareemPayPaymentMethod
+      description: Payment method used for Careem Pay.
+    PaymentAmendmentType:
+      type: string
+      enum:
+      - iterative
+      - checkout
+      - external
+      title: PaymentAmendmentType
+      description: 'ITERATIVE: Payment intents, invoices, etc, are made/amended when the basket is created, or items are added/removed from it
+
+        CHECKOUT: Payment intents, invoices, etc, are made at checkout only.
+
+        EXTERNAL: The distributor is MOR, handling the payment in its entirety.'
+    CreditPaymentMethod:
+      properties:
+        name:
+          $ref: '#/components/schemas/PaymentMethodType'
+          default: tickitto
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether this payment method is currently enabled.
+          default: false
+        amendment_trigger:
+          $ref: '#/components/schemas/PaymentAmendmentType'
+          default: external
+      type: object
+      title: CreditPaymentMethod
+      description: Payment method used where Tickitto is a creditor to the user.
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
+      type: object
+      required:
+      - request_id
+      - detail
+      title: ErrorBody
   securitySchemes:
     APIKeyHeader:
       type: apiKey

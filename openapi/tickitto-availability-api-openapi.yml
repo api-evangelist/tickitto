@@ -328,42 +328,6 @@ paths:
               example: 123e4567-e89b-12d3-a456-426614174000
 components:
   schemas:
-    ErrorBody:
-      properties:
-        request_id:
-          type: string
-          title: Request Id
-        detail:
-          items:
-            $ref: '#/components/schemas/Error'
-          type: array
-          title: Detail
-        body:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Body
-      type: object
-      required:
-      - request_id
-      - detail
-      title: ErrorBody
-    SessionObject:
-      properties:
-        session_id:
-          type: string
-          title: Session Id
-          description: Machine identifier of this session
-        view_url:
-          type: string
-          title: View Url
-          description: URL where the widget can be used to book this session
-      type: object
-      required:
-      - session_id
-      - view_url
-      title: SessionObject
     Error:
       properties:
         type:
@@ -390,15 +354,21 @@ components:
       - msg
       - loc
       title: Error
-    HTTPValidationError:
+    SessionObject:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        session_id:
+          type: string
+          title: Session Id
+          description: Machine identifier of this session
+        view_url:
+          type: string
+          title: View Url
+          description: URL where the widget can be used to book this session
       type: object
-      title: HTTPValidationError
+      required:
+      - session_id
+      - view_url
+      title: SessionObject
     ValidationError:
       properties:
         loc:
@@ -420,6 +390,36 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
+      type: object
+      required:
+      - request_id
+      - detail
+      title: ErrorBody
   securitySchemes:
     APIKeyHeader:
       type: apiKey
