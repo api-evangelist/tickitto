@@ -1,0 +1,12 @@
+{
+ "url": "https://tickitto.tech/openapi.json",
+ "requested_url": "https://tickitto.tech/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 307329,
+ "sha256": "dbe8c7dd27ac8783135175d64a3eabb895e9230d057f54e94c9c5b5999682e2d",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
