@@ -603,54 +603,140 @@ paths:
               example: 123e4567-e89b-12d3-a456-426614174000
 components:
   schemas:
-    Image:
+    APIEventVenue:
       properties:
-        desktop:
+        latitude:
+          type: number
+          title: Latitude
+          description: Latitude in degrees
+          examples:
+          - 1.23456789
+        longitude:
+          type: number
+          title: Longitude
+          description: Longitude in degrees
+          examples:
+          - 1.23456789
+        id:
+          type: string
+          title: Id
+          description: Machine identifier for this place
+          default: ''
+          examples:
+          - '123'
+        venue_brand_id:
           anyOf:
           - type: string
           - type: 'null'
-          title: Desktop
-          description: URL to use on desktop devices
-        mobile:
+          title: Venue Brand Id
+          description: The brand ID that operates the venue
+        venue_address:
+          type: string
+          title: Venue Address
+          description: Street address of the venue
+          examples:
+          - 27 Stadium Avenue
+        seatplan_images:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Image'
+            type: array
+          - type: 'null'
+          title: Seatplan Images
+          description: Images of the venue's seatplan.
+        configuration:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Configuration
+        venue_name:
+          type: string
+          title: Venue Name
+          description: Friendly venue name, in English
+          examples:
+          - Wembley Stadium
+        venue_brand:
           anyOf:
           - type: string
           - type: 'null'
-          title: Mobile
-          description: URL to use on mobile devices
-        thumbnail:
+          title: Venue Brand
+          description: The brand name that operates the venue
+        venue_city:
           anyOf:
           - type: string
           - type: 'null'
-          title: Thumbnail
-          description: URL of a square version of this image
+          title: Venue City
+          description: The city of the venue
+          examples:
+          - London
+        venue_country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Venue Country
+          description: The country of the venue
       type: object
-      title: Image
-    Error:
+      required:
+      - latitude
+      - longitude
+      - venue_address
+      - venue_name
+      title: APIEventVenue
+    AutocompleteField:
       properties:
-        type:
+        name:
           type: string
-          title: Type
-        msg:
+          title: Name
+          description: Title/name value of the field
+          examples:
+          - Dubai
+        score:
+          type: number
+          title: Score
+          description: MongoDB Atlas score for the autocomplete text match - larger is a better match
+          examples:
+          - 0.8567645
+        slug:
           type: string
-          title: Msg
+          title: Slug
+          description: Slug value of the field
+          examples:
+          - the-cat-in-the-hat
+        id:
+          type: string
+          title: Id
+          description: ID value of the field
+          examples:
+          - 10
+      type: object
+      required:
+      - name
+      - score
+      - slug
+      - id
+      title: AutocompleteField
+    ValidationError:
+      properties:
         loc:
           items:
             anyOf:
             - type: string
             - type: integer
           type: array
-          title: Loc
-        payload:
-          anyOf:
-          - {}
-          - type: 'null'
-          title: Payload
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
       required:
-      - type
-      - msg
       - loc
-      title: Error
+      - msg
+      - type
+      title: ValidationError
     LiteEvent:
       properties:
         title:
@@ -797,6 +883,27 @@ components:
       - soft_availability_t2
       - event_id
       title: LiteEvent
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
+      type: object
+      required:
+      - request_id
+      - detail
+      title: ErrorBody
     SearchResults:
       properties:
         results:
@@ -846,6 +953,75 @@ components:
       - city_count
       - country_count
       title: SearchResults
+    Error:
+      properties:
+        type:
+          type: string
+          title: Type
+        msg:
+          type: string
+          title: Msg
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Loc
+        payload:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Payload
+      type: object
+      required:
+      - type
+      - msg
+      - loc
+      title: Error
+    Image:
+      properties:
+        desktop:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desktop
+          description: URL to use on desktop devices
+        mobile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mobile
+          description: URL to use on mobile devices
+        thumbnail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Thumbnail
+          description: URL of a square version of this image
+      type: object
+      title: Image
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    EventType:
+      type: string
+      enum:
+      - Standard
+      - Cinema
+      title: EventType
+      description: 'Event type classification.
+
+
+        - STANDARD: (Currently) All non-cinema events
+
+        - CINEMA: All cinema experiences'
     IsTbd:
       properties:
         time:
@@ -864,27 +1040,13 @@ components:
           default: false
       type: object
       title: IsTbd
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+    ResultSort:
+      type: string
+      enum:
+      - price_asc
+      - price_desc
+      - popularity
+      title: ResultSort
     AutocompleteResults:
       properties:
         event_count:
@@ -952,98 +1114,6 @@ components:
           default: []
       type: object
       title: AutocompleteResults
-    EventType:
-      type: string
-      enum:
-      - Standard
-      - Cinema
-      title: EventType
-      description: 'Event type classification.
-
-
-        - STANDARD: (Currently) All non-cinema events
-
-        - CINEMA: All cinema experiences'
-    APIEventVenue:
-      properties:
-        latitude:
-          type: number
-          title: Latitude
-          description: Latitude in degrees
-          examples:
-          - 1.23456789
-        longitude:
-          type: number
-          title: Longitude
-          description: Longitude in degrees
-          examples:
-          - 1.23456789
-        id:
-          type: string
-          title: Id
-          description: Machine identifier for this place
-          default: ''
-          examples:
-          - '123'
-        venue_brand_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Venue Brand Id
-          description: The brand ID that operates the venue
-        venue_address:
-          type: string
-          title: Venue Address
-          description: Street address of the venue
-          examples:
-          - 27 Stadium Avenue
-        seatplan_images:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/Image'
-            type: array
-          - type: 'null'
-          title: Seatplan Images
-          description: Images of the venue's seatplan.
-        configuration:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Configuration
-        venue_name:
-          type: string
-          title: Venue Name
-          description: Friendly venue name, in English
-          examples:
-          - Wembley Stadium
-        venue_brand:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Venue Brand
-          description: The brand name that operates the venue
-        venue_city:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Venue City
-          description: The city of the venue
-          examples:
-          - London
-        venue_country:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Venue Country
-          description: The country of the venue
-      type: object
-      required:
-      - latitude
-      - longitude
-      - venue_address
-      - venue_name
-      title: APIEventVenue
     Price:
       properties:
         amount:
@@ -1068,76 +1138,6 @@ components:
       - currency
       title: Price
       description: Represents an absolute monetary value in a particular currency. Cannot be negative.
-    AutocompleteField:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Title/name value of the field
-          examples:
-          - Dubai
-        score:
-          type: number
-          title: Score
-          description: MongoDB Atlas score for the autocomplete text match - larger is a better match
-          examples:
-          - 0.8567645
-        slug:
-          type: string
-          title: Slug
-          description: Slug value of the field
-          examples:
-          - the-cat-in-the-hat
-        id:
-          type: string
-          title: Id
-          description: ID value of the field
-          examples:
-          - 10
-      type: object
-      required:
-      - name
-      - score
-      - slug
-      - id
-      title: AutocompleteField
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ErrorBody:
-      properties:
-        request_id:
-          type: string
-          title: Request Id
-        detail:
-          items:
-            $ref: '#/components/schemas/Error'
-          type: array
-          title: Detail
-        body:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Body
-      type: object
-      required:
-      - request_id
-      - detail
-      title: ErrorBody
-    ResultSort:
-      type: string
-      enum:
-      - price_asc
-      - price_desc
-      - popularity
-      title: ResultSort
   securitySchemes:
     APIKeyHeader:
       type: apiKey

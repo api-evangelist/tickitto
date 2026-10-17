@@ -625,6 +625,35 @@ components:
       - basket_booking
       - direct_booking
       title: BookingType
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AdmissionType:
+      type: string
+      enum:
+      - open_entry
+      - date_entry
+      - slot_entry
+      - timed_entry
+      title: AdmissionType
     APIEvent:
       properties:
         cancellation_policy_information:
@@ -967,37 +996,18 @@ components:
         For example, Moulin Rouge is an event that occurs at 14:30 and 19:30 from Monday to Saturday for the next upcoming 12 months.
 
         In this example, an availability instance would be Saturday, 19th January 2021, at 19:30.'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    Image:
-      properties:
-        desktop:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Desktop
-          description: URL to use on desktop devices
-        mobile:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Mobile
-          description: URL to use on mobile devices
-        thumbnail:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Thumbnail
-          description: URL of a square version of this image
-      type: object
-      title: Image
+    EventType:
+      type: string
+      enum:
+      - Standard
+      - Cinema
+      title: EventType
+      description: 'Event type classification.
+
+
+        - STANDARD: (Currently) All non-cinema events
+
+        - CINEMA: All cinema experiences'
     Addon:
       properties:
         id:
@@ -1091,13 +1101,26 @@ components:
       - venue_address
       - venue_name
       title: APIEventVenue
-    ResultSort:
-      type: string
-      enum:
-      - price_asc
-      - price_desc
-      - popularity
-      title: ResultSort
+    EventPerformer:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Performer's ID in Mongo
+          examples:
+          - ed_sheeran
+        name:
+          type: string
+          title: Name
+          description: Performer's name
+          examples:
+          - Ed Sheeran
+      type: object
+      required:
+      - id
+      - name
+      title: EventPerformer
+      description: Small performer model used in the events table
     Error:
       properties:
         type:
@@ -1137,26 +1160,40 @@ components:
           default: {}
       type: object
       title: PersonalisationFields
-    EventPerformer:
+    HTTPValidationError:
       properties:
-        id:
-          type: string
-          title: Id
-          description: Performer's ID in Mongo
-          examples:
-          - ed_sheeran
-        name:
-          type: string
-          title: Name
-          description: Performer's name
-          examples:
-          - Ed Sheeran
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - id
-      - name
-      title: EventPerformer
-      description: Small performer model used in the events table
+      title: HTTPValidationError
+    DeliveryMethod:
+      type: string
+      enum:
+      - external
+      - collection
+      - document
+      - eticket
+      - print
+      title: DeliveryMethod
+    PersonalisationField:
+      type: string
+      enum:
+      - prefix
+      - first_name
+      - last_name
+      - phone_number
+      - email
+      - birthdate
+      - house_number
+      - street_name
+      - postal_code
+      - country_code
+      - city
+      - nationality
+      title: PersonalisationField
     ErrorBody:
       properties:
         request_id:
@@ -1178,114 +1215,6 @@ components:
       - request_id
       - detail
       title: ErrorBody
-    PersonalisationField:
-      type: string
-      enum:
-      - prefix
-      - first_name
-      - last_name
-      - phone_number
-      - email
-      - birthdate
-      - house_number
-      - street_name
-      - postal_code
-      - country_code
-      - city
-      - nationality
-      title: PersonalisationField
-    IsTbd:
-      properties:
-        time:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Time
-          description: Whether the event time is to be determined
-          default: false
-        date:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Date
-          description: Whether the event date is to be determined
-          default: false
-      type: object
-      title: IsTbd
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    EventType:
-      type: string
-      enum:
-      - Standard
-      - Cinema
-      title: EventType
-      description: 'Event type classification.
-
-
-        - STANDARD: (Currently) All non-cinema events
-
-        - CINEMA: All cinema experiences'
-    AdmissionType:
-      type: string
-      enum:
-      - open_entry
-      - date_entry
-      - slot_entry
-      - timed_entry
-      title: AdmissionType
-    Price:
-      properties:
-        amount:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-          description: Monetary value of this price in the given currency, with decimal point i.e. not integer format
-          examples:
-          - '3.99'
-        currency:
-          type: string
-          maxLength: 3
-          minLength: 3
-          pattern: '[A-Z][A-Z][A-Z]'
-          title: Currency
-          description: ISO 4217 code for the currency in which the item's prices are sent
-          examples:
-          - GBP
-      type: object
-      required:
-      - amount
-      - currency
-      title: Price
-      description: Represents an absolute monetary value in a particular currency. Cannot be negative.
-    DeliveryMethod:
-      type: string
-      enum:
-      - external
-      - collection
-      - document
-      - eticket
-      - print
-      title: DeliveryMethod
     APIPickupPoint:
       properties:
         latitude:
@@ -1326,6 +1255,46 @@ components:
       - pickup_point_name
       - pickup_point_address
       title: APIPickupPoint
+    Image:
+      properties:
+        desktop:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desktop
+          description: URL to use on desktop devices
+        mobile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mobile
+          description: URL to use on mobile devices
+        thumbnail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Thumbnail
+          description: URL of a square version of this image
+      type: object
+      title: Image
+    IsTbd:
+      properties:
+        time:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Time
+          description: Whether the event time is to be determined
+          default: false
+        date:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Date
+          description: Whether the event date is to be determined
+          default: false
+      type: object
+      title: IsTbd
     PersonalisationFieldConstraints:
       properties:
         regex:
@@ -1336,6 +1305,37 @@ components:
           description: The regular expression that the field input should validate against
       type: object
       title: PersonalisationFieldConstraints
+    ResultSort:
+      type: string
+      enum:
+      - price_asc
+      - price_desc
+      - popularity
+      title: ResultSort
+    Price:
+      properties:
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: Monetary value of this price in the given currency, with decimal point i.e. not integer format
+          examples:
+          - '3.99'
+        currency:
+          type: string
+          maxLength: 3
+          minLength: 3
+          pattern: '[A-Z][A-Z][A-Z]'
+          title: Currency
+          description: ISO 4217 code for the currency in which the item's prices are sent
+          examples:
+          - GBP
+      type: object
+      required:
+      - amount
+      - currency
+      title: Price
+      description: Represents an absolute monetary value in a particular currency. Cannot be negative.
   securitySchemes:
     APIKeyHeader:
       type: apiKey

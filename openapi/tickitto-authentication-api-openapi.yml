@@ -75,6 +75,34 @@ paths:
         in: header
 components:
   schemas:
+    StripePaymentMethod:
+      properties:
+        name:
+          $ref: '#/components/schemas/PaymentMethodType'
+          default: stripe
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether this payment method is currently enabled.
+          default: false
+        amendment_trigger:
+          $ref: '#/components/schemas/PaymentAmendmentType'
+          default: iterative
+        account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Account Id
+          description: Account ID.
+        platform_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Platform Key
+          description: Tickitto publishable platform key.
+      type: object
+      title: StripePaymentMethod
+      description: Payments method used for stripe.
     BookingFeeSettings:
       properties:
         item_min_charge:
@@ -104,6 +132,27 @@ components:
       type: object
       title: BookingFeeSettings
       description: Settings for booking charge calculation
+    ErrorBody:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        detail:
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+          title: Detail
+        body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Body
+      type: object
+      required:
+      - request_id
+      - detail
+      title: ErrorBody
     Error:
       properties:
         type:
@@ -130,6 +179,62 @@ components:
       - msg
       - loc
       title: Error
+    PaymentAmendmentType:
+      type: string
+      enum:
+      - iterative
+      - checkout
+      - external
+      title: PaymentAmendmentType
+      description: 'ITERATIVE: Payment intents, invoices, etc, are made/amended when the basket is created, or items are added/removed from it
+
+        CHECKOUT: Payment intents, invoices, etc, are made at checkout only.
+
+        EXTERNAL: The distributor is MOR, handling the payment in its entirety.'
+    CareemPayPaymentMethod:
+      properties:
+        name:
+          $ref: '#/components/schemas/PaymentMethodType'
+          default: careem_pay
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether this payment method is currently enabled.
+          default: false
+        amendment_trigger:
+          $ref: '#/components/schemas/PaymentAmendmentType'
+          default: checkout
+      type: object
+      title: CareemPayPaymentMethod
+      description: Payment method used for Careem Pay.
+    PaymentMethodType:
+      type: string
+      enum:
+      - stripe
+      - careem_pay
+      - tickitto
+      title: PaymentMethodType
+      description: 'STRIPE: Tickitto is MOR, and retrieves payment for the items via Stripe.
+
+        CAREEM_PAY: Tickitto is MOR, and retrieves payment via Careem Pay.
+
+        TICKITTO: The distributor is MOR, and tickitto purchases the items directly.'
+    CreditPaymentMethod:
+      properties:
+        name:
+          $ref: '#/components/schemas/PaymentMethodType'
+          default: tickitto
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether this payment method is currently enabled.
+          default: false
+        amendment_trigger:
+          $ref: '#/components/schemas/PaymentAmendmentType'
+          default: external
+      type: object
+      title: CreditPaymentMethod
+      description: Payment method used where Tickitto is a creditor to the user.
     ApiUser:
       properties:
         id:
@@ -169,111 +274,6 @@ components:
       - name
       - booking_fee_settings
       title: ApiUser
-    StripePaymentMethod:
-      properties:
-        name:
-          $ref: '#/components/schemas/PaymentMethodType'
-          default: stripe
-        enabled:
-          type: boolean
-          title: Enabled
-          description: Whether this payment method is currently enabled.
-          default: false
-        amendment_trigger:
-          $ref: '#/components/schemas/PaymentAmendmentType'
-          default: iterative
-        account_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Account Id
-          description: Account ID.
-        platform_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Platform Key
-          description: Tickitto publishable platform key.
-      type: object
-      title: StripePaymentMethod
-      description: Payments method used for stripe.
-    PaymentMethodType:
-      type: string
-      enum:
-      - stripe
-      - careem_pay
-      - tickitto
-      title: PaymentMethodType
-      description: 'STRIPE: Tickitto is MOR, and retrieves payment for the items via Stripe.
-
-        CAREEM_PAY: Tickitto is MOR, and retrieves payment via Careem Pay.
-
-        TICKITTO: The distributor is MOR, and tickitto purchases the items directly.'
-    CareemPayPaymentMethod:
-      properties:
-        name:
-          $ref: '#/components/schemas/PaymentMethodType'
-          default: careem_pay
-        enabled:
-          type: boolean
-          title: Enabled
-          description: Whether this payment method is currently enabled.
-          default: false
-        amendment_trigger:
-          $ref: '#/components/schemas/PaymentAmendmentType'
-          default: checkout
-      type: object
-      title: CareemPayPaymentMethod
-      description: Payment method used for Careem Pay.
-    PaymentAmendmentType:
-      type: string
-      enum:
-      - iterative
-      - checkout
-      - external
-      title: PaymentAmendmentType
-      description: 'ITERATIVE: Payment intents, invoices, etc, are made/amended when the basket is created, or items are added/removed from it
-
-        CHECKOUT: Payment intents, invoices, etc, are made at checkout only.
-
-        EXTERNAL: The distributor is MOR, handling the payment in its entirety.'
-    CreditPaymentMethod:
-      properties:
-        name:
-          $ref: '#/components/schemas/PaymentMethodType'
-          default: tickitto
-        enabled:
-          type: boolean
-          title: Enabled
-          description: Whether this payment method is currently enabled.
-          default: false
-        amendment_trigger:
-          $ref: '#/components/schemas/PaymentAmendmentType'
-          default: external
-      type: object
-      title: CreditPaymentMethod
-      description: Payment method used where Tickitto is a creditor to the user.
-    ErrorBody:
-      properties:
-        request_id:
-          type: string
-          title: Request Id
-        detail:
-          items:
-            $ref: '#/components/schemas/Error'
-          type: array
-          title: Detail
-        body:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Body
-      type: object
-      required:
-      - request_id
-      - detail
-      title: ErrorBody
   securitySchemes:
     APIKeyHeader:
       type: apiKey
